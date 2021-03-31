@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Algorithm on Aiden's Deep Machine Learning lab</title><link>https://aiden-jeon.github.io/post/algorithm/</link><description>Recent content in Algorithm on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/algorithm/index.xml" rel="self" type="application/rss+xml"/><item><title>단어 뒤집기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Algorithm on Aiden's Deep Machine Learning lab</title><link>/post/algorithm/</link><description>Recent content in Algorithm on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/algorithm/index.xml" rel="self" type="application/rss+xml"/><item><title>단어 뒤집기</title><link>/post/algorithm/acmicpc/9093/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>/post/algorithm/acmicpc/9093/</guid><description>
 &lt;ul>
 &lt;li>problem number: 9093&lt;/li>
 &lt;li>link: &lt;a href="https://www.acmicpc.net/problem/9093">https://www.acmicpc.net/problem/9093&lt;/a>&lt;/li>
@@ -25,7 +25,7 @@
 &lt;span class="ln"> 8&lt;/span> &lt;span class="n">words&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="p">:&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">words&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="n">sentence&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">words&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">10&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sentence&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>스택수열</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>스택수열</title><link>/post/algorithm/acmicpc/1874/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>/post/algorithm/acmicpc/1874/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1874&lt;/li>
 &lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1874">https://www.acmicpc.net/problem/1874&lt;/a>&lt;/li>
@@ -85,7 +85,7 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln">27&lt;/span>&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">28&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">r&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">29&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>에디터</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>에디터</title><link>/post/algorithm/acmicpc/1406/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>/post/algorithm/acmicpc/1406/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1406&lt;/li>
 &lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1406">https://www.acmicpc.net/problem/1406&lt;/a>&lt;/li>
@@ -122,7 +122,7 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln">17&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">18&lt;/span>
 &lt;span class="ln">19&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]))&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>요세푸스 문제</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>요세푸스 문제</title><link>/post/algorithm/acmicpc/1158/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>/post/algorithm/acmicpc/1158/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1158&lt;/li>
 &lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1158">https://www.acmicpc.net/problem/1158&lt;/a>&lt;/li>

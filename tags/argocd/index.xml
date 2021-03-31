@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>argocd on Aiden's Deep Machine Learning lab</title><link>https://aiden-jeon.github.io/tags/argocd/</link><description>Recent content in argocd on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 04 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/tags/argocd/index.xml" rel="self" type="application/rss+xml"/><item><title>argocd를 이용한 cd</title><link>https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>argocd on Aiden's Deep Machine Learning lab</title><link>/tags/argocd/</link><description>Recent content in argocd on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 04 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/argocd/index.xml" rel="self" type="application/rss+xml"/><item><title>argocd를 이용한 cd</title><link>/post/tech/cicd/argocd_cd/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><guid>/post/tech/cicd/argocd_cd/</guid><description>
 &lt;p>&lt;strong>CI/CD Contents 순서&lt;/strong>&lt;/p>
 &lt;ol>
 &lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/sphinx-autoapi">sphinx-autoapi 를 이용한 자동 api 문서 생성하기&lt;/a>&lt;/li>
@@ -26,18 +26,18 @@
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods -n argocd -l app.kubernetes.io/name&lt;span class="o">=&lt;/span>argocd-server -o name &lt;span class="p">|&lt;/span> cut -d&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span> -f &lt;span class="m">2&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>로그인에 성공하면 https://localhost:8080 으로 들어갑니다.&lt;/p>
 &lt;p>처음 나오는 화면은 다음 처럼 아무런 app이 없습니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-8.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-8.png" alt="img">&lt;/p>
 &lt;p>NEW APP 을 눌러 추가하겠습니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-9.png" alt="img">
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-10.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-9.png" alt="img">
+&lt;img src="/imgs/github/cicd-10.png" alt="img">&lt;/p>
 &lt;p>위와 같이 config를 입력하고 create를 해줍니다. 완성되면 아래와 같이 app이 생성됩니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-11.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-11.png" alt="img">&lt;/p>
 &lt;p>app에 클릭해서 들어가면 다음과 같이 나옵니다. 여기서 SYNC 버튼을 눌러줍니다
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-12.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-12.png" alt="img">&lt;/p>
 &lt;p>SYNCHRONIZE 버튼을 누릅니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-13.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-13.png" alt="img">&lt;/p>
 &lt;p>다음은 sync가 완료된 화면입니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-14.png" alt="img">&lt;/p>
+&lt;img src="/imgs/github/cicd-14.png" alt="img">&lt;/p>
 &lt;p>command창에서 정상적으로 떴는지 확인해봅니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n sphinx-doc
 &lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
