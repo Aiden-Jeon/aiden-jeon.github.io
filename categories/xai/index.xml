@@ -110,7 +110,7 @@
 &lt;li>&lt;a href="https://www.microsoft.com/en-us/research/uploads/prod/2019/05/Explainable-AI-for-Science-and-Medicine-slides.pdf">https://www.microsoft.com/en-us/research/uploads/prod/2019/05/Explainable-AI-for-Science-and-Medicine-slides.pdf&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>LIME with code</title><link>https://aiden-jeon.github.io/post/tech/xai/lime_with_code/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/lime_with_code/</guid><description>
 &lt;h1 id="lime-local-interpretable-model-agnostic-explanations">&lt;strong>(LIME) Local Interpretable Model-agnostic Explanations&lt;/strong>​&lt;/h1>
-&lt;h2 id="objective-of-lime">Objective of LIME&lt;/h2>
+&lt;h2 id="objective-of-lime">&lt;strong>Objective of LIME&lt;/strong>&lt;/h2>
 &lt;p>$$\xi(x)=\underset{g\in G}{\operatorname{argmin}} L(f,g,\pi_{x})+\Omega(g)$$&lt;/p>
 &lt;p>​&lt;/p>
 &lt;h2 id="train-f">&lt;strong>Train &lt;em>f&lt;/em>&lt;/strong>&lt;/h2>
@@ -254,7 +254,7 @@
 &lt;span class="ln">12&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">0.246&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">0.754&lt;/span>&lt;span class="p">],&lt;/span>
 &lt;span class="ln">13&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">0.098&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">0.902&lt;/span>&lt;span class="p">]])&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>​&lt;/p>
-&lt;h2 id="spare-linear-explanations">&lt;strong>Spare Linear Explanations&lt;/strong>&lt;/h2>
+&lt;h2 id="sparse-linear-explanations">&lt;strong>Sparse Linear Explanations&lt;/strong>&lt;/h2>
 &lt;hr>
 &lt;p>다음으로는 &lt;em>g&lt;/em>를 학습시킬 때 필요한 &lt;em>weight&lt;/em>를 계산해야 합니다.&lt;/p>
 &lt;p>위에서 random 하게 뽑힌 *z'*들이 원본 데이터와 거리가 얼마나 먼 곳에서 있는지에 따라서 학습할 때 가중치로 사용합니다.&lt;/p>
@@ -278,7 +278,7 @@
 &lt;span class="ln"> 9&lt;/span>&lt;span class="n">distances&lt;/span>
 &lt;span class="ln">10&lt;/span>
 &lt;span class="ln">11&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span> &lt;span class="mf">0.&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="mf">40.59114742&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">9.2514787&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="mf">4.001634&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="mf">4.001634&lt;/span> &lt;span class="p">,&lt;/span>
-&lt;span class="ln">12&lt;/span> &lt;span class="mf">32.84492632&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.001634&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="mf">8.17749432&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">35.83110521&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">80.19704914&lt;/span>&lt;span class="p">])&lt;/span>&lt;span class="o">**&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="mf">32.84492632&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.001634&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="mf">8.17749432&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">35.83110521&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">80.19704914&lt;/span>&lt;span class="p">])&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>​&lt;/p>
 &lt;h3 id="kerenl-function">&lt;strong>Kerenl function&lt;/strong>&lt;/h3>
 &lt;p>pi_{x}는 exponential kernel 입니다. 앞서 계산한 distance를 kernel에 넣어서 값을 변환시켜줍니다. 이 때 식의 sigma는 kernel width 로 해석됩니다.&lt;/p>
