@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>argocd on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/tags/argocd/</link><description>Recent content in argocd on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 04 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/tags/argocd/index.xml" rel="self" type="application/rss+xml"/><item><title>argocd를 이용한 cd</title><link>https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/</guid><description>
 &lt;p>&lt;strong>CI/CD Contents 순서&lt;/strong>&lt;/p>
 &lt;ol>
-&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/sphinx-autoapi">sphinx-autoapi 를 이용한 자동 api 문서 생성하기&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-1">github action을 이용한 ci&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-2">ghcr을 이용한 kubernetes deployment 만들기&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-3">helm을 이용한 deployment chart 만들기&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-4">argocd를 이용한 cd&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/sphinx_autoapi/">sphinx-autoapi 를 이용한 자동 api 문서 생성하기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/github_action_ci/">github action을 이용한 ci&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/ghcr_k8s_deploy/">ghcr을 이용한 kubernetes deployment 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/helm_deployment_chart/">helm을 이용한 deployment chart 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/">argocd를 이용한 cd&lt;/a>&lt;/li>
 &lt;/ol>
 &lt;hr>
 &lt;p>이번 포스트에서는 argocd를 이용해 helm chart를 cd(continuous delivery) 하는 법에 대해서 알아보겠습니다.&lt;/p>
-&lt;h2 id="1-argocd-설치">1. argocd 설치&lt;/h2>
+&lt;h2 id="1-설치">1. 설치&lt;/h2>
 &lt;p>argocd 설치는 &lt;a href="https://argoproj.github.io/argo-cd/getting_started/">tutorial&lt;/a>을 따라했습니다.&lt;/p>
+&lt;h2 id="2-실행">2. 실행&lt;/h2>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># 1. argocd namespace&lt;/span>
 &lt;span class="ln"> 2&lt;/span>kubectl create namespace argocd
 &lt;span class="ln"> 3&lt;/span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -25,19 +26,20 @@
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>기본 아이디는 admin입니다. 비밀번호는 아래 명령어로 확인할 수 잇습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods -n argocd -l app.kubernetes.io/name&lt;span class="o">=&lt;/span>argocd-server -o name &lt;span class="p">|&lt;/span> cut -d&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span> -f &lt;span class="m">2&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>로그인에 성공하면 https://localhost:8080 으로 들어갑니다.&lt;/p>
-&lt;p>처음 나오는 화면은 다음 처럼 아무런 app이 없습니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-8.png" alt="img">&lt;/p>
-&lt;p>NEW APP 을 눌러 추가하겠습니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-9.png" alt="img">
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-10.png" alt="img">&lt;/p>
-&lt;p>위와 같이 config를 입력하고 create를 해줍니다. 완성되면 아래와 같이 app이 생성됩니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-11.png" alt="img">&lt;/p>
-&lt;p>app에 클릭해서 들어가면 다음과 같이 나옵니다. 여기서 SYNC 버튼을 눌러줍니다
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-12.png" alt="img">&lt;/p>
-&lt;p>SYNCHRONIZE 버튼을 누릅니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-13.png" alt="img">&lt;/p>
-&lt;p>다음은 sync가 완료된 화면입니다.
-&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-14.png" alt="img">&lt;/p>
+&lt;h2 id="3-app-생성">3. APP 생성&lt;/h2>
+&lt;p>처음 나오는 화면은 다음 처럼 아무런 app이 없습니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-8.png" alt="그림-1">&lt;/p>
+&lt;p>NEW APP 을 눌러 추가하겠습니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-9.png" alt="그림-2">
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-10.png" alt="그림-3">&lt;/p>
+&lt;p>그림-3과 같이 config를 입력하고 create를 해줍니다. 완성되면 아래와 같이 app이 생성됩니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-11.png" alt="그림-4">&lt;/p>
+&lt;p>app에 클릭해서 들어가면 다음과 같이 나옵니다. 여기서 SYNC 버튼을 눌러줍니다&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-12.png" alt="그림-5">&lt;/p>
+&lt;p>SYNCHRONIZE 버튼을 누릅니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-13.png" alt="그림-6">&lt;/p>
+&lt;p>다음은 sync가 완료된 화면입니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-14.png" alt="그림-7">&lt;/p>
 &lt;p>command창에서 정상적으로 떴는지 확인해봅니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n sphinx-doc
 &lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
@@ -51,7 +53,8 @@
 &lt;span class="ln">10&lt;/span>
 &lt;span class="ln">11&lt;/span>NAME DESIRED CURRENT READY AGE
 &lt;span class="ln">12&lt;/span>replicaset.apps/sphinx-api-doc-sphinx-doc-5576ff677b &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 89s
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>다음 명령어로 접속할 ip와 포트를 얻습니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-확인">4. 확인&lt;/h2>
+&lt;p>다음 명령어로 접속할 ip와 포트를 얻습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube service -n sphinx-doc --url sphinx-api-doc-sphinx-doc
 &lt;span class="ln">2&lt;/span>
 &lt;span class="ln">3&lt;/span>http://192.168.64.2:31058
