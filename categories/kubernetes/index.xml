@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Deep Machine Learning lab</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Wed, 03 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>kubernetes에서 ghcr package pull 하기</title><link>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</guid><description>
+&lt;p>kubernetes 에서 사용하는 image는 기본적으로 dockerhub에서 pull 된다. 기본적으로 Local에 있는 패키지는 사용하지 않는다.
+회사에서는 도커 이미지를 dockerhub와 같은 곳에 public 하게 공유할 수가 없다.
+그래서 github 에서 제공하는 (GHCR) GitHub Container Registry for Docker images 을 이용해서 도커 이미지를 관리하고 있다.&lt;/p>
+&lt;p>GHCR 을 이용하기 위해서는 github access key 가 필요하다. 우선 github access token을 발급 받아 보자.&lt;/p>
+&lt;h2 id="1-ghcr-을-위한-github-access-token-발급-받기">1. ghcr 을 위한 github access token 발급 받기&lt;/h2>
+&lt;p>우선 github setting에서 deplotver settings / personal access tokens 로 들어간다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/0.png" alt="img">
+여기서 generate new token을 누른다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/1.png" alt="img">
+토큰 이름으로 ghcr-token을 입력하고 packages와 관련된 권한을 주고 token을 생성한다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/2.png" alt="img">
+다음과 같이 토큰이 생성된다. 이제 이 토큰을 잘 저장해둔다.&lt;/p>
+&lt;h2 id="2-kubernetes-secret">2. kubernetes secret&lt;/h2>
+&lt;p>다음으로 kubernetes 에 secret 을 생성해준다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl -n &amp;lt;k8s-namespace&amp;gt; create secret docker-registry &amp;lt;k8s-docker-registry-secret-name&amp;gt; &lt;span class="se">\
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="se">&lt;/span> --docker-server&lt;span class="o">=&lt;/span>ghcr.io &lt;span class="se">\
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="se">&lt;/span> --docker-username&lt;span class="o">=&lt;/span>&amp;lt;github-username&amp;gt; &lt;span class="se">\
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="se">&lt;/span> --docker-password&lt;span class="o">=&lt;/span>&amp;lt;github-personal-access-token&amp;gt; &lt;span class="se">\
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="se">&lt;/span> --docker-email&lt;span class="o">=&lt;/span>&amp;lt;email-address&amp;gt;
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>k8s-docker-registry-secret-name&lt;/code>: secret 이름&lt;/li>
+&lt;li>&lt;code>github-username&lt;/code>: github 유저 네임&lt;/li>
+&lt;li>&lt;code>github-personal-access-token&lt;/code>: 발급받은 토큰&lt;/li>
+&lt;li>&lt;code>email-address&lt;/code>: github 이메일&lt;/li>
+&lt;/ul>
+&lt;p>예를 들면 아래와 같이 사용할 수 있다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl -n default create secret docker-registry test-ghcr &lt;span class="se">\
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="se">&lt;/span> --docker-server&lt;span class="o">=&lt;/span>ghcr.io &lt;span class="se">\
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="se">&lt;/span> --docker-username&lt;span class="o">=&lt;/span>aiden-jeon &lt;span class="se">\
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="se">&lt;/span> --docker-password&lt;span class="o">=&lt;/span>&amp;lt;github-personal-access-token&amp;gt; &lt;span class="se">\
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="se">&lt;/span> --docker-email&lt;span class="o">=&lt;/span>ells2124@gmail.com
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행될 경우 아래와 같이 출력된다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>secret/test-ghcr created
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-yaml-파일-작성">3. yaml 파일 작성&lt;/h2>
+&lt;p>이제 deployment를 위한 yaml 파일을 작성한다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">apps/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deployment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">selector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">app&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">service&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">app&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">service&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ghcr.io/{user-name}/{package-name}:{package-tag}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">imagePullPolicy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Always&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">containerPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">imagePullSecrets&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-ghcr&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>image에 ghcr 의 도커 이미지를 입력해주면 된다.
+그리고 imagePullSecrets에 좀 전에 생성한 secret 의 이름을 입력하면 된다.&lt;/p></description></item></channel></rss>

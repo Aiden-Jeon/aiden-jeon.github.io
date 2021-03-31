@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>algorithm on Aiden's Deep Machine Learning lab</title><link>https://aiden-jeon.github.io/categories/algorithm/</link><description>Recent content in algorithm on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Tue, 30 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/algorithm/index.xml" rel="self" type="application/rss+xml"/><item><title>단어 뒤집기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</guid><description>
+&lt;ul>
+&lt;li>problem number: 9093&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/9093">https://www.acmicpc.net/problem/9093&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: sentence with words
+&lt;ul>
+&lt;li>단어의 기준은 space&lt;/li>
+&lt;li>대문자는 유지&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Output: 문장에서 단어들의 위치는 보존하고 각 단어들의 역순으로 이루어진 문장&lt;/li>
+&lt;/ul>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="n">N&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">words&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">words&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="p">:&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">words&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">sentence&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">words&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sentence&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>스택수열</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</guid><description>
+&lt;ul>
+&lt;li>problem number: 1874&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1874">https://www.acmicpc.net/problem/1874&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: empty stack 1 // n&lt;/li>
+&lt;li>Output: array &amp;lt;a1, a2, ...&amp;gt; ai = (push, pop) if cannot return NO&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;p>스택 수열 동작 예시&lt;br>
+stack = [] / / 4&lt;br>
+stack = [1] / / 4&lt;br>
+stack = [1, 2] / / 4&lt;br>
+stack = [1, 2, 3] / / 4&lt;br>
+stack = [1, 2, 3, 4] / / 4&lt;br>
+stack = [1, 2, 3] / 4 / 3&lt;br>
+stack = [1, 2] / 4 3&lt;br>
+stack = [1, 2, 5] / 4 3&lt;br>
+stack = [1, 2, 5, 6] / 4 3&lt;br>
+stack = [1, 2, 5] / 4 3 6&lt;br>
+stack = [1, 2, 5, 7] / 4 3 6&lt;br>
+stack = [1, 2, 5, 7, 8] / 4 3 6&lt;br>
+stack = [1, 2, 5, 7] / 4 3 6 8&lt;br>
+stack = [1, 2, 5] / 4 3 6 8 7&lt;br>
+stack = [1, 2] / 4 3 6 8 7 5&lt;br>
+stack = [1] / 4 3 6 8 7 5 2&lt;br>
+stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="n">N&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="n">stack&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;span class="ln"> 8&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="bp">True&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">j&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;+&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">14&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;span class="ln">15&lt;/span> &lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="n">p&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">17&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">p&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">18&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;-&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">19&lt;/span> &lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">20&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">21&lt;/span> &lt;span class="k">break&lt;/span>
+&lt;span class="ln">22&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">23&lt;/span> &lt;span class="k">break&lt;/span>
+&lt;span class="ln">24&lt;/span>
+&lt;span class="ln">25&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">26&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">27&lt;/span>&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">28&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">r&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">29&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>에디터</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</guid><description>
+&lt;ul>
+&lt;li>problem number: 1406&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1406">https://www.acmicpc.net/problem/1406&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 문자열, 명령어&lt;/li>
+&lt;li>Output: 명령어에 의해 수정된 문자열&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;p>입력으로 들어오는 크기의 최대값이 50000임&lt;/p>
+&lt;ol>
+&lt;li>indexing 으로 할 경우 P 를 받을 때 O(n) 이 발생&lt;/li>
+&lt;li>insert, pop 의 경우 값을 추가하거나 뺄 때 해당 index의 오른쪽 값들을 한 칸씩 미루어야 해서 시간 복잡도가 O(n) 이 발생함&lt;/li>
+&lt;/ol>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>&lt;span class="n">string&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="n">N&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="n">left&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="n">right&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;span class="ln"> 8&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">command&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;P&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;L&amp;#34;&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">14&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;D&amp;#34;&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">15&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">right&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;B&amp;#34;&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">17&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">18&lt;/span>
+&lt;span class="ln">19&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>요세푸스 문제</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</guid><description>
+&lt;ul>
+&lt;li>problem number: 1158&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1158">https://www.acmicpc.net/problem/1158&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: &amp;lt;a1, a2, .. an&amp;gt;, order k&lt;/li>
+&lt;li>Output: &amp;lt;a^1, a^2, .. a^n&amp;gt;&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;p>list를 이용할 경우 append or pop 에서 O(N)이 소모된다. &lt;br>
+시간복잡도를 줄이기 위해서는 아래의 과정이 각각 O(1) 이어야 한다.&lt;/p>
+&lt;ul>
+&lt;li>left pop, right append&lt;/li>
+&lt;li>left append, right pop&lt;/li>
+&lt;/ul>
+&lt;p>이를 위해서 deque를 사용했다.&lt;/p>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">collections&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">deque&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">k&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="n">deq&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">deque&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 8&lt;/span>
+&lt;span class="ln"> 9&lt;/span>&lt;span class="n">answer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;span class="ln">10&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="n">deq&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">k&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">popleft&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">answer&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">popleft&lt;/span>&lt;span class="p">()]&lt;/span>
+&lt;span class="ln">14&lt;/span>&lt;span class="n">answer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;, &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">answer&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f&lt;/span>&lt;span class="s2">&amp;#34;&amp;lt;{answer}&amp;gt;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>

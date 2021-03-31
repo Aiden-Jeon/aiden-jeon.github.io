@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>github on Aiden's Deep Machine Learning lab</title><link>https://aiden-jeon.github.io/tags/github/</link><description>Recent content in github on Aiden's Deep Machine Learning lab</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Aiden Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 04 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/tags/github/index.xml" rel="self" type="application/rss+xml"/><item><title>github action을 이용한 ci</title><link>https://aiden-jeon.github.io/post/tech/cicd/github_action_ci/</link><pubDate>Thu, 04 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cicd/github_action_ci/</guid><description>
+&lt;p>&lt;strong>CI/CD Contents 순서&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/sphinx-autoapi">sphinx-autoapi 를 이용한 자동 api 문서 생성하기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-1">github action을 이용한 ci&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-2">ghcr을 이용한 kubernetes deployment 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-3">helm을 이용한 deployment chart 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/cicd/github-cicd-4">argocd를 이용한 cd&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;p>이번 포스트에서는 github action을 이용해 CI(Continuous Integreation)를 하는 법에 대해서 알아보겠습니다.
+이번 포스트에서 사용하는 Dockerfile은 &lt;a href="https://github.com/Aiden-Jeon/github-cicd">github&lt;/a> 를 이용합니다.
+내용은 &lt;a href="https://aiden-jeon.github.io/cicd/sphinx-autoapi">이전 포스트&lt;/a>를 확인해주세요.&lt;/p>
+&lt;h2 id="1-github-package-사용-설정하기">1. github package 사용 설정하기&lt;/h2>
+&lt;p>이번 포스트에서는 ghcr(GitHub Container Registry for Docker images) 을 이용할 예정입니다. 개인 repo에서 ghcr을 사용하기 위해서는 따로 설정할 부분이 있습니다.&lt;/p>
+&lt;p>github 페이지에서 오른쪽 위에 있는 프로필을 누른 후 Feature Preview를 열어줍니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-0.png" alt="img">&lt;/p>
+&lt;p>Improved continer support enable을 눌러줍니다. 그러면 아래와 같이 바뀌게 됩니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-1.png" alt="img">&lt;/p>
+&lt;h2 id="2-secrets-설정해주기">2. secrets 설정해주기&lt;/h2>
+&lt;p>github action 으로 자동으로 push 하기 위해서는 github packages에 접근할 수 있는 key가 필요합니다.&lt;/p>
+&lt;p>우선 github setting에서 deplotver settings / personal access tokens 로 들어 갑니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/0.png" alt="img">
+여기서 generate new token을 누릅니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/1.png" alt="img">
+토큰 이름으로 ghcr-token을 입력하고 packages와 관련된 권한을 주고 token을 생성합니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/k8s/ghcr/2.png" alt="img">
+다음과 같이 토큰이 생성됩니다. 이 토큰을 메모장에 잘 적어둡니다.&lt;/p>
+&lt;p>그리고 ci를 진행할 github repo의 settings에 들어갑니다.
+secrets를 누른 후 New repository secret을 눌러줍니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-2.png" alt="img">&lt;/p>
+&lt;p>Name에는 CR_PAT을 value 에는 위에서 생성한 key를 입력합니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-3.png" alt="img">&lt;/p>
+&lt;p>정상적으로 생성되면 아래와 같이 나오게 됩니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-4.png" alt="img">&lt;/p>
+&lt;h2 id="3-github-action-작성하기">3. github action 작성하기&lt;/h2>
+&lt;p>이제 준비가 끝났으니 github action을 작성할 차례입니다.
+&lt;code>.github/workflows&lt;/code> 폴더를 생성합니다. 그리고 아래와 같은 파일을 작성합니다. 파일명은 &lt;code>docker-image-push.yml&lt;/code>으로 하겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Docker Image CI/CD&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="l">main]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">docker-image-ci&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-18.04&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">recursive&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Create shot SHA&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">benjlevesque/short-sha@v1.2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">short-sha&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Set up Docker Buildx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/setup-buildx-action@v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Login to GitHub Container Registry&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/login-action@v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">registry&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ghcr.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">username&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ github.repository_owner }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">password&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.CR_PAT }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build and push&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/build-push-action@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">29&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">30&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">31&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">context&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">32&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">file&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/Dockerfile&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">33&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">tags&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">34&lt;/span>&lt;span class="sd"> ghcr.io/&amp;lt;github-name&amp;gt;/&amp;lt;package-name&amp;gt;:latest
+&lt;/span>&lt;span class="ln">35&lt;/span>&lt;span class="sd"> ghcr.io/&amp;lt;github-name&amp;gt;/&amp;lt;package-name&amp;gt;:${{ steps.short-sha.outputs.sha }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>내용에서 수정해야 할 부분은 아래 부분입니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">tags&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">|&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">ghcr.io/&amp;lt;github-name&amp;gt;/&amp;lt;package-name&amp;gt;:latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">ghcr.io/&amp;lt;github-name&amp;gt;/&amp;lt;package-name&amp;gt;:${{ steps.short-sha.outputs.sha }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>github-name&lt;/code>: pacakge를 저장할 github name을 적어줍니다.&lt;/li>
+&lt;li>&lt;code>package-name&lt;/code>: 저장할 package 이름을 적어줍니다.&lt;/li>
+&lt;/ul>
+&lt;p>예를 들어 저는 다음과 같이 적겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">tags&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">|&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">ghcr.io/aiden-jeon/sphinx-api:latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">ghcr.io/aiden-jeon/sphinx-api:${{ steps.short-sha.outputs.sha }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 작성한 workflow를 github에 push 해줍니다. github에 들어가보면 자동으로 action을 실행합니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-5.png" alt="img">&lt;/p>
+&lt;p>package에 가보면 아래과 같이 생성된 걸 확인할 수 있습니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-6.png" alt="img">&lt;/p>
+&lt;h2 id="4-local-ghcr-pull">4. local ghcr pull&lt;/h2>
+&lt;p>local에서 ghcr을 pull해서 정상적으로 build가 되었는지 확인해보겠습니다.&lt;/p>
+&lt;p>아래 명령어로 ghcr docker에 로그인합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">export&lt;/span> &lt;span class="nv">CR_PAT&lt;/span>&lt;span class="o">=&lt;/span>&amp;lt;MY_TOKEN&amp;gt;
+&lt;span class="ln">2&lt;/span>&lt;span class="nb">echo&lt;/span> &lt;span class="nv">$CR_PAT&lt;/span> &lt;span class="p">|&lt;/span> docker login ghcr.io -u &amp;lt;github-username&amp;gt; --password-stdin
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>MY_TOKEN: 위에서 발급받은 key를 입력해줍니다.&lt;/li>
+&lt;li>github-username: ghcr package가 있는 username을 입력합니다.&lt;/li>
+&lt;/ul>
+&lt;p>로그인을 한후 아까 만든 docker를 pull합니다. pull 명령어는 package를 누르면 확인할 수 있습니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-7.png" alt="img">&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>docker pull ghcr.io/aiden-jeon/sphinx-api:dc3c4be
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 run 되는지 확인해보겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>docker run -p 8000:80 --rm ghcr.io/aiden-jeon/sphinx-api:dc3c4be
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>http://localhost:8000 을 들어가면 정상적으로 나오는 것을 확인할 수 있습니다.&lt;/p></description></item></channel></rss>
