@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 04 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/tech/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/introduction/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/tech/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/introduction/</guid><description>
 &lt;h1 id="introduction-to-xaiexplainable-ai">Introduction to XAI(eXplainable AI)&lt;/h1>
 &lt;hr>
 &lt;p>최근 많은 산업에서 딥러닝을 적용을 시도하고 있습니다. 하지만 모델의 결과가 어떤 과정을 통해서 그런 예측을 했는지 해석하기 어려운 '블랙박스' 문제는 딥러닝 적용을 blocking하는 큰 요인입니다.&lt;/p>
@@ -1323,7 +1323,155 @@ apply하기에 앞서 secrets를 설정해주어야 합니다. 자세한 방법�
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube service -n sphinx-doc --url sphinx-api-doc-sphinx-doc
 &lt;span class="ln">2&lt;/span>
 &lt;span class="ln">3&lt;/span>http://192.168.64.2:31058
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행이 되었는지 확인합니다.&lt;/p></description></item><item><title>relative-sort-array</title><link>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</link><pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행이 되었는지 확인합니다.&lt;/p></description></item><item><title>단어 길이 재기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/2743/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/2743/</guid><description>
+&lt;ul>
+&lt;li>problem number: 2743&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/2743">https://www.acmicpc.net/problem/2743&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 문자열&lt;/li>
+&lt;li>Output: 문자열의 길이&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln">2&lt;/span>
+&lt;span class="ln">3&lt;/span>
+&lt;span class="ln">4&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">5&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>문자열 분석</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10820/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10820/</guid><description>
+&lt;ul>
+&lt;li>problem number: 10820&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/10820">https://www.acmicpc.net/problem/10820&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 소문자, 대문자, 숫자, 공백으로 이루어진 어떤 문자열&lt;/li>
+&lt;li>Output: 소문자, 대문자, 숫자, 공백의 개수&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;p>주어진 문자열 시작과 끝에 공백이 있음으로 strip 하면 안 된다.&lt;/p>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">collections&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Counter&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 6&lt;/span> &lt;span class="n">lower&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">upper&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">number&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">blank&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="n">line&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">line&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="k">break&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">counts&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Counter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">line&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">14&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">15&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="n">blank&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">17&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;0&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;9&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">18&lt;/span> &lt;span class="n">number&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">19&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">20&lt;/span> &lt;span class="n">lower&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">21&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Z&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">22&lt;/span> &lt;span class="n">upper&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">23&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lower&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">upper&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">blank&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>알파벳 개수</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10808/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10808/</guid><description>
+&lt;ul>
+&lt;li>problem number: 10808&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/10808">https://www.acmicpc.net/problem/10808&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 소문자로 이루어진 단어 S&lt;/li>
+&lt;li>Output: 각 소문자별 count&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln">2&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">collections&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Counter&lt;/span>
+&lt;span class="ln">3&lt;/span>
+&lt;span class="ln">4&lt;/span>
+&lt;span class="ln">5&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">6&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Counter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">7&lt;/span>&lt;span class="n">answer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">chr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;span class="ln">8&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>알파벳 찾기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10809/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10809/</guid><description>
+&lt;ul>
+&lt;li>problem number: 10809&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/10809">https://www.acmicpc.net/problem/10809&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 소문자로 이루어진 단어 S&lt;/li>
+&lt;li>Output: 각 알파벳이 처음 나온 위치&lt;/li>
+&lt;/ul>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 6&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">string&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">enumerate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">i&lt;/span>
+&lt;span class="ln">10&lt;/span>
+&lt;span class="ln">11&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>후위 표기식2</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1935/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1935/</guid><description>
+&lt;ul>
+&lt;li>problem number: 1935&lt;/li>
+&lt;li>link: &lt;a href="https://www.acmicpc.net/problem/1935">https://www.acmicpc.net/problem/1935&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="define-input-output">Define input, output&lt;/h2>
+&lt;ul>
+&lt;li>Input: 후위표기식으로 표시된 식&lt;/li>
+&lt;li>Output: 값&lt;/li>
+&lt;/ul>
+&lt;h2 id="설명">설명&lt;/h2>
+&lt;p>후위 표기식과 다르게 정방향으로 접근한다.&lt;br>
+후휘 표기식 자체가 컴퓨터에서 식을 간단하게 계산하기 위해서 만들어진 것을 생각하자.&lt;/p>
+&lt;h2 id="source-code">source code&lt;/h2>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">sys&lt;/span>
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">calculator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">after&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">before&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cur&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln"> 5&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">cur&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;+&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln"> 6&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">after&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">cur&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;-&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">after&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">cur&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">after&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">cur&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="n">after&lt;/span>
+&lt;span class="ln">13&lt;/span>
+&lt;span class="ln">14&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="n">N&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">16&lt;/span>&lt;span class="n">math&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">17&lt;/span>
+&lt;span class="ln">18&lt;/span>&lt;span class="n">alphabet&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">19&lt;/span>&lt;span class="n">replace&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{}&lt;/span>
+&lt;span class="ln">20&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">21&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;span class="ln">22&lt;/span> &lt;span class="n">replace&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">chr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alphabet&lt;/span>&lt;span class="p">)]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">n&lt;/span>
+&lt;span class="ln">23&lt;/span> &lt;span class="n">alphabet&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;span class="ln">24&lt;/span>
+&lt;span class="ln">25&lt;/span>&lt;span class="n">stacks&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;span class="ln">26&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">cur&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">math&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">27&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Z&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="ln">28&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">replace&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;span class="ln">29&lt;/span> &lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">30&lt;/span> &lt;span class="n">after&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">31&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">32&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">calculator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">after&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">before&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cur&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">33&lt;/span>
+&lt;span class="ln">34&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;{:.2f}&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">stacks&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>relative-sort-array</title><link>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</link><pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1122&lt;/li>
 &lt;li>difficult: Easy&lt;/li>
@@ -1518,11 +1666,11 @@ apply하기에 앞서 secrets를 설정해주어야 합니다. 자세한 방법�
 &lt;hr>
 &lt;h2 id="define-input-output">Define input, output&lt;/h2>
 &lt;ul>
-&lt;li>Input: Array &amp;lt;$a_{1}$, $a_{2}$,...,$a_{n}$&amp;gt;&lt;/li>
+&lt;li>Input: Array $$&amp;lt;a_{1}, a_{2}, ... ,a_{n}&amp;gt;$$&lt;/li>
 &lt;li>Output:
 &lt;ul>
 &lt;li>Array :&lt;/li>
-&lt;li>$$&amp;lt;a'&lt;em>{1}$, $a'&lt;/em>{2}$,...,$a'_{n}&amp;gt;$$&lt;/li>
+&lt;li>$$&amp;lt;a'&lt;em>{1}, a'&lt;/em>{2}, ... ,a'_{n}&amp;gt;$$&lt;/li>
 &lt;li>$$b_{i} = max(a'_{i+1}, a'_{i+2}, ..., a'_{n})$$&lt;/li>
 &lt;li>$$a'&lt;em>{i} = \text{if } b&lt;/em>{i} &amp;gt; a_{i} \text{ then } b_{i} \text{ else }-1$$&lt;/li>
 &lt;/ul>
