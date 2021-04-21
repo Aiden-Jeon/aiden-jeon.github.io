@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Tue, 13 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/tech/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/introduction/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Wed, 21 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/tech/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/introduction/</guid><description>
 &lt;h1 id="introduction-to-xaiexplainable-ai">Introduction to XAI(eXplainable AI)&lt;/h1>
 &lt;hr>
 &lt;p>최근 많은 산업에서 딥러닝을 적용을 시도하고 있습니다. 하지만 모델의 결과가 어떤 과정을 통해서 그런 예측을 했는지 해석하기 어려운 '블랙박스' 문제는 딥러닝 적용을 blocking하는 큰 요인입니다.&lt;/p>
@@ -1277,22 +1277,23 @@ apply하기에 앞서 secrets를 설정해주어야 합니다. 자세한 방법�
 &lt;h2 id="1-설치">1. 설치&lt;/h2>
 &lt;p>argocd 설치는 &lt;a href="https://argoproj.github.io/argo-cd/getting_started/">tutorial&lt;/a>을 따라했습니다.&lt;/p>
 &lt;h2 id="2-실행">2. 실행&lt;/h2>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># 1. argocd namespace&lt;/span>
-&lt;span class="ln"> 2&lt;/span>kubectl create namespace argocd
-&lt;span class="ln"> 3&lt;/span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-&lt;span class="ln"> 4&lt;/span>
-&lt;span class="ln"> 5&lt;/span>&lt;span class="c1"># access argo cd api server&lt;/span>
-&lt;span class="ln"> 6&lt;/span>kubectl patch svc argocd-server -n argocd -p &lt;span class="s1">&amp;#39;{&amp;#34;spec&amp;#34;: {&amp;#34;type&amp;#34;: &amp;#34;LoadBalancer&amp;#34;}}&amp;#39;&lt;/span>
-&lt;span class="ln"> 7&lt;/span>
-&lt;span class="ln"> 8&lt;/span>&lt;span class="c1">#port forward&lt;/span>
-&lt;span class="ln"> 9&lt;/span>kubectl port-forward svc/argocd-server -n argocd 8080:443
-&lt;span class="ln">10&lt;/span>
-&lt;span class="ln">11&lt;/span>argocd login localhost:8080
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>기본 아이디는 admin입니다. 비밀번호는 아래 명령어로 확인할 수 잇습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="c1"># 1. argocd namespace&lt;/span>
+&lt;span class="ln">2&lt;/span>kubectl create namespace argocd
+&lt;span class="ln">3&lt;/span>kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+&lt;span class="ln">4&lt;/span>
+&lt;span class="ln">5&lt;/span>&lt;span class="c1"># access argo cd api server&lt;/span>
+&lt;span class="ln">6&lt;/span>kubectl patch svc argocd-server -n argocd -p &lt;span class="s1">&amp;#39;{&amp;#34;spec&amp;#34;: {&amp;#34;type&amp;#34;: &amp;#34;LoadBalancer&amp;#34;}}&amp;#39;&lt;/span>
+&lt;span class="ln">7&lt;/span>
+&lt;span class="ln">8&lt;/span>&lt;span class="c1">#port forward&lt;/span>
+&lt;span class="ln">9&lt;/span>kubectl port-forward svc/argocd-server -n argocd 8080:80
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>argocd 를 실행시켰으면 https://localhost:8080 으로 들어갑니다.&lt;br>
+기본으로 설정되어 있는 아이디는 admin이며 비밀번호는 아래 명령어로 확인할 수 있습니다.&lt;/p>
+&lt;p>v1.8.0 이하는 아래 명령어로 확인할 수 있습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods -n argocd -l app.kubernetes.io/name&lt;span class="o">=&lt;/span>argocd-server -o name &lt;span class="p">|&lt;/span> cut -d&lt;span class="s1">&amp;#39;/&amp;#39;&lt;/span> -f &lt;span class="m">2&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>로그인에 성공하면 https://localhost:8080 으로 들어갑니다.&lt;/p>
-&lt;h2 id="3-app-생성">3. APP 생성&lt;/h2>
-&lt;p>처음 나오는 화면은 다음 처럼 아무런 app이 없습니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>v1.9.0 이상은 아래 명령어로 확인할 수 있습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl -n argocd get secret argocd-initial-admin-secret -o &lt;span class="nv">jsonpath&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;{.data.password}&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> base64 -d
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-app-생성">3. APP 생성&lt;/h2>
+&lt;p>처음 나오는 화면은 다음과 같이 아무런 app이 없습니다.&lt;/p>
 &lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-8.png" alt="그림-1">&lt;/p>
 &lt;p>NEW APP 을 눌러 추가하겠습니다.&lt;/p>
 &lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-9.png" alt="그림-2">
@@ -1323,7 +1324,284 @@ apply하기에 앞서 secrets를 설정해주어야 합니다. 자세한 방법�
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube service -n sphinx-doc --url sphinx-api-doc-sphinx-doc
 &lt;span class="ln">2&lt;/span>
 &lt;span class="ln">3&lt;/span>http://192.168.64.2:31058
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행이 되었는지 확인합니다.&lt;/p></description></item><item><title>사탕 게임</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</link><pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행이 되었는지 확인합니다.&lt;/p></description></item><item><title>argocd를 branch에서 cd</title><link>https://aiden-jeon.github.io/post/tech/cicd/argocd_branch/</link><pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cicd/argocd_branch/</guid><description>
+&lt;p>&lt;strong>CI/CD Contents 순서&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/sphinx_autoapi/">sphinx-autoapi 를 이용한 자동 api 문서 생성하기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/github_action_ci/">github action을 이용한 ci&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/ghcr_k8s_deploy/">ghcr을 이용한 kubernetes deployment 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/helm_deployment_chart/">helm을 이용한 deployment chart 만들기&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/argocd_cd/">argocd를 이용한 cd&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://aiden-jeon.github.io/post/tech/cicd/argocd_branch/">argocd를 branch에서 cd&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;p>이번 포스트에서는 argocd를 이용해 github branch 에서 cd(continuous delivery) 하는 법에 대해서 알아보겠습니다.&lt;/p>
+&lt;h2 id="1-github-action-설정하기">1. github action 설정하기&lt;/h2>
+&lt;h3 id="11-ci">1.1 CI&lt;/h3>
+&lt;p>CI를 위한 github action을 작성하겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">docker-image-ci&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-18.04&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">recursive&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Create shot SHA&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">benjlevesque/short-sha@v1.2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">short-sha&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Set up Docker Buildx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/setup-buildx-action@v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Login to GitHub Container Registry&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/login-action@v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">registry&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ghcr.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">username&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ github.repository_owner }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">password&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.CR_PAT }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup python&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/setup-python@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">python-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;3.8.5&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Generate html&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="sd"> pip install -r requirements-doc.txt
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="sd"> cd docs
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="sd"> make html&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">29&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build and push&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">30&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/build-push-action@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">31&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">32&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">33&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">context&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">34&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">file&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">docker/Dockerfile&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">35&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">tags&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">36&lt;/span>&lt;span class="sd"> ghcr.io/aiden-jeon/sphinx-api:latest
+&lt;/span>&lt;span class="ln">37&lt;/span>&lt;span class="sd"> ghcr.io/aiden-jeon/sphinx-api:${{ steps.short-sha.outputs.sha }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>main branch에 수정이 생기면 docs를 build하고 docker image를 만듭니다.
+docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span># requirements-doc.txt
+&lt;span class="ln">2&lt;/span>sphinx-autoapi==1.6.0
+&lt;span class="ln">3&lt;/span>sphinx-rtd-theme==0.5.1
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="12-cd">1.2 CD&lt;/h3>
+&lt;p>CI를 위한 github action을 작성하겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">docker-image-cd&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-18.04&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Create short SHA&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">benjlevesque/short-sha@v1.2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">short-sha&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout deploy repo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">repository&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">aiden-jeon/github-cicd&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.CR_PAT }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github-cicd&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Install yq&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="sd"> wget https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64 -O ./yq
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="sd"> chmod +x ./yq&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Change image tag on values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="sd"> cat ./github-cicd/sphinx-doc/values.yaml | ./yq e &amp;#39;.image.tag=&amp;#34;${{ steps.short-sha.outputs.sha }}&amp;#34;&amp;#39; - | tee ./github-cicd/sphinx-doc/values.yaml.tmp
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="sd"> mv ./github-cicd/sphinx-doc/values.yaml.tmp ./github-cicd/sphinx-doc/values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Commit file&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">|&lt;/span>&lt;span class="sd">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="sd"> cd github-cicd
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="sd"> git config --local user.email &amp;#34;ells2124@gmail.com&amp;#34;
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="sd"> git config --local user.name &amp;#34;aiden-jeon&amp;#34;
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="sd"> git add ./sphinx-doc/values.yaml
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="sd"> git commit -m &amp;#34;Update sphinx-doc image tag.&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Push changes&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">29&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ad-m/github-push-action@master&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">30&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">31&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">directory&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github-cicd&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">32&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">repository&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">aiden-jeon/github-cicd&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">33&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">github_token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.CR_PAT }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">34&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">doc-pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">35&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">force&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>CI가 종료되면 &lt;code>doc-pages&lt;/code> branch 의 values를 수정합니다.&lt;/p>
+&lt;h2 id="2-app-생성">2. APP 생성&lt;/h2>
+&lt;p>cd를 위한 app을 생성하겠습니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-15.png" alt="그림-1">&lt;/p>
+&lt;p>NEW APP 을 눌러 추가하겠습니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-16.png" alt="그림-2">
+&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-17.png" alt="그림-3">&lt;/p>
+&lt;p>그림-3과 같이 config를 입력하고 create를 해줍니다. 완성되면 아래와 같이 app이 생성됩니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-18.png" alt="그림-4">&lt;/p>
+&lt;p>app에 클릭해서 들어가면 다음과 같이 나옵니다. 여기서 SYNC 버튼을 눌러줍니다&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-19.png" alt="그림-5">&lt;/p>
+&lt;p>SYNCHRONIZE 버튼을 누릅니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-20.png" alt="그림-6">&lt;/p>
+&lt;p>다음은 sync가 완료된 화면입니다.&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/github/cicd-21.png" alt="그림-7">&lt;/p>
+&lt;p>command창에서 정상적으로 떴는지 확인해봅니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>❯ kubectl get all -n sphinx-doc
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln"> 4&lt;/span>pod/sphinx-branch-sphinx-doc-5c597645d-wr69x 1/1 Running &lt;span class="m">0&lt;/span> 35s
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln"> 7&lt;/span>service/sphinx-branch-sphinx-doc NodePort 10.107.46.101 &amp;lt;none&amp;gt; 80:30903/TCP 36s
+&lt;span class="ln"> 8&lt;/span>
+&lt;span class="ln"> 9&lt;/span>NAME READY UP-TO-DATE AVAILABLE AGE
+&lt;span class="ln">10&lt;/span>deployment.apps/sphinx-branch-sphinx-doc 1/1 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 35s
+&lt;span class="ln">11&lt;/span>
+&lt;span class="ln">12&lt;/span>NAME DESIRED CURRENT READY AGE
+&lt;span class="ln">13&lt;/span>replicaset.apps/sphinx-branch-sphinx-doc-5c597645d &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 35s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-확인">4. 확인&lt;/h2>
+&lt;p>다음 명령어로 접속할 ip와 포트를 얻습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>❯ minikube service -n sphinx-doc --url sphinx-branch-sphinx-doc
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>🏃 Starting tunnel &lt;span class="k">for&lt;/span> service sphinx-branch-sphinx-doc.
+&lt;span class="ln"> 4&lt;/span>&lt;span class="p">|&lt;/span>------------&lt;span class="p">|&lt;/span>--------------------------&lt;span class="p">|&lt;/span>-------------&lt;span class="p">|&lt;/span>------------------------&lt;span class="p">|&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="p">|&lt;/span> NAMESPACE &lt;span class="p">|&lt;/span> NAME &lt;span class="p">|&lt;/span> TARGET PORT &lt;span class="p">|&lt;/span> URL &lt;span class="p">|&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="p">|&lt;/span>------------&lt;span class="p">|&lt;/span>--------------------------&lt;span class="p">|&lt;/span>-------------&lt;span class="p">|&lt;/span>------------------------&lt;span class="p">|&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="p">|&lt;/span> sphinx-doc &lt;span class="p">|&lt;/span> sphinx-branch-sphinx-doc &lt;span class="p">|&lt;/span> &lt;span class="p">|&lt;/span> http://127.0.0.1:63918 &lt;span class="p">|&lt;/span>
+&lt;span class="ln"> 8&lt;/span>&lt;span class="p">|&lt;/span>------------&lt;span class="p">|&lt;/span>--------------------------&lt;span class="p">|&lt;/span>-------------&lt;span class="p">|&lt;/span>------------------------&lt;span class="p">|&lt;/span>
+&lt;span class="ln"> 9&lt;/span>
+&lt;span class="ln">10&lt;/span>http://127.0.0.1:63918
+&lt;span class="ln">11&lt;/span>❗ Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 실행이 되었는지 확인합니다.&lt;/p></description></item><item><title>minikube를 이용해 seldon 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</link><pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</guid><description>
+&lt;p>이번 포스트는 Seldon Core를 설치하는 법에 대해서 설명합니다.&lt;/p>
+&lt;p>사용한 k8s 환경은 minikube 입니다.&lt;/p>
+&lt;h2 id="1-install">1. Install&lt;/h2>
+&lt;p>우선, minikube를 시작합니다&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube start
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 helm을 이용해 seldon-core를 설치합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl create ns seldon-system
+&lt;span class="ln">2&lt;/span>&amp;gt; helm install seldon-core seldon-core-operator &lt;span class="se">\
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="se">&lt;/span> --repo https://storage.googleapis.com/seldon-charts &lt;span class="se">\
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="se">&lt;/span> --set usageMetrics.enabled&lt;span class="o">=&lt;/span>&lt;span class="nb">true&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="se">&lt;/span> --namespace seldon-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인해 봅니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n seldon-system
+&lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln"> 3&lt;/span>pod/seldon-controller-manager-559c567c9-9tj9w 1/1 Running &lt;span class="m">0&lt;/span> 11s
+&lt;span class="ln"> 4&lt;/span>
+&lt;span class="ln"> 5&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln"> 6&lt;/span>service/seldon-webhook-service ClusterIP 10.101.37.1 &amp;lt;none&amp;gt; 443/TCP 11s
+&lt;span class="ln"> 7&lt;/span>
+&lt;span class="ln"> 8&lt;/span>NAME READY UP-TO-DATE AVAILABLE AGE
+&lt;span class="ln"> 9&lt;/span>deployment.apps/seldon-controller-manager 1/1 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
+&lt;span class="ln">10&lt;/span>
+&lt;span class="ln">11&lt;/span>NAME DESIRED CURRENT READY AGE
+&lt;span class="ln">12&lt;/span>replicaset.apps/seldon-controller-manager-559c567c9 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-sklearn-model">2. Sklearn Model&lt;/h2>
+&lt;p>deploy에 이용할 모델을 만들어 보겠습니다.
+모델을 생성하는 코드입니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># sklearn_model.py&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">joblib&lt;/span>
+&lt;span class="ln"> 3&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">datasets&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">svm&lt;/span>
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">train&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">datasets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">load_iris&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">target&lt;/span>
+&lt;span class="ln"> 9&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">svm&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SVC&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">12&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">joblib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;model.joblib&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">14&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="n">train&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>실행 시켜서 &lt;code>model.joblib&lt;/code> 을 생성합니다.&lt;/p>
+&lt;h2 id="3-pvc">3. pvc&lt;/h2>
+&lt;p>pod에 모델 파일을 옮기기 위해 pvc를 생성합니다.&lt;/p>
+&lt;p>우선 minikube에 접속해서 폴더를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube ssh
+&lt;span class="ln">2&lt;/span>&amp;gt; docker@minikube:~$ sudo mkdir -p /mnt/models/sklearn
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 생성된 경로를 바라보는 pvc를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># sklearn-pv-volume.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/mnt/models/sklearn&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nn">---&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolumeClaim&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">seldon&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">requests&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>생성 후 상태를 확인합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl create ns seldon
+&lt;span class="ln">2&lt;/span>&amp;gt; kubectl apply -f sklearn-pv-volume.yaml
+&lt;span class="ln">3&lt;/span>persistentvolume/sklearn-pv-volume created
+&lt;span class="ln">4&lt;/span>
+&lt;span class="ln">5&lt;/span>&amp;gt; kubectl get pv sklearn-pv-volume
+&lt;span class="ln">6&lt;/span>NAME CAPACITY ACCESS MODES RECLAIM POLICY STATUS CLAIM STORAGECLASS REASON AGE
+&lt;span class="ln">7&lt;/span>sklearn-pv-volume 1Gi RWO Retain Bound seldon/sklearn-pv-volume manual 53s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-deploy">4. Deploy&lt;/h2>
+&lt;p>이제 SeldonDeployment를 생성하겠습니다.&lt;/p>
+&lt;p>간단하게 SKLEARN_SERVER를 사용하는 deployment를 띄우겠습니다. 우선 아래의 내용을 &lt;code>deploy.yaml&lt;/code> 파일에 작성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># seldom-deploy.yaml&lt;/span>
+&lt;span class="ln"> 2&lt;/span>apiVersion: machinelearning.seldon.io/v1
+&lt;span class="ln"> 3&lt;/span>kind: SeldonDeployment
+&lt;span class="ln"> 4&lt;/span>metadata:
+&lt;span class="ln"> 5&lt;/span> name: iris-model
+&lt;span class="ln"> 6&lt;/span> namespace: seldon
+&lt;span class="ln"> 7&lt;/span>spec:
+&lt;span class="ln"> 8&lt;/span> name: iris-model
+&lt;span class="ln"> 9&lt;/span> predictors:
+&lt;span class="ln">10&lt;/span> - graph:
+&lt;span class="ln">11&lt;/span> children: &lt;span class="o">[]&lt;/span>
+&lt;span class="ln">12&lt;/span> implementation: SKLEARN_SERVER
+&lt;span class="ln">13&lt;/span> modelUri: pvc://sklearn-pv-volume/
+&lt;span class="ln">14&lt;/span> name: classifier
+&lt;span class="ln">15&lt;/span> parameters:
+&lt;span class="ln">16&lt;/span> - name: method
+&lt;span class="ln">17&lt;/span> type: STRING
+&lt;span class="ln">18&lt;/span> value: predict
+&lt;span class="ln">19&lt;/span> name: default
+&lt;span class="ln">20&lt;/span> replicas: &lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 apply를 합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f deploy.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get po -n seldon
+&lt;span class="ln">2&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln">3&lt;/span>iris-model-default-0-classifier-6bb64c9588-5q8ck 0/2 Running &lt;span class="m">0&lt;/span> 18s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="5-test">5. test&lt;/h2>
+&lt;p>정상적으로 작동하는지 확인하기 위한 테스트를 해보겠습니다.&lt;/p>
+&lt;p>우선 서비스에 어떤 것들이 있는지 확인해보겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get svc -n seldon
+&lt;span class="ln">2&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln">3&lt;/span>iris-model-default ClusterIP 10.96.166.74 &amp;lt;none&amp;gt; 8000/TCP,5001/TCP 89s
+&lt;span class="ln">4&lt;/span>iris-model-default-classifier ClusterIP 10.102.2.217 &amp;lt;none&amp;gt; 9000/TCP,9500/TCP 114s
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 중 &lt;code>classifier&lt;/code> 가 붙어있는 svc 가 predict를 담당합니다.&lt;/p>
+&lt;p>로컬에서 사용할 수 있게 포트포워딩을 해줍니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl port-forward -n seldon svc/iris-model-default-classifier &lt;span class="m">9000&lt;/span>
+&lt;span class="ln">2&lt;/span>Forwarding from 127.0.0.1:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
+&lt;span class="ln">3&lt;/span>Forwarding from &lt;span class="o">[&lt;/span>::1&lt;span class="o">]&lt;/span>:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>inference할 데이터를 생성해보겠습니다.&lt;/p>
+&lt;p>다음 파일을 input.json에 저장합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="ln">1&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;span class="ln">2&lt;/span> &lt;span class="nt">&amp;#34;data&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="ln">3&lt;/span> &lt;span class="nt">&amp;#34;ndarray&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;span class="ln">4&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">2.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.4&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;span class="ln">5&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">3.4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.6&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">6&lt;/span> &lt;span class="p">]&lt;/span>
+&lt;span class="ln">7&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="ln">8&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>다음 명령어를 이용해 predict를 해봅니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; curl -H &lt;span class="s2">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> http://localhost:9000/predict -d @./input.json
+&lt;span class="ln">2&lt;/span>&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;data&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;names&amp;#34;&lt;/span>:&lt;span class="o">[]&lt;/span>,&lt;span class="s2">&amp;#34;ndarray&amp;#34;&lt;/span>:&lt;span class="o">[&lt;/span>1,1&lt;span class="o">]}&lt;/span>,&lt;span class="s2">&amp;#34;meta&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;requestPath&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;classifier&amp;#34;&lt;/span>:&lt;span class="s2">&amp;#34;seldonio/sklearnserver:1.7.0&amp;#34;&lt;/span>&lt;span class="o">}}}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>[1, 1]&lt;/code> 로 예측되어서 나오는 것을 확인할 수 있습니다.&lt;/p></description></item><item><title>사탕 게임</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</link><pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</guid><description>
 &lt;ul>
 &lt;li>problem number: 3085&lt;/li>
 &lt;li>link: &lt;a href="https://www.acmicpc.net/problem/3085">https://www.acmicpc.net/problem/3085&lt;/a>&lt;/li>
