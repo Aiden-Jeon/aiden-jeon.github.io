@@ -1,4 +1,81 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Wed, 21 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>minikube를 이용해 seldon 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</link><pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 22 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>seldon-core local에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/local/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/local/</guid><description>
+&lt;p>이번 포스트에서는 seldon core를 local에서 사용하는 법에 대해서 설명합니다.&lt;/p>
+&lt;h2 id="install-selon-core">Install selon-core&lt;/h2>
+&lt;p>현재 seldon-core를 로컬에서 사용하기 위해서는 multiprocessing issue로 인해 3.7에서만 가능합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>pyenv virtualenv 3.7.9 seldon
+&lt;span class="ln">2&lt;/span>pyenv activate seldon
+&lt;span class="ln">3&lt;/span>pip install seldon-core scikit-learn mlflow pandas
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>seldon-core repo를 clone 합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>git clone https://github.com/SeldonIO/seldon-core
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="sklearn-server">Sklearn server&lt;/h2>
+&lt;p>sklearn server 를 사용할 경로 위치로 이동합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">cd&lt;/span> seldon-core/servers/sklearnserver/sklearnserver
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>모델을 저장할 스크립트를 작성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># sklearn_model.py&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">joblib&lt;/span>
+&lt;span class="ln"> 3&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">datasets&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">svm&lt;/span>
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">train&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">datasets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">load_iris&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">target&lt;/span>
+&lt;span class="ln"> 9&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">svm&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SVC&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">12&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">joblib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;model/model.joblib&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">14&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="n">train&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>모델을 저장할 경로를 생성한 후 스크립트를 실행해 &lt;code>model.joblib&lt;/code>을 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>mkdir model
+&lt;span class="ln">2&lt;/span>python sklearn_model.py
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 서버를 실행시켜 보겠습니다. SVC 모델은 predict 함수만 있기 때문에 parameter에서 predict method를 주겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>seldon-core-microservice SKLearnServer --parameters &lt;span class="s1">&amp;#39;[{&amp;#34;name&amp;#34;: &amp;#34;method&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;STRING&amp;#34;, &amp;#34;value&amp;#34;: &amp;#34;predict&amp;#34;}, {&amp;#34;name&amp;#34;: &amp;#34;model_uri&amp;#34;, &amp;#34;type&amp;#34;:&amp;#34;STRING&amp;#34;, &amp;#34;value&amp;#34;: &amp;#34;file://model/&amp;#34;}]&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 predict를 해보겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>curl -H &lt;span class="s2">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> http://localhost:9000/predict -d &lt;span class="s1">&amp;#39;{
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="s1"> &amp;#34;data&amp;#34;:{
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="s1"> &amp;#34;ndarray&amp;#34;: [[0.6745011455,-0.5923730118, 1.0469454037, 1.1855672065]],
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="s1"> &amp;#34;names&amp;#34;: [&amp;#34;sepal length (cm)&amp;#34;, &amp;#34;sepal width (cm)&amp;#34;,&amp;#34;petal length (cm)&amp;#34;,&amp;#34;petal width (cm)&amp;#34;]
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="s1"> },
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="s1"> &amp;#34;meta&amp;#34; : {}
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="s1">}&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="mlflow-server">MLflow server&lt;/h2>
+&lt;p>mlflow server 가 위치한 경로로 이동합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">cd&lt;/span> seldon-core/servers/sklearnserver/sklearnserver
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>모델을 저장할 스크립트를 작성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># mlflow_model.py&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">mlflow&lt;/span>
+&lt;span class="ln"> 3&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">mlflow.models.signature&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">infer_signature&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">datasets&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">svm&lt;/span>
+&lt;span class="ln"> 6&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">train&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">datasets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">load_iris&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">target&lt;/span>
+&lt;span class="ln">10&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">svm&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SVC&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">signature&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">infer_signature&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">predict&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">14&lt;/span> &lt;span class="n">mlflow&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sklearn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">log_model&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;iris_model&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">signature&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">signature&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">15&lt;/span>
+&lt;span class="ln">16&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">17&lt;/span> &lt;span class="n">train&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>생성된 mlruns 폴더에서 artifact의 모델 경로를 찾습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; &lt;span class="nb">cd&lt;/span> mlruns/0/d96ad56315364063901ace2df62dfbc2/artifacts/iris_model
+&lt;span class="ln">2&lt;/span>&amp;gt; ls
+&lt;span class="ln">3&lt;/span>MLmodel conda.yaml model.pkl
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 서버를 실행시켜 보겠습니다. SVC 모델은 predict 함수만 있기 때문에 parameter에서 predict method를 주겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>seldon-core-microservice MLFlowServer --parameters &lt;span class="s1">&amp;#39;[{&amp;#34;name&amp;#34;: &amp;#34;model_uri&amp;#34;, &amp;#34;type&amp;#34;:&amp;#34;STRING&amp;#34;, &amp;#34;value&amp;#34;: &amp;#34;file://mlruns/0/d96ad56315364063901ace2df62dfbc2/artifacts/iris_model/&amp;#34;}]&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 predict를 해보겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>curl -H &lt;span class="s2">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> http://localhost:9000/predict -d &lt;span class="s1">&amp;#39;{
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="s1"> &amp;#34;data&amp;#34;:{
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="s1"> &amp;#34;ndarray&amp;#34;: [[0.6745011455,-0.5923730118, 1.0469454037, 1.1855672065]],
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="s1"> &amp;#34;names&amp;#34;: [&amp;#34;sepal length (cm)&amp;#34;, &amp;#34;sepal width (cm)&amp;#34;,&amp;#34;petal length (cm)&amp;#34;,&amp;#34;petal width (cm)&amp;#34;]
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="s1"> },
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="s1"> &amp;#34;meta&amp;#34; : {}
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="s1">}&amp;#39;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>minikube를 이용해 seldon 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</link><pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</guid><description>
 &lt;p>이번 포스트는 Seldon Core를 설치하는 법에 대해서 설명합니다.&lt;/p>
 &lt;p>사용한 k8s 환경은 minikube 입니다.&lt;/p>
 &lt;h2 id="1-install">1. Install&lt;/h2>
@@ -48,6 +125,8 @@
 &lt;p>우선 minikube에 접속해서 폴더를 생성합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube ssh
 &lt;span class="ln">2&lt;/span>&amp;gt; docker@minikube:~$ sudo mkdir -p /mnt/models/sklearn
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 모델을 해당 경로에 넣어주어야 합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube cp model.joblib /mnt/models/sklearn/models.joblib
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 생성된 경로를 바라보는 pvc를 생성합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># sklearn-pv-volume.yaml&lt;/span>&lt;span class="w">
 &lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
