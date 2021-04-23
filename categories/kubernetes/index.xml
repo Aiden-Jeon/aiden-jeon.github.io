@@ -1,4 +1,153 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 22 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>seldon-core local에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/local/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/local/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Fri, 23 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>seldon-core minikube에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/minikube/</link><pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/minikube/</guid><description>
+&lt;p>이번 포스트는 seldon-core를 minikube에서 사용하는 법에 대해서 설명합니다.&lt;/p>
+&lt;hr>
+&lt;h2 id="1-install">1. Install&lt;/h2>
+&lt;p>우선, minikube를 시작합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube start
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>seldon-core를 설치할 namespace를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl create ns seldon-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 helm을 이용해 seldon-core를 설치합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>helm install seldon-core seldon-core-operator &lt;span class="se">\
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="se">&lt;/span> --repo https://storage.googleapis.com/seldon-charts &lt;span class="se">\
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="se">&lt;/span> --set usageMetrics.enabled&lt;span class="o">=&lt;/span>&lt;span class="nb">true&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="se">&lt;/span> --namespace seldon-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인해 봅니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n seldon-system
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln"> 4&lt;/span>pod/seldon-controller-manager-559c567c9-9tj9w 1/1 Running &lt;span class="m">0&lt;/span> 11s
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln"> 7&lt;/span>service/seldon-webhook-service ClusterIP 10.101.37.1 &amp;lt;none&amp;gt; 443/TCP 11s
+&lt;span class="ln"> 8&lt;/span>
+&lt;span class="ln"> 9&lt;/span>NAME READY UP-TO-DATE AVAILABLE AGE
+&lt;span class="ln">10&lt;/span>deployment.apps/seldon-controller-manager 1/1 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
+&lt;span class="ln">11&lt;/span>
+&lt;span class="ln">12&lt;/span>NAME DESIRED CURRENT READY AGE
+&lt;span class="ln">13&lt;/span>replicaset.apps/seldon-controller-manager-559c567c9 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>seldon-controller-manager pod이 정상적으로 Running 상태여야 합니다.&lt;/p>
+&lt;h2 id="2-sklearn-model">2. Sklearn Model&lt;/h2>
+&lt;p>deploy에 이용할 모델을 만들어 보겠습니다.
+모델을 생성하는 코드입니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># sklearn_model.py&lt;/span>
+&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">joblib&lt;/span>
+&lt;span class="ln"> 3&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">datasets&lt;/span>
+&lt;span class="ln"> 4&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">svm&lt;/span>
+&lt;span class="ln"> 5&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">train&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;span class="ln"> 7&lt;/span> &lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">datasets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">load_iris&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 8&lt;/span> &lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">target&lt;/span>
+&lt;span class="ln"> 9&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">svm&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SVC&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">12&lt;/span>
+&lt;span class="ln">13&lt;/span> &lt;span class="n">joblib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;model.joblib&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">14&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">16&lt;/span> &lt;span class="n">train&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>실행 시켜서 &lt;code>model.joblib&lt;/code> 을 생성합니다.&lt;/p>
+&lt;h2 id="3-pvc">3. pvc&lt;/h2>
+&lt;p>pod에 모델 파일을 옮기기 위해 pvc를 생성해야 합니다.&lt;/p>
+&lt;p>우선 minikube에 접속합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube ssh
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>폴더를 생성 후 종료합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>docker@minikube:~$ sudo mkdir -p /mnt/models/sklearn
+&lt;span class="ln">2&lt;/span>docker@minikube:~$ &lt;span class="nb">exit&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 모델을 해당 경로에 넣어주어야 합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube cp model.joblib /mnt/models/sklearn/model.joblib
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 생성된 경로를 바라보는 pvc를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># sklearn-pv-volume.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/mnt/models/sklearn&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nn">---&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolumeClaim&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">seldon&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">requests&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>deploy 할 namespace를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl create ns seldon
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 &lt;code>sklearn-pv-volume.yaml&lt;/code> 를 생성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f sklearn-pv-volume.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>생성 후 상태를 확인합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl get pv sklearn-pv-volume
+&lt;span class="ln">2&lt;/span>
+&lt;span class="ln">3&lt;/span>NAME CAPACITY ACCESS MODES RECLAIM POLICY STATUS CLAIM STORAGECLASS REASON AGE
+&lt;span class="ln">4&lt;/span>sklearn-pv-volume 1Gi RWO Retain Bound seldon/sklearn-pv-volume manual 53s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-deploy">4. Deploy&lt;/h2>
+&lt;p>이제 SeldonDeployment를 생성하겠습니다.&lt;/p>
+&lt;p>간단하게 SKLEARN_SERVER를 사용하는 deployment를 띄우겠습니다. 우선 아래의 내용을 &lt;code>deploy.yaml&lt;/code> 파일에 작성합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># sklearn-deploy.yaml&lt;/span>
+&lt;span class="ln"> 2&lt;/span>apiVersion: machinelearning.seldon.io/v1
+&lt;span class="ln"> 3&lt;/span>kind: SeldonDeployment
+&lt;span class="ln"> 4&lt;/span>metadata:
+&lt;span class="ln"> 5&lt;/span> name: iris-model
+&lt;span class="ln"> 6&lt;/span> namespace: seldon
+&lt;span class="ln"> 7&lt;/span>spec:
+&lt;span class="ln"> 8&lt;/span> name: iris-model
+&lt;span class="ln"> 9&lt;/span> predictors:
+&lt;span class="ln">10&lt;/span> - graph:
+&lt;span class="ln">11&lt;/span> children: &lt;span class="o">[]&lt;/span>
+&lt;span class="ln">12&lt;/span> implementation: SKLEARN_SERVER
+&lt;span class="ln">13&lt;/span> modelUri: pvc://sklearn-pv-volume/
+&lt;span class="ln">14&lt;/span> name: classifier
+&lt;span class="ln">15&lt;/span> parameters:
+&lt;span class="ln">16&lt;/span> - name: method
+&lt;span class="ln">17&lt;/span> type: STRING
+&lt;span class="ln">18&lt;/span> value: predict
+&lt;span class="ln">19&lt;/span> name: default
+&lt;span class="ln">20&lt;/span> replicas: &lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 apply를 합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f sklearn-deploy.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>정상적으로 Running이 되는지 확인합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl get po -n seldon
+&lt;span class="ln">2&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln">3&lt;/span>iris-model-default-0-classifier-6bb64c9588-5q8ck 0/2 Running &lt;span class="m">0&lt;/span> 18s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="5-test">5. test&lt;/h2>
+&lt;p>실제로 predict가 되는지 테스트를 해보겠습니다.
+우선 서비스에 어떤 것들이 있는지 확인해보겠습니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get svc -n seldon
+&lt;span class="ln">2&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln">3&lt;/span>iris-model-default ClusterIP 10.96.166.74 &amp;lt;none&amp;gt; 8000/TCP,5001/TCP 89s
+&lt;span class="ln">4&lt;/span>iris-model-default-classifier ClusterIP 10.102.2.217 &amp;lt;none&amp;gt; 9000/TCP,9500/TCP 114s
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 중 &lt;code>classifier&lt;/code> 가 붙어있는 svc 가 predict를 담당합니다.&lt;/p>
+&lt;p>로컬에서 사용할 수 있게 포트포워딩을 해줍니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl port-forward -n seldon svc/iris-model-default-classifier &lt;span class="m">9000&lt;/span>
+&lt;span class="ln">2&lt;/span>Forwarding from 127.0.0.1:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
+&lt;span class="ln">3&lt;/span>Forwarding from &lt;span class="o">[&lt;/span>::1&lt;span class="o">]&lt;/span>:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>inference할 데이터를 생성해보겠습니다.&lt;/p>
+&lt;p>다음 파일을 input.json에 저장합니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="ln">1&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;span class="ln">2&lt;/span> &lt;span class="nt">&amp;#34;data&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="ln">3&lt;/span> &lt;span class="nt">&amp;#34;ndarray&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;span class="ln">4&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">2.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.4&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;span class="ln">5&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">3.4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.6&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;span class="ln">6&lt;/span> &lt;span class="p">]&lt;/span>
+&lt;span class="ln">7&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="ln">8&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>다음 명령어를 이용해 predict를 해봅니다.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; curl -H &lt;span class="s2">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> http://localhost:9000/predict -d @./input.json
+&lt;span class="ln">2&lt;/span>&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;data&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;names&amp;#34;&lt;/span>:&lt;span class="o">[]&lt;/span>,&lt;span class="s2">&amp;#34;ndarray&amp;#34;&lt;/span>:&lt;span class="o">[&lt;/span>1,1&lt;span class="o">]}&lt;/span>,&lt;span class="s2">&amp;#34;meta&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;requestPath&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;classifier&amp;#34;&lt;/span>:&lt;span class="s2">&amp;#34;seldonio/sklearnserver:1.7.0&amp;#34;&lt;/span>&lt;span class="o">}}}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>[1, 1]&lt;/code> 로 예측되어서 나오는 것을 확인할 수 있습니다.&lt;/p></description></item><item><title>seldon-core local에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/local/</link><pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/local/</guid><description>
 &lt;p>이번 포스트에서는 seldon-core를 local에서 사용하는 법에 대해서 설명합니다.&lt;/p>
 &lt;h2 id="1-install">1. Install&lt;/h2>
 &lt;h3 id="11-seldon-core">1.1) seldon-core&lt;/h3>
@@ -80,150 +229,7 @@
 &lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="s1"> },
 &lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="s1"> &amp;#34;meta&amp;#34; : {}
 &lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="s1">}&amp;#39;&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>minikube를 이용해 seldon 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</link><pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/quickstart/</guid><description>
-&lt;p>이번 포스트는 Seldon Core를 설치하는 법에 대해서 설명합니다.&lt;/p>
-&lt;p>사용한 k8s 환경은 minikube 입니다.&lt;/p>
-&lt;h2 id="1-install">1. Install&lt;/h2>
-&lt;p>우선, minikube를 시작합니다&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube start
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 helm을 이용해 seldon-core를 설치합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl create ns seldon-system
-&lt;span class="ln">2&lt;/span>&amp;gt; helm install seldon-core seldon-core-operator &lt;span class="se">\
-&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="se">&lt;/span> --repo https://storage.googleapis.com/seldon-charts &lt;span class="se">\
-&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="se">&lt;/span> --set usageMetrics.enabled&lt;span class="o">=&lt;/span>&lt;span class="nb">true&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="se">&lt;/span> --namespace seldon-system
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인해 봅니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n seldon-system
-&lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
-&lt;span class="ln"> 3&lt;/span>pod/seldon-controller-manager-559c567c9-9tj9w 1/1 Running &lt;span class="m">0&lt;/span> 11s
-&lt;span class="ln"> 4&lt;/span>
-&lt;span class="ln"> 5&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
-&lt;span class="ln"> 6&lt;/span>service/seldon-webhook-service ClusterIP 10.101.37.1 &amp;lt;none&amp;gt; 443/TCP 11s
-&lt;span class="ln"> 7&lt;/span>
-&lt;span class="ln"> 8&lt;/span>NAME READY UP-TO-DATE AVAILABLE AGE
-&lt;span class="ln"> 9&lt;/span>deployment.apps/seldon-controller-manager 1/1 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
-&lt;span class="ln">10&lt;/span>
-&lt;span class="ln">11&lt;/span>NAME DESIRED CURRENT READY AGE
-&lt;span class="ln">12&lt;/span>replicaset.apps/seldon-controller-manager-559c567c9 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 11s
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-sklearn-model">2. Sklearn Model&lt;/h2>
-&lt;p>deploy에 이용할 모델을 만들어 보겠습니다.
-모델을 생성하는 코드입니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># sklearn_model.py&lt;/span>
-&lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">joblib&lt;/span>
-&lt;span class="ln"> 3&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">datasets&lt;/span>
-&lt;span class="ln"> 4&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">svm&lt;/span>
-&lt;span class="ln"> 5&lt;/span>
-&lt;span class="ln"> 6&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">train&lt;/span>&lt;span class="p">():&lt;/span>
-&lt;span class="ln"> 7&lt;/span> &lt;span class="n">df&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">datasets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">load_iris&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="ln"> 8&lt;/span> &lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">df&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">target&lt;/span>
-&lt;span class="ln"> 9&lt;/span>
-&lt;span class="ln">10&lt;/span> &lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">svm&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">SVC&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="ln">11&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">y&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">12&lt;/span>
-&lt;span class="ln">13&lt;/span> &lt;span class="n">joblib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dump&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;model.joblib&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">14&lt;/span>
-&lt;span class="ln">15&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">16&lt;/span> &lt;span class="n">train&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>실행 시켜서 &lt;code>model.joblib&lt;/code> 을 생성합니다.&lt;/p>
-&lt;h2 id="3-pvc">3. pvc&lt;/h2>
-&lt;p>pod에 모델 파일을 옮기기 위해 pvc를 생성합니다.&lt;/p>
-&lt;p>우선 minikube에 접속해서 폴더를 생성합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube ssh
-&lt;span class="ln">2&lt;/span>&amp;gt; docker@minikube:~$ sudo mkdir -p /mnt/models/sklearn
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>이제 모델을 해당 경로에 넣어주어야 합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>minikube cp model.joblib /mnt/models/sklearn/models.joblib
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 생성된 경로를 바라보는 pvc를 생성합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># sklearn-pv-volume.yaml&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolume&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/mnt/models/sklearn&amp;#34;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nn">---&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolumeClaim&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">sklearn-pv-volume&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">seldon&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storageClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">manual&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">requests&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>생성 후 상태를 확인합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl create ns seldon
-&lt;span class="ln">2&lt;/span>&amp;gt; kubectl apply -f sklearn-pv-volume.yaml
-&lt;span class="ln">3&lt;/span>persistentvolume/sklearn-pv-volume created
-&lt;span class="ln">4&lt;/span>
-&lt;span class="ln">5&lt;/span>&amp;gt; kubectl get pv sklearn-pv-volume
-&lt;span class="ln">6&lt;/span>NAME CAPACITY ACCESS MODES RECLAIM POLICY STATUS CLAIM STORAGECLASS REASON AGE
-&lt;span class="ln">7&lt;/span>sklearn-pv-volume 1Gi RWO Retain Bound seldon/sklearn-pv-volume manual 53s
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-deploy">4. Deploy&lt;/h2>
-&lt;p>이제 SeldonDeployment를 생성하겠습니다.&lt;/p>
-&lt;p>간단하게 SKLEARN_SERVER를 사용하는 deployment를 띄우겠습니다. 우선 아래의 내용을 &lt;code>deploy.yaml&lt;/code> 파일에 작성합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># seldom-deploy.yaml&lt;/span>
-&lt;span class="ln"> 2&lt;/span>apiVersion: machinelearning.seldon.io/v1
-&lt;span class="ln"> 3&lt;/span>kind: SeldonDeployment
-&lt;span class="ln"> 4&lt;/span>metadata:
-&lt;span class="ln"> 5&lt;/span> name: iris-model
-&lt;span class="ln"> 6&lt;/span> namespace: seldon
-&lt;span class="ln"> 7&lt;/span>spec:
-&lt;span class="ln"> 8&lt;/span> name: iris-model
-&lt;span class="ln"> 9&lt;/span> predictors:
-&lt;span class="ln">10&lt;/span> - graph:
-&lt;span class="ln">11&lt;/span> children: &lt;span class="o">[]&lt;/span>
-&lt;span class="ln">12&lt;/span> implementation: SKLEARN_SERVER
-&lt;span class="ln">13&lt;/span> modelUri: pvc://sklearn-pv-volume/
-&lt;span class="ln">14&lt;/span> name: classifier
-&lt;span class="ln">15&lt;/span> parameters:
-&lt;span class="ln">16&lt;/span> - name: method
-&lt;span class="ln">17&lt;/span> type: STRING
-&lt;span class="ln">18&lt;/span> value: predict
-&lt;span class="ln">19&lt;/span> name: default
-&lt;span class="ln">20&lt;/span> replicas: &lt;span class="m">1&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>그리고 apply를 합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f deploy.yaml
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get po -n seldon
-&lt;span class="ln">2&lt;/span>NAME READY STATUS RESTARTS AGE
-&lt;span class="ln">3&lt;/span>iris-model-default-0-classifier-6bb64c9588-5q8ck 0/2 Running &lt;span class="m">0&lt;/span> 18s
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="5-test">5. test&lt;/h2>
-&lt;p>정상적으로 작동하는지 확인하기 위한 테스트를 해보겠습니다.&lt;/p>
-&lt;p>우선 서비스에 어떤 것들이 있는지 확인해보겠습니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get svc -n seldon
-&lt;span class="ln">2&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
-&lt;span class="ln">3&lt;/span>iris-model-default ClusterIP 10.96.166.74 &amp;lt;none&amp;gt; 8000/TCP,5001/TCP 89s
-&lt;span class="ln">4&lt;/span>iris-model-default-classifier ClusterIP 10.102.2.217 &amp;lt;none&amp;gt; 9000/TCP,9500/TCP 114s
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>이 중 &lt;code>classifier&lt;/code> 가 붙어있는 svc 가 predict를 담당합니다.&lt;/p>
-&lt;p>로컬에서 사용할 수 있게 포트포워딩을 해줍니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl port-forward -n seldon svc/iris-model-default-classifier &lt;span class="m">9000&lt;/span>
-&lt;span class="ln">2&lt;/span>Forwarding from 127.0.0.1:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
-&lt;span class="ln">3&lt;/span>Forwarding from &lt;span class="o">[&lt;/span>::1&lt;span class="o">]&lt;/span>:9000 -&amp;gt; &lt;span class="m">9000&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>inference할 데이터를 생성해보겠습니다.&lt;/p>
-&lt;p>다음 파일을 input.json에 저장합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="ln">1&lt;/span>&lt;span class="p">{&lt;/span>
-&lt;span class="ln">2&lt;/span> &lt;span class="nt">&amp;#34;data&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;span class="ln">3&lt;/span> &lt;span class="nt">&amp;#34;ndarray&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
-&lt;span class="ln">4&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">2.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.4&lt;/span>&lt;span class="p">],&lt;/span>
-&lt;span class="ln">5&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mf">6.0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">3.4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4.5&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">1.6&lt;/span>&lt;span class="p">]&lt;/span>
-&lt;span class="ln">6&lt;/span> &lt;span class="p">]&lt;/span>
-&lt;span class="ln">7&lt;/span> &lt;span class="p">}&lt;/span>
-&lt;span class="ln">8&lt;/span> &lt;span class="p">}&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>다음 명령어를 이용해 predict를 해봅니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; curl -H &lt;span class="s2">&amp;#34;Content-Type: application/json&amp;#34;&lt;/span> http://localhost:9000/predict -d @./input.json
-&lt;span class="ln">2&lt;/span>&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;data&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;names&amp;#34;&lt;/span>:&lt;span class="o">[]&lt;/span>,&lt;span class="s2">&amp;#34;ndarray&amp;#34;&lt;/span>:&lt;span class="o">[&lt;/span>1,1&lt;span class="o">]}&lt;/span>,&lt;span class="s2">&amp;#34;meta&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;requestPath&amp;#34;&lt;/span>:&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;classifier&amp;#34;&lt;/span>:&lt;span class="s2">&amp;#34;seldonio/sklearnserver:1.7.0&amp;#34;&lt;/span>&lt;span class="o">}}}&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>[1, 1]&lt;/code> 로 예측되어서 나오는 것을 확인할 수 있습니다.&lt;/p></description></item><item><title>kubernetes에서 ghcr package pull 하기</title><link>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>kubernetes에서 ghcr package pull 하기</title><link>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</link><pubDate>Wed, 03 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/kubernetes/kubernetes_ghcr/</guid><description>
 &lt;p>kubernetes 에서 사용하는 image는 기본적으로 dockerhub에서 pull 된다. 기본적으로 Local에 있는 패키지는 사용하지 않는다.
 회사에서는 도커 이미지를 dockerhub와 같은 곳에 public 하게 공유할 수가 없다.
 그래서 github 에서 제공하는 (GHCR) GitHub Container Registry for Docker images 을 이용해서 도커 이미지를 관리하고 있다.&lt;/p>
