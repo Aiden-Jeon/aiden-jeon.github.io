@@ -39,7 +39,7 @@
 </span><span class=ln>5</span><span class=s1>    },
 </span><span class=ln>6</span><span class=s1>    &#34;meta&#34; : {}
 </span><span class=ln>7</span><span class=s1>}&#39;</span>
-</code></pre></div><h2 id=3-mlflow-server>3. MLflow server</h2><p>clone받은 repo에서 mlflow server가 위치한 경로로 이동합니다.</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=ln>1</span><span class=nb>cd</span> seldon-core/servers/sklearnserver/sklearnserver
+</code></pre></div><h2 id=3-mlflow-server>3. MLflow server</h2><p>clone받은 repo에서 mlflow server가 위치한 경로로 이동합니다.</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=ln>1</span><span class=nb>cd</span> seldon-core/servers/mlflowserver/mlflowserver
 </code></pre></div><p>mlflow를 이용해 모델을 저장할 스크립트를 작성합니다.</p><div class=highlight><pre class=chroma><code class=language-python data-lang=python><span class=ln> 1</span><span class=c1># mlflow_model.py</span>
 <span class=ln> 2</span><span class=kn>import</span> <span class=nn>mlflow</span>
 <span class=ln> 3</span><span class=kn>from</span> <span class=nn>mlflow.models.signature</span> <span class=kn>import</span> <span class=n>infer_signature</span>

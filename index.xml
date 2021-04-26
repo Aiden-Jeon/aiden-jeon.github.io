@@ -195,7 +195,7 @@
 &lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="s1">}&amp;#39;&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-mlflow-server">3. MLflow server&lt;/h2>
 &lt;p>clone받은 repo에서 mlflow server가 위치한 경로로 이동합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">cd&lt;/span> seldon-core/servers/sklearnserver/sklearnserver
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">cd&lt;/span> seldon-core/servers/mlflowserver/mlflowserver
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>mlflow를 이용해 모델을 저장할 스크립트를 작성합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="c1"># mlflow_model.py&lt;/span>
 &lt;span class="ln"> 2&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">mlflow&lt;/span>
