@@ -1,4 +1,462 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/post/tech/</link><description>Recent content in Tech on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Mon, 10 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>seldon-core와 prometheus local에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/grafana/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/grafana/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/post/tech/</link><description>Recent content in Tech on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Mon, 10 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>(CKA) 02. Core Concepts</title><link>https://aiden-jeon.github.io/post/tech/cka/core_concepts/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/core_concepts/</guid><description>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="0-tips">0. Tips&lt;/h1>
+&lt;ol>
+&lt;li>
+&lt;p>ailias &lt;code>kubectl&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; &lt;span class="nb">alias&lt;/span> &lt;span class="nv">k&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kubectl&amp;#34;&lt;/span>
+&lt;span class="ln">2&lt;/span>&amp;gt; k get po
+&lt;span class="ln">3&lt;/span>No resources found in default namespace.
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>shortcuts&lt;/p>
+&lt;ul>
+&lt;li>pod = po&lt;/li>
+&lt;li>service = svc&lt;/li>
+&lt;li>namespace = ns&lt;/li>
+&lt;li>replicasets = rs&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>do not write all config file&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>use dry run&lt;/p>
+&lt;p>&lt;code>kubectl run nginx --image=nginx --dry-run=client -o yaml&lt;/code>&lt;/p>
+&lt;p>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>export it to yaml file&lt;/p>
+&lt;p>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml &amp;gt; nginx-deployment.yaml&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="1-pods">1. Pods&lt;/h2>
+&lt;h3 id="생성">생성&lt;/h3>
+&lt;ol>
+&lt;li>yaml&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># pod.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">kubectl apply -f pod.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>run&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl run nginx --image&lt;span class="o">=&lt;/span>nginx
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="상태">상태&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>기본&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get po
+&lt;span class="ln">2&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln">3&lt;/span>newpods-6nl8r 1/1 Running &lt;span class="m">0&lt;/span> 3m
+&lt;span class="ln">4&lt;/span>newpods-9sp8p 1/1 Running &lt;span class="m">0&lt;/span> 3m
+&lt;span class="ln">5&lt;/span>newpods-tplx9 1/1 Running &lt;span class="m">0&lt;/span> 3m
+&lt;span class="ln">6&lt;/span>nginx 1/1 Running &lt;span class="m">0&lt;/span> 3m11s
+&lt;span class="ln">7&lt;/span>webapp 1/2 ImagePullBackOff &lt;span class="m">0&lt;/span> 54s
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>READY means
+&lt;ul>
+&lt;li>running_containers in pod / total_containers in pod&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>wide&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get po -o wide
+&lt;span class="ln">2&lt;/span>NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES
+&lt;span class="ln">3&lt;/span>newpods-6nl8r 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 14s &amp;lt;none&amp;gt; controlplane &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;
+&lt;span class="ln">4&lt;/span>newpods-9sp8p 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 14s &amp;lt;none&amp;gt; controlplane &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;
+&lt;span class="ln">5&lt;/span>newpods-tplx9 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 14s &amp;lt;none&amp;gt; controlplane &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;
+&lt;span class="ln">6&lt;/span>nginx 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 25s &amp;lt;none&amp;gt; controlplane &amp;lt;none&amp;gt; &amp;lt;none&amp;gt;
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>NODE&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>describe&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; k describe po webapp
+&lt;span class="ln"> 2&lt;/span>Name: webapp
+&lt;span class="ln"> 3&lt;/span>Namespace: default
+&lt;span class="ln"> 4&lt;/span>Priority: &lt;span class="m">0&lt;/span>
+&lt;span class="ln"> 5&lt;/span>Node: controlplane/10.77.67.9
+&lt;span class="ln"> 6&lt;/span>Start Time: Mon, &lt;span class="m">10&lt;/span> May &lt;span class="m">2021&lt;/span> 03:54:38 +0000
+&lt;span class="ln"> 7&lt;/span>Labels: &amp;lt;none&amp;gt;
+&lt;span class="ln"> 8&lt;/span>Annotations: &amp;lt;none&amp;gt;
+&lt;span class="ln"> 9&lt;/span>Status: Pending
+&lt;span class="ln">10&lt;/span>IP: 10.244.0.8
+&lt;span class="ln">11&lt;/span>IPs:
+&lt;span class="ln">12&lt;/span> IP: 10.244.0.8
+&lt;span class="ln">13&lt;/span>Containers:
+&lt;span class="ln">14&lt;/span> nginx:
+&lt;span class="ln">15&lt;/span> Container ID: docker://f9580f7e4b7c51b53f0cb0d94ff913b643706a65a103a58614c3c254cf26043f
+&lt;span class="ln">16&lt;/span> Image: nginx
+&lt;span class="ln">17&lt;/span> Image ID: docker-pullable://nginx@sha256:75a55d33ecc73c2a242450a9f1cc858499d468f077ea942867e662c247b5e412
+&lt;span class="ln">18&lt;/span> Port: &amp;lt;none&amp;gt;
+&lt;span class="ln">19&lt;/span> Host Port: &amp;lt;none&amp;gt;
+&lt;span class="ln">20&lt;/span> State: Running
+&lt;span class="ln">21&lt;/span> Started: Mon, &lt;span class="m">10&lt;/span> May &lt;span class="m">2021&lt;/span> 03:54:41 +0000
+&lt;span class="ln">22&lt;/span> Ready: True
+&lt;span class="ln">23&lt;/span> Restart Count: &lt;span class="m">0&lt;/span>
+&lt;span class="ln">24&lt;/span> Environment: &amp;lt;none&amp;gt;
+&lt;span class="ln">25&lt;/span> Mounts:
+&lt;span class="ln">26&lt;/span> /var/run/secrets/kubernetes.io/serviceaccount from default-token-pz92t &lt;span class="o">(&lt;/span>ro&lt;span class="o">)&lt;/span>
+&lt;span class="ln">27&lt;/span> agentx:
+&lt;span class="ln">28&lt;/span> Container ID:
+&lt;span class="ln">29&lt;/span> Image: agentx
+&lt;span class="ln">30&lt;/span> Image ID:
+&lt;span class="ln">31&lt;/span> Port: &amp;lt;none&amp;gt;
+&lt;span class="ln">32&lt;/span> Host Port: &amp;lt;none&amp;gt;
+&lt;span class="ln">33&lt;/span> State: Waiting
+&lt;span class="ln">34&lt;/span> Reason: ImagePullBackOff
+&lt;span class="ln">35&lt;/span> Ready: False
+&lt;span class="ln">36&lt;/span> Restart Count: &lt;span class="m">0&lt;/span>
+&lt;span class="ln">37&lt;/span> Environment: &amp;lt;none&amp;gt;
+&lt;span class="ln">38&lt;/span> Mounts:
+&lt;span class="ln">39&lt;/span> /var/run/secrets/kubernetes.io/serviceaccount from default-token-pz92t &lt;span class="o">(&lt;/span>ro&lt;span class="o">)&lt;/span>
+&lt;span class="ln">40&lt;/span>Conditions:
+&lt;span class="ln">41&lt;/span> Type Status
+&lt;span class="ln">42&lt;/span> Initialized True
+&lt;span class="ln">43&lt;/span> Ready False
+&lt;span class="ln">44&lt;/span> ContainersReady False
+&lt;span class="ln">45&lt;/span> PodScheduled True
+&lt;span class="ln">46&lt;/span>Volumes:
+&lt;span class="ln">47&lt;/span> default-token-pz92t:
+&lt;span class="ln">48&lt;/span> Type: Secret &lt;span class="o">(&lt;/span>a volume populated by a Secret&lt;span class="o">)&lt;/span>
+&lt;span class="ln">49&lt;/span> SecretName: default-token-pz92t
+&lt;span class="ln">50&lt;/span> Optional: &lt;span class="nb">false&lt;/span>
+&lt;span class="ln">51&lt;/span>QoS Class: BestEffort
+&lt;span class="ln">52&lt;/span>Node-Selectors: &amp;lt;none&amp;gt;
+&lt;span class="ln">53&lt;/span>Tolerations: node.kubernetes.io/not-ready:NoExecute &lt;span class="nv">op&lt;/span>&lt;span class="o">=&lt;/span>Exists &lt;span class="k">for&lt;/span> 300s
+&lt;span class="ln">54&lt;/span> node.kubernetes.io/unreachable:NoExecute &lt;span class="nv">op&lt;/span>&lt;span class="o">=&lt;/span>Exists &lt;span class="k">for&lt;/span> 300s
+&lt;span class="ln">55&lt;/span>Events:
+&lt;span class="ln">56&lt;/span> Type Reason Age From Message
+&lt;span class="ln">57&lt;/span> ---- ------ ---- ---- -------
+&lt;span class="ln">58&lt;/span> Normal Scheduled 17s default-scheduler Successfully assigned default/webapp to controlplane
+&lt;span class="ln">59&lt;/span> Normal Pulling 15s kubelet Pulling image &lt;span class="s2">&amp;#34;nginx&amp;#34;&lt;/span>
+&lt;span class="ln">60&lt;/span> Normal Pulled 15s kubelet Successfully pulled image &lt;span class="s2">&amp;#34;nginx&amp;#34;&lt;/span> in 170.242045ms
+&lt;span class="ln">61&lt;/span> Normal Created 15s kubelet Created container nginx
+&lt;span class="ln">62&lt;/span> Normal Started 14s kubelet Started container nginx
+&lt;span class="ln">63&lt;/span> Normal Pulling 14s kubelet Pulling image &lt;span class="s2">&amp;#34;agentx&amp;#34;&lt;/span>
+&lt;span class="ln">64&lt;/span> Warning Failed 13s kubelet Failed to pull image &lt;span class="s2">&amp;#34;agentx&amp;#34;&lt;/span>: rpc error: &lt;span class="nv">code&lt;/span> &lt;span class="o">=&lt;/span> Unknown &lt;span class="nv">desc&lt;/span> &lt;span class="o">=&lt;/span> Error response from daemon: pull access denied &lt;span class="k">for&lt;/span> agentx, repository does not exist or may require &lt;span class="s1">&amp;#39;docker login&amp;#39;&lt;/span>: denied: requested access to the resource is denied
+&lt;span class="ln">65&lt;/span> Warning Failed 13s kubelet Error: ErrImagePull
+&lt;span class="ln">66&lt;/span> Normal BackOff 12s &lt;span class="o">(&lt;/span>x2 over 13s&lt;span class="o">)&lt;/span> kubelet Back-off pulling image &lt;span class="s2">&amp;#34;agentx&amp;#34;&lt;/span>
+&lt;span class="ln">67&lt;/span> Warning Failed 12s &lt;span class="o">(&lt;/span>x2 over 13s&lt;span class="o">)&lt;/span> kubelet Error: ImagePullBackOff
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="삭제">삭제&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>root@controlplane:~# k delete po webapp
+&lt;span class="ln">2&lt;/span>pod &lt;span class="s2">&amp;#34;webapp&amp;#34;&lt;/span> deleted
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="수정">수정&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k edit po redis
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-replication-controller">2. Replication Controller&lt;/h2>
+&lt;p>What is replica and why need controller?&lt;/p>
+&lt;ul>
+&lt;li>replication controller
+&lt;ul>
+&lt;li>run multiple instances of a single pod in the k8s cluster&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>특징&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>high availability
+&lt;ul>
+&lt;li>multiplie pod or single pod&lt;/li>
+&lt;li>replication controller ensures that the specified number of pods are running at all times.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Load Balancing &amp;amp; Scaling
+&lt;ul>
+&lt;li>balance the load&lt;/li>
+&lt;li>spans across multiple nodes&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>replication controller
+&lt;ul>
+&lt;li>old technology&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>replica set
+&lt;ul>
+&lt;li>recommended&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="생성-1">생성&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># ReplicaSet&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">apps/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ReplicaSet&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp-replicaset&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">app&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">front-end&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">app&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">front-end&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">replicas&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">selector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">front-end&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="상태-1">상태&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get replicasets
+&lt;span class="ln">2&lt;/span>NAME DESIRED CURRENT READY AGE
+&lt;span class="ln">3&lt;/span>new-replica-set &lt;span class="m">4&lt;/span> &lt;span class="m">4&lt;/span> &lt;span class="m">0&lt;/span> 11s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="수정-1">수정&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k edit replicaset
+&lt;span class="ln">2&lt;/span>replicaset.apps/new-replica-set edited
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>pod 삭제&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k delete po --all
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>자동으로 다시 pod 생성 됨&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>ot@controlplane:~# k get po
+&lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
+&lt;span class="ln"> 3&lt;/span>new-replica-set-7mx8k 0/1 Terminating &lt;span class="m">0&lt;/span> 4m22s
+&lt;span class="ln"> 4&lt;/span>new-replica-set-7p95n 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 17s
+&lt;span class="ln"> 5&lt;/span>new-replica-set-dcl5m 0/1 Terminating &lt;span class="m">0&lt;/span> 4m22s
+&lt;span class="ln"> 6&lt;/span>new-replica-set-hhpm9 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 17s
+&lt;span class="ln"> 7&lt;/span>new-replica-set-hr54x 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 17s
+&lt;span class="ln"> 8&lt;/span>new-replica-set-m6dmb 0/1 Terminating &lt;span class="m">0&lt;/span> 4m22s
+&lt;span class="ln"> 9&lt;/span>new-replica-set-v2vr5 0/1 ContainerCreating &lt;span class="m">0&lt;/span> 17s
+&lt;span class="ln">10&lt;/span>new-replica-set-vmts5 0/1 Terminating &lt;span class="m">0&lt;/span> 4m22s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="scale">scale&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>replace w\ file&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl replace -f ~~.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>scale w\ file&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl scale --replicas&lt;span class="o">=&lt;/span>&lt;span class="m">6&lt;/span> -f ~~.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>scale w\ resource&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl scale --replicas&lt;span class="o">=&lt;/span>&lt;span class="m">6&lt;/span> replicaset myapp-replicaset
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>edit&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl edit replicaset
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>
+&lt;p>실습&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k scale --replicas&lt;span class="o">=&lt;/span>&lt;span class="m">5&lt;/span> rs new-replica-set
+&lt;span class="ln">2&lt;/span>replicaset.apps/new-replica-set scaled
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="3-deployments">3. Deployments&lt;/h2>
+&lt;ul>
+&lt;li>rolling updates&lt;/li>
+&lt;li>rolling back&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-1.png" alt="img-1">&lt;/p>
+&lt;h2 id="4-namespaces">4. Namespaces&lt;/h2>
+&lt;ul>
+&lt;li>user의 실수부터 보호하기 위해서 처음 3개의 namespace가 생성됨
+&lt;ul>
+&lt;li>Default&lt;/li>
+&lt;li>kube-system&lt;/li>
+&lt;li>kube-public&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>isolate resources between namespace&lt;/li>
+&lt;li>own policies
+&lt;ul>
+&lt;li>each namespace is guaranteed certain amount and does not to use more.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>to reach in same namespace
+&lt;ul>
+&lt;li>&lt;code>mysql.connect(&amp;quot;db-service&amp;quot;)&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>to reach in other namespace
+&lt;ul>
+&lt;li>&lt;code>mysql.connect(db-service.dev.svc.cluster.local)&lt;/code>&lt;/li>
+&lt;li>&lt;code>{service-name}.{namespace}.{service}-{domain-name}&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="생성-2">생성&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k create ns dev-ns
+&lt;span class="ln">2&lt;/span>namespace/dev-ns created
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="목록">목록&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; k get ns
+&lt;span class="ln"> 2&lt;/span>
+&lt;span class="ln"> 3&lt;/span>NAME STATUS AGE
+&lt;span class="ln"> 4&lt;/span>default Active 88s
+&lt;span class="ln"> 5&lt;/span>dev Active 34s
+&lt;span class="ln"> 6&lt;/span>finance Active 34s
+&lt;span class="ln"> 7&lt;/span>kube-node-lease Active 93s
+&lt;span class="ln"> 8&lt;/span>kube-public Active 94s
+&lt;span class="ln"> 9&lt;/span>kube-system Active 95s
+&lt;span class="ln">10&lt;/span>manufacturing Active 33s
+&lt;span class="ln">11&lt;/span>marketing Active 34s
+&lt;span class="ln">12&lt;/span>prod Active 33s
+&lt;span class="ln">13&lt;/span>research Active 33s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="상태-2">상태&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;code>--namespace&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods --namespace&lt;span class="o">=&lt;/span>kube-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;code>-n&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods -n kube-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h3 id="change-default">change default&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl config set-context &lt;span class="k">$(&lt;/span>kubectl config current-context&lt;span class="k">)&lt;/span> --namespace&lt;span class="o">=&lt;/span>dev
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="pod-생성">pod 생성&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k run redis --image&lt;span class="o">=&lt;/span>redis --namespace&lt;span class="o">=&lt;/span>finance
+&lt;span class="ln">2&lt;/span>pod/redis created
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="전체-확인">전체 확인&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k get po --all-namespaces
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>하나의 값만 찾고 싶을 때&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k get po --all-namespaces &lt;span class="p">|&lt;/span> grep -i blue
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-services">5. Services&lt;/h2>
+&lt;p>allow to communicate w\ people, backend, frontend, extra data source&lt;/p>
+&lt;p>&lt;strong>types&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>node port
+&lt;ul>
+&lt;li>make an internal pod accessible on a port on node&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>cluster ip
+&lt;ul>
+&lt;li>creates a virtual IP inside the cluster to enable communication b2n different services&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>load balancer
+&lt;ul>
+&lt;li>provisions a load balancer for service for cloud provider&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>NodePort&lt;/strong>&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-2.png" alt="img-2">&lt;/p>
+&lt;ul>
+&lt;li>target port&lt;/li>
+&lt;li>port
+&lt;ul>
+&lt;li>port of service itself&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>node port
+&lt;ul>
+&lt;li>valid range: 30000 ~ 32767&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">SErvice&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myapp-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">NodePort&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">targetPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">nodePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">30008&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>if &lt;code>targetPort&lt;/code> is not given&lt;/p>
+&lt;ul>
+&lt;li>same as &lt;code>port&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>if &lt;code>nodePort&lt;/code> is not given&lt;/p>
+&lt;ul>
+&lt;li>automatically allocated&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>randomly distributed if same port is exists&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>ClusterIP&lt;/strong>
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-3.png" alt="img-3">&lt;/p>
+&lt;p>&lt;strong>LoadBalancer&lt;/strong>&lt;/p>
+&lt;h3 id="상태-3">상태&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get svc
+&lt;span class="ln">2&lt;/span>
+&lt;span class="ln">3&lt;/span>NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span class="o">(&lt;/span>S&lt;span class="o">)&lt;/span> AGE
+&lt;span class="ln">4&lt;/span>kubernetes ClusterIP 10.96.0.1 &amp;lt;none&amp;gt; 443/TCP 3m46s
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="명령어">명령어&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl expose pod redis --port&lt;span class="o">=&lt;/span>&lt;span class="m">6379&lt;/span> --name redis-service
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="expose">expose&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; kubectl run custom-nginx --image&lt;span class="o">=&lt;/span>nginx --port&lt;span class="o">=&lt;/span>&lt;span class="m">8080&lt;/span>
+&lt;span class="ln">2&lt;/span>kubectl run httpd --image&lt;span class="o">=&lt;/span>httpd:alpine --port&lt;span class="o">=&lt;/span>&lt;span class="m">80&lt;/span> --expose
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="6-imperative-vs-declaritive">6. Imperative vs Declaritive&lt;/h2>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-4.png" alt="img-4">&lt;/p>
+&lt;h3 id="infrastructure-as-code">Infrastructure as Code&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-5.png" alt="img-5">&lt;/p>
+&lt;h3 id="kubernetes">Kubernetes&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/core_concepts-6.png" alt="img-6">
+&lt;strong>Imperative Commands&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>create objects&lt;/li>
+&lt;li>update objects&lt;/li>
+&lt;/ul>
+&lt;p>→ hard to keep track&lt;/p>
+&lt;p>Imperative Configuration Files&lt;/p>
+&lt;ul>
+&lt;li>create objects
+&lt;ul>
+&lt;li>&lt;code>kubectl create -f ~.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>update obejcts
+&lt;ul>
+&lt;li>&lt;code>kubectl edit ~~ ~~&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl replace -f ~.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Declaritve&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>create objects
+&lt;ul>
+&lt;li>&lt;code>kubectl apply -f ~.yaml&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl apply -f /path/to/config-files&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>update objects
+&lt;ul>
+&lt;li>&lt;code>kubectl apply -f ~.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>seldon-core와 prometheus local에서 사용해보기</title><link>https://aiden-jeon.github.io/post/tech/seldon/grafana/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/seldon/grafana/</guid><description>
 &lt;p>이번 포스트에서는 local에서 실행한 seldon-core의 metric을 prometheus의 metric을 grafana에서 확인하는 방벙에 대해서 설명합니다.&lt;/p>
 &lt;h1 id="grafana">Grafana&lt;/h1>
 &lt;p>grafana를 설치합니다.&lt;/p>
