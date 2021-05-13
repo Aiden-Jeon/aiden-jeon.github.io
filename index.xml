@@ -2004,7 +2004,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">26&lt;/span> &lt;span class="n">answer&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">27&lt;/span>
 &lt;span class="ln">28&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/tech/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/introduction/</guid><description>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/mldl/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/mldl/xai/introduction/</guid><description>
 &lt;h1 id="introduction-to-xaiexplainable-ai">Introduction to XAI(eXplainable AI)&lt;/h1>
 &lt;hr>
 &lt;p>최근 많은 산업에서 딥러닝을 적용을 시도하고 있습니다. 하지만 모델의 결과가 어떤 과정을 통해서 그런 예측을 했는지 해석하기 어려운 '블랙박스' 문제는 딥러닝 적용을 blocking하는 큰 요인입니다.&lt;/p>
@@ -2114,7 +2114,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;li>XAI 설명 가능한 인공지능, 인공지능을 해부하다&lt;/li>
 &lt;li>&lt;a href="https://christophm.github.io/interpretable-ml-book/global.html">https://christophm.github.io/interpretable-ml-book/global.html&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://www.microsoft.com/en-us/research/uploads/prod/2019/05/Explainable-AI-for-Science-and-Medicine-slides.pdf">https://www.microsoft.com/en-us/research/uploads/prod/2019/05/Explainable-AI-for-Science-and-Medicine-slides.pdf&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>LIME with code</title><link>https://aiden-jeon.github.io/post/tech/xai/lime_with_code/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/xai/lime_with_code/</guid><description>
+&lt;/ul></description></item><item><title>LIME with code</title><link>https://aiden-jeon.github.io/post/mldl/xai/lime_with_code/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/mldl/xai/lime_with_code/</guid><description>
 &lt;h1 id="lime-local-interpretable-model-agnostic-explanations">&lt;strong>(LIME) Local Interpretable Model-agnostic Explanations&lt;/strong>​&lt;/h1>
 &lt;h2 id="objective-of-lime">&lt;strong>Objective of LIME&lt;/strong>&lt;/h2>
 &lt;p>$$\xi(x)=\underset{g\in G}{\operatorname{argmin}} L(f,g,\pi_{x})+\Omega(g)$$&lt;/p>
@@ -3652,7 +3652,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">imagePullSecrets&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
 &lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">test-ghcr&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>image에 ghcr 의 도커 이미지를 입력해주면 된다.
-그리고 imagePullSecrets에 좀 전에 생성한 secret 의 이름을 입력하면 된다.&lt;/p></description></item><item><title>동영상에서 원하는 인물 따라가기</title><link>https://aiden-jeon.github.io/post/tech/project/tracking_my_idol/</link><pubDate>Sun, 04 Oct 2020 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/project/tracking_my_idol/</guid><description>
+그리고 imagePullSecrets에 좀 전에 생성한 secret 의 이름을 입력하면 된다.&lt;/p></description></item><item><title>동영상에서 원하는 인물 따라가기</title><link>https://aiden-jeon.github.io/post/mldl/project/tracking_my_idol/</link><pubDate>Sun, 04 Oct 2020 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/mldl/project/tracking_my_idol/</guid><description>
 &lt;h2 id="0-참고-자료-검색">0. 참고 자료 검색&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a href="https://www.youtube.com/watch?v=cx7VONjFEE0&amp;amp;t=83s">빵형의 개발도상국&lt;/a>&lt;/li>
