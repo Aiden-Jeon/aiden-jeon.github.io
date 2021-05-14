@@ -18,20 +18,14 @@
 &lt;li>Istio&lt;/li>
 &lt;/ol>
 &lt;h3 id="1-minikube">1. Minikube&lt;/h3>
-&lt;ul>
-&lt;li>
 &lt;p>사용한 minikube version은 다음과 같습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube version
 &lt;span class="ln">2&lt;/span>minikube version: v1.20.0
 &lt;span class="ln">3&lt;/span>commit: c61663e942ec43b20e8e70839dcca52e44cd85ae
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>이 때 기본 minikube config는 oom 이슈가 생길 수 있음으로 memory를 늘리고 실행시킵니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>minikube의 default config는 memory의 경우 2048mb 입니다. 이 경우 실습 중 메모리가 부족해서 OOM이슈가 생겨서 정삭적으로 진행할 수 없을 수 도 있습니다. OOM을 방지하기 위해서 minikube의 메모리를 4096mb로 늘려줍니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube config &lt;span class="nb">set&lt;/span> memory &lt;span class="m">4096&lt;/span>
 &lt;span class="ln">2&lt;/span>❗ These changes will take effect upon a minikube delete and &lt;span class="k">then&lt;/span> a minikube start
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>minikube를 실행시킵니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>minikube를 실행시킵니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; minikube start
 &lt;span class="ln"> 2&lt;/span>😄 minikube v1.20.0 on Ubuntu 18.04
 &lt;span class="ln"> 3&lt;/span>✨ Automatically selected the docker driver. Other choices: virtualbox, ssh
@@ -46,26 +40,13 @@
 &lt;span class="ln">12&lt;/span> ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
 &lt;span class="ln">13&lt;/span>🌟 Enabled addons: storage-provisioner, default-storageclass
 &lt;span class="ln">14&lt;/span>🏄 Done! kubectl is now configured to use &lt;span class="s2">&amp;#34;minikube&amp;#34;&lt;/span> cluster and &lt;span class="s2">&amp;#34;default&amp;#34;&lt;/span> namespace by default
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="2-helm">2. Helm&lt;/h3>
-&lt;ul>
-&lt;li>
-&lt;p>helm 공식 홈페이지의 방법을 따라 합니다.&lt;/p>
-&lt;ul>
-&lt;li>&lt;a href="https://helm.sh/docs/intro/install/">https://helm.sh/docs/intro/install/&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>Script&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="2-helm">2. Helm&lt;/h3>
+&lt;p>&lt;a href="https://helm.sh/docs/intro/install/">helm 공식 홈페이지&lt;/a>의 방법을 따라 합니다. 이 때 버전은 3 이상이어야 합니다.&lt;br>
+여러 방법중 스크립트 방법을 이용해 설치하겠습니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>curl -fsSL -o get_helm.sh &amp;lt;https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3&amp;gt;
 &lt;span class="ln">2&lt;/span>chmod &lt;span class="m">700&lt;/span> get_helm.sh
 &lt;span class="ln">3&lt;/span>./get_helm.sh
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="3-ingress">3. Ingress&lt;/h3>
-&lt;ul>
-&lt;li>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="3-ingress">3. Ingress&lt;/h3>
 &lt;p>minikube에서 ingress addon 을 사용합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube addons &lt;span class="nb">enable&lt;/span> ingress
 &lt;span class="ln">2&lt;/span> ▪ Using image k8s.gcr.io/ingress-nginx/controller:v0.44.0
@@ -73,11 +54,7 @@
 &lt;span class="ln">4&lt;/span> ▪ Using image docker.io/jettech/kube-webhook-certgen:v1.5.1
 &lt;span class="ln">5&lt;/span>🔎 Verifying ingress addon...
 &lt;span class="ln">6&lt;/span>🌟 The &lt;span class="s1">&amp;#39;ingress&amp;#39;&lt;/span> addon is enabled
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="4-ambassador">4. Ambassador&lt;/h3>
-&lt;ul>
-&lt;li>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="4-ambassador">4. Ambassador&lt;/h3>
 &lt;p>helm chart를 이용해 설치합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl create namespace ambassador &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;namespace ambassador exists&amp;#34;&lt;/span>
 &lt;span class="ln">2&lt;/span>
@@ -87,9 +64,7 @@
 &lt;span class="ln">6&lt;/span> --set &lt;span class="nv">enableAES&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nb">false&lt;/span> &lt;span class="se">\\&lt;/span>
 &lt;span class="ln">7&lt;/span> --set crds.keep&lt;span class="o">=&lt;/span>&lt;span class="nb">false&lt;/span> &lt;span class="se">\\&lt;/span>
 &lt;span class="ln">8&lt;/span> --namespace ambassador
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>상태를 확인합니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>상태를 확인합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>&amp;gt; kubectl get all -n ambassador
 &lt;span class="ln"> 2&lt;/span>NAME READY STATUS RESTARTS AGE
 &lt;span class="ln"> 3&lt;/span>pod/ambassador-5bf7689fc6-9hlrd 1/1 Running &lt;span class="m">0&lt;/span> 116s
@@ -108,9 +83,7 @@
 &lt;span class="ln">16&lt;/span>NAME DESIRED CURRENT READY AGE
 &lt;span class="ln">17&lt;/span>replicaset.apps/ambassador-5bf7689fc6 &lt;span class="m">3&lt;/span> &lt;span class="m">3&lt;/span> &lt;span class="m">3&lt;/span> 116s
 &lt;span class="ln">18&lt;/span>replicaset.apps/ambassador-agent-8585f84d86 &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="m">1&lt;/span> 116s
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h2 id="seldon-core">Seldon-core&lt;/h2>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="seldon-core">Seldon-core&lt;/h2>
 &lt;h3 id="install-seldon-core">Install seldon-core&lt;/h3>
 &lt;ul>
 &lt;li>
@@ -226,8 +199,7 @@
 &lt;h2 id="seldon-analytics">Seldon-analytics&lt;/h2>
 &lt;h3 id="install">Install&lt;/h3>
 &lt;ul>
-&lt;li>
-&lt;p>helm chart 설치&lt;/p>
+&lt;li>helm chart 설치
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>helm install seldon-core-analytics seldon-core-analytics &lt;span class="se">\\&lt;/span>
 &lt;span class="ln">2&lt;/span> --repo &amp;lt;https://storage.googleapis.com/seldon-charts&amp;gt; &lt;span class="se">\\&lt;/span>
 &lt;span class="ln">3&lt;/span> --namespace seldon-system
@@ -242,17 +214,11 @@
 &lt;li>
 &lt;p>http://localhost:3000 에 접속합니다.&lt;/p>
 &lt;ul>
-&lt;li>
-&lt;p>admin / password 로 로그인 합니다.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>dashboard에서 prediction analytics를 클릭합니다&lt;/p>
-&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/seldon/from-scratch-install-istio-0.png" alt="img-0">&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>다음과 같은 dashboard를 볼 수 있습니다.&lt;/p>
-&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/seldon/from-scratch-install-istio-1.png" alt="img-1">&lt;/p>
-&lt;/li>
+&lt;li>admin / password 로 로그인 합니다.&lt;/li>
+&lt;li>dashboard에서 prediction analytics를 클릭합니다
+&lt;img src="https://aiden-jeon.github.io/imgs/seldon/from-scratch-install-istio-0.png" alt="img-0">&lt;/li>
+&lt;li>다음과 같은 dashboard를 볼 수 있습니다.
+&lt;img src="https://aiden-jeon.github.io/imgs/seldon/from-scratch-install-istio-1.png" alt="img-1">&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul></description></item></channel></rss>
