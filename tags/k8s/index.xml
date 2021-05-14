@@ -245,7 +245,7 @@
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube version
 &lt;span class="ln">2&lt;/span>minikube version: v1.20.0
 &lt;span class="ln">3&lt;/span>commit: c61663e942ec43b20e8e70839dcca52e44cd85ae
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>minikube의 default config는 memory의 경우 2048mb 입니다. 이 경우 실습 중 메모리가 부족해서 OOM이슈가 생겨서 정삭적으로 진행할 수 없을 수 도 있습니다. OOM을 방지하기 위해서 minikube의 메모리를 4096mb로 늘려둡니다.&lt;/p>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>minikube의 default config는 memory의 경우 2048mb 입니다. 이 경우 실습 중 메모리가 부족해서 OOM이슈가 생겨서 정삭적으로 진행할 수 없을 수 도 있습니다. OOM을 방지하기 위해서 minikube의 메모리를 4096mb로 늘려줍니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; minikube config &lt;span class="nb">set&lt;/span> memory &lt;span class="m">4096&lt;/span>
 &lt;span class="ln">2&lt;/span>❗ These changes will take effect upon a minikube delete and &lt;span class="k">then&lt;/span> a minikube start
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>minikube를 실행시킵니다.&lt;/p>
