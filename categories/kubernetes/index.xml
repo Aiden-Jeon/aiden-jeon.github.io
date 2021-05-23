@@ -1,4 +1,511 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Tue, 18 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 05. Application Lifecycle Management</title><link>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</link><pubDate>Tue, 18 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 08. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/08_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_storage/</guid><description>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker-storage">Docker Storage&lt;/h2>
+&lt;h3 id="file-system">File system&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-1.png" alt="img-1">&lt;/p>
+&lt;h4 id="layered-architecture">Layered architecture&lt;/h4>
+&lt;ul>
+&lt;li>build
+&lt;ul>
+&lt;li>application 1
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-2.png" alt="img-2">&lt;/li>
+&lt;li>application 2
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-3.png" alt="img-3">&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>run
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-4.png" alt="img-4">&lt;/li>
+&lt;li>copy-on-write
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-5.png" alt="img-5">&lt;/li>
+&lt;/ul>
+&lt;h4 id="volumes">Volumes&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-6.png" alt="img-6">&lt;/p>
+&lt;h4 id="volume-mounting">Volume mounting&lt;/h4>
+&lt;ul>
+&lt;li>create and run
+&lt;ul>
+&lt;li>create
+&lt;ul>
+&lt;li>&lt;code>docker volume create data_volume&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>run
+&lt;ul>
+&lt;li>&lt;code>docker run -v data_volume:/var/lib/mysql mysql&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>create by run
+&lt;ul>
+&lt;li>&lt;code>docker run -v data_volume2:/var/lib/mysql mysql&lt;/code>&lt;/li>
+&lt;li>automatically create data_volume&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="bind-mounting">Bind mounting&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker run -v /data/mysql:/var/lib/mysql mysql&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="preferred">Preferred&lt;/h4>
+&lt;ul>
+&lt;li>old
+&lt;ul>
+&lt;li>&lt;code>-v&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>new
+&lt;ul>
+&lt;li>&lt;code>--mount&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker run --mount type=bind,source=/data/mysql,target=/var/lib/mysql mysql&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="storage-drivers">Storage drivers&lt;/h3>
+&lt;ul>
+&lt;li>AUFS&lt;/li>
+&lt;li>ZFS&lt;/li>
+&lt;li>BTFS&lt;/li>
+&lt;li>Device Mapper&lt;/li>
+&lt;li>Overlay&lt;/li>
+&lt;li>Overlay2&lt;/li>
+&lt;/ul>
+&lt;h3 id="volume-drivers">Volume Drivers&lt;/h3>
+&lt;ul>
+&lt;li>Local&lt;/li>
+&lt;li>Azure File Storage&lt;/li>
+&lt;li>Convoy&lt;/li>
+&lt;li>...&lt;/li>
+&lt;/ul>
+&lt;h2 id="volumes-1">Volumes&lt;/h2>
+&lt;ul>
+&lt;li>docker
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-7.png" alt="img-7">&lt;/li>
+&lt;li>k8s
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-8.png" alt="img-8">&lt;/li>
+&lt;/ul>
+&lt;h3 id="volumes--mounts">Volumes &amp;amp; Mounts&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-9.png" alt="img-9">&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>definition&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadat&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">random-number-generator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">alpine&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">alpine&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;bin/sh&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;-c&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;shuf -i 0-100 -n 1 &amp;gt;&amp;gt; /opt/number.out;&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumeMounts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">mountPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/opt&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">data-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">data-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/data&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Directory&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>hostPath
+&lt;ul>
+&lt;li>→ single node is possible&lt;/li>
+&lt;li>→ not recommended in multi node&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>AWS
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">data-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">awsElastricBlockStore&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumeID&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">&amp;lt;volume-id&amp;gt;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fsType&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ext4&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="persistent-volume">Persistent Volume&lt;/h2>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-10.png" alt="img-10">&lt;/p>
+&lt;h3 id="생성">생성&lt;/h3>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pv-vol1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">persistentVolumeReclaimPolicy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Retain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">capacity&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">1Gi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/tmp/data&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>accessModes&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>ReadOnlyMany&lt;/code>&lt;/li>
+&lt;li>&lt;code>ReadWriteOnce&lt;/code>&lt;/li>
+&lt;li>&lt;code>ReadWriteMany&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>persistentVolumeReclaimPolicy&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>delete&lt;/code>&lt;/li>
+&lt;li>&lt;code>recycle&lt;/code>&lt;/li>
+&lt;li>&lt;code>retain&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="상태">상태&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>kubectl get persistentvolume&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get pv&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="persistent-volume-claims">Persistent Volume Claims&lt;/h2>
+&lt;ul>
+&lt;li>Persistent Volume
+&lt;ul>
+&lt;li>administrator crates&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Persistent Volume Claims
+&lt;ul>
+&lt;li>users create to use persistent volume&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="생성-1">생성&lt;/h3>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PersistentVolumeClaim&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">myclaim&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">accessModes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">ReadWriteOnce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">requests&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">500Mi&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="상태-1">상태&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>kubectl get persistentvolumeclaim&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get pvc&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="삭제">삭제&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>kubectl delete persistentvolumne myclaim&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="pod-with-pvc">Pod with PVC&lt;/h2>
+&lt;h3 id="생성-2">생성&lt;/h3>
+&lt;ul>
+&lt;li>definition w\ hostPath
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">webapp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">event-simulator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kodekloud/event-simulator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">LOG_HANDLERS&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">file&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumeMounts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">mountPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/log&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">log-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">log-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c">## directory location on host&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/var/log/webapp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c">## this field is optional&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Directory&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>definition w\ PVC
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">webapp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">event-simulator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kodekloud/event-simulator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">LOG_HANDLERS&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">file&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumeMounts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">mountPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/log&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">log-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">log-volume&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">persistentVolumeClaim&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">claimName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">claim-log-1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="storage-class">Storage Class&lt;/h2>
+&lt;h3 id="상태-2">상태&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>kubectl get storageclass&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get sc&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>\[CKA\] 06. Cluster Maintenance</title><link>https://aiden-jeon.github.io/post/tech/cka/06_cluster_maintenance/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/06_cluster_maintenance/</guid><description>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="operating-system-upgrade">Operating System Upgrade&lt;/h2>
+&lt;ul>
+&lt;li>upgrading base software&lt;/li>
+&lt;li>applying security patches&lt;/li>
+&lt;/ul>
+&lt;h3 id="pod-eviction-timeout">Pod Eviction Timeout&lt;/h3>
+&lt;ul>
+&lt;li>waiting pod healthy
+&lt;ul>
+&lt;li>&lt;code>pod-eviction-timeout=5m0s&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="drain">Drain&lt;/h3>
+&lt;p>Do not use this node, and all pods are out.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>kubectl drain node01&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl drain node01 --ignore-daemonsets&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>root@controlplane:~# kubectl drain node01 --ignore-daemonsets
+&lt;span class="ln"> 2&lt;/span>node/node01 cordoned
+&lt;span class="ln"> 3&lt;/span>WARNING: ignoring DaemonSet-managed Pods: kube-system/kube-flannel-ds-x6dgs, kube-system/kube-proxy-jfmxw
+&lt;span class="ln"> 4&lt;/span>evicting pod default/blue-746c87566d-wn2qg
+&lt;span class="ln"> 5&lt;/span>evicting pod default/blue-746c87566d-kt266
+&lt;span class="ln"> 6&lt;/span>evicting pod default/blue-746c87566d-9w9zq
+&lt;span class="ln"> 7&lt;/span>pod/blue-746c87566d-kt266 evicted
+&lt;span class="ln"> 8&lt;/span>pod/blue-746c87566d-wn2qg evicted
+&lt;span class="ln"> 9&lt;/span>pod/blue-746c87566d-9w9zq evicted
+&lt;span class="ln">10&lt;/span>node/node01 evicted
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>kubectl drain node01 --ignore-daemonsets --force&lt;/code>&lt;br>
+if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a pod will be lost.
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>root@controlplane:~# kubectl drain node01 --ignore-daemonsets --force
+&lt;span class="ln">2&lt;/span>node/node01 already cordoned
+&lt;span class="ln">3&lt;/span>WARNING: deleting Pods not managed by ReplicationController, ReplicaSet, Job, DaemonSet or StatefulSet: default/hr-app&lt;span class="p">;&lt;/span> ignoring DaemonSet-managed Pods: kube-system/kube-flannel-ds-x6dgs, kube-system/kube-proxy-jfmxw
+&lt;span class="ln">4&lt;/span>evicting pod default/hr-app
+&lt;span class="ln">5&lt;/span>pod/hr-app evicted
+&lt;span class="ln">6&lt;/span>node/node01 evicted
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="cordon">Cordon&lt;/h3>
+&lt;p>Do not use this node, but exist pods will be running.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>kubectl cordon node01&lt;/code>
+&lt;ul>
+&lt;li>This will ensure that no new pods are scheduled on this node.&lt;/li>
+&lt;li>The existing pods will not be affected by this operation.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="uncordon">Uncordon&lt;/h3>
+&lt;p>Can use this node.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>kubectl uncordon node01&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="cluster-upgrade-process">Cluster Upgrade Process&lt;/h2>
+&lt;h3 id="supported-versions">Supported versions&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/cluster_maintenance-1.png" alt="img-1">&lt;/p>
+&lt;h4 id="gcp">gcp&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/cluster_maintenance-2.png" alt="img-2">&lt;/p>
+&lt;h4 id="kubeadm">kubeadm&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>kubectl upgrade plan&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln"> 1&lt;/span>root@controlplane:~## kubeadm upgrade plan
+&lt;span class="ln"> 2&lt;/span>&lt;span class="o">[&lt;/span>upgrade/config&lt;span class="o">]&lt;/span> Making sure the configuration is correct:
+&lt;span class="ln"> 3&lt;/span>&lt;span class="o">[&lt;/span>upgrade/config&lt;span class="o">]&lt;/span> Reading configuration from the cluster...
+&lt;span class="ln"> 4&lt;/span>&lt;span class="o">[&lt;/span>upgrade/config&lt;span class="o">]&lt;/span> FYI: You can look at this config file with &lt;span class="s1">&amp;#39;kubectl -n kube-system get cm kubeadm-config -oyaml&amp;#39;&lt;/span>
+&lt;span class="ln"> 5&lt;/span>&lt;span class="o">[&lt;/span>preflight&lt;span class="o">]&lt;/span> Running pre-flight checks.
+&lt;span class="ln"> 6&lt;/span>&lt;span class="o">[&lt;/span>upgrade&lt;span class="o">]&lt;/span> Running cluster health checks
+&lt;span class="ln"> 7&lt;/span>&lt;span class="o">[&lt;/span>upgrade&lt;span class="o">]&lt;/span> Fetching available versions to upgrade to
+&lt;span class="ln"> 8&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> Cluster version: v1.19.0
+&lt;span class="ln"> 9&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> kubeadm version: v1.19.0
+&lt;span class="ln">10&lt;/span>I0522 08:54:38.911002 &lt;span class="m">21647&lt;/span> version.go:252&lt;span class="o">]&lt;/span> remote version is much newer: v1.21.1&lt;span class="p">;&lt;/span> falling back to: stable-1.19
+&lt;span class="ln">11&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> Latest stable version: v1.19.11
+&lt;span class="ln">12&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> Latest stable version: v1.19.11
+&lt;span class="ln">13&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> Latest version in the v1.19 series: v1.19.11
+&lt;span class="ln">14&lt;/span>&lt;span class="o">[&lt;/span>upgrade/versions&lt;span class="o">]&lt;/span> Latest version in the v1.19 series: v1.19.11
+&lt;span class="ln">15&lt;/span>
+&lt;span class="ln">16&lt;/span>Components that must be upgraded manually after you have upgraded the control plane with &lt;span class="s1">&amp;#39;kubeadm upgrade apply&amp;#39;&lt;/span>:
+&lt;span class="ln">17&lt;/span>COMPONENT CURRENT AVAILABLE
+&lt;span class="ln">18&lt;/span>kubelet &lt;span class="m">2&lt;/span> x v1.19.0 v1.19.11
+&lt;span class="ln">19&lt;/span>
+&lt;span class="ln">20&lt;/span>Upgrade to the latest version in the v1.19 series:
+&lt;span class="ln">21&lt;/span>
+&lt;span class="ln">22&lt;/span>COMPONENT CURRENT AVAILABLE
+&lt;span class="ln">23&lt;/span>kube-apiserver v1.19.0 v1.19.11
+&lt;span class="ln">24&lt;/span>kube-controller-manager v1.19.0 v1.19.11
+&lt;span class="ln">25&lt;/span>kube-scheduler v1.19.0 v1.19.11
+&lt;span class="ln">26&lt;/span>kube-proxy v1.19.0 v1.19.11
+&lt;span class="ln">27&lt;/span>CoreDNS 1.7.0 1.7.0
+&lt;span class="ln">28&lt;/span>etcd 3.4.9-1 3.4.9-1
+&lt;span class="ln">29&lt;/span>
+&lt;span class="ln">30&lt;/span>You can now apply the upgrade by executing the following command:
+&lt;span class="ln">31&lt;/span>
+&lt;span class="ln">32&lt;/span> kubeadm upgrade apply v1.19.11
+&lt;span class="ln">33&lt;/span>
+&lt;span class="ln">34&lt;/span>Note: Before you can perform this upgrade, you have to update kubeadm to v1.19.11.
+&lt;span class="ln">35&lt;/span>
+&lt;span class="ln">36&lt;/span>_____________________________________________________________________
+&lt;span class="ln">37&lt;/span>
+&lt;span class="ln">38&lt;/span>The table below shows the current state of component configs as understood by this version of kubeadm.
+&lt;span class="ln">39&lt;/span>Configs that have a &lt;span class="s2">&amp;#34;yes&amp;#34;&lt;/span> mark in the &lt;span class="s2">&amp;#34;MANUAL UPGRADE REQUIRED&amp;#34;&lt;/span> column require manual config upgrade or
+&lt;span class="ln">40&lt;/span>resetting to kubeadm defaults before a successful upgrade can be performed. The version to manually
+&lt;span class="ln">41&lt;/span>upgrade to is denoted in the &lt;span class="s2">&amp;#34;PREFERRED VERSION&amp;#34;&lt;/span> column.
+&lt;span class="ln">42&lt;/span>
+&lt;span class="ln">43&lt;/span>API GROUP CURRENT VERSION PREFERRED VERSION MANUAL UPGRADE REQUIRED
+&lt;span class="ln">44&lt;/span>kubeproxy.config.k8s.io v1alpha1 v1alpha1 no
+&lt;span class="ln">45&lt;/span>kubelet.config.k8s.io v1beta1 v1beta1 no
+&lt;span class="ln">46&lt;/span>_____________________________________________________________________
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>&lt;code>kubectl upgrade apply&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="kubeadm-1">Kubeadm&lt;/h3>
+&lt;h4 id="strategy">Strategy&lt;/h4>
+&lt;ul>
+&lt;li>strategy-1
+&lt;ul>
+&lt;li>all node down and up&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>strategy-2
+&lt;ul>
+&lt;li>upgrade node one by one&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>strategy-3
+&lt;ul>
+&lt;li>add new version node and remove old node&lt;/li>
+&lt;li>easy in cluster&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="procedure">Procedure&lt;/h4>
+&lt;ul>
+&lt;li>master node
+&lt;ul>
+&lt;li>ver 1
+&lt;ul>
+&lt;li>&lt;code>apt-get upgrade -y kuebadm=1.12.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubeadm upgrade apply v1.12.0&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt-get upgrade -y kubelet=1.12.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>systemctl restart kubelet&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ver 2
+&lt;ul>
+&lt;li>&lt;code>apt update&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt install kubeadm=1.20.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubeadm upgrade apply v1.20.0&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt install kubelet=1.20.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>systemctl restart kubelet&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>worker node
+&lt;ul>
+&lt;li>ver 1
+&lt;ul>
+&lt;li>&lt;code>kubectl drain node01&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt-get upgrade -y kuebadm=1.12.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt-get upgrade -y kubelet=1.12.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubeadm upgrade node config --kubelet-version v1.12.0&lt;/code>&lt;/li>
+&lt;li>&lt;code>systemctl restart kubelet&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl uncordon node01&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ver 2
+&lt;ul>
+&lt;li>&lt;code>apt update&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt install kubeadm=1.20.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubeadm upgrade node&lt;/code>&lt;/li>
+&lt;li>&lt;code>apt install kubelet=1.20.0-00&lt;/code>&lt;/li>
+&lt;li>&lt;code>systemctl restart kubelet&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="backup-and-restore">Backup and Restore&lt;/h2>
+&lt;h3 id="backup-candidates">Backup Candidates&lt;/h3>
+&lt;ul>
+&lt;li>Resource Configuration&lt;/li>
+&lt;li>ETCD Cluster&lt;/li>
+&lt;li>Persistent Volumes&lt;/li>
+&lt;/ul>
+&lt;h4 id="resource-configuration">Resource Configuration&lt;/h4>
+&lt;ul>
+&lt;li>kube-apiserver
+&lt;ul>
+&lt;li>&lt;code>kubectl get all -A -o yaml &amp;gt; all-deploy-svc.yaml&lt;/code>&lt;/li>
+&lt;li>too many resource to do&lt;/li>
+&lt;li>→ opensource like VELERO&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="etcd">ETCD&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>method 1&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>ExecStart= ... \\\\ --data-dir=/var/lib/etct&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>method 2&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>ETCDCTL_API=3 etcdctl snapshot save snapshot.db&lt;/code>&lt;/li>
+&lt;li>&lt;code>servcie kube-apiserver stop&lt;/code>&lt;/li>
+&lt;li>&lt;code>ETCDCTL_API=3 etcdctl snapshot --data-dir /var/lib/etcd-from-backup snapshot restore snapshot.db&lt;/code>&lt;/li>
+&lt;li>&lt;code>systemctl daemon-reload&lt;/code>&lt;/li>
+&lt;li>&lt;code>servce stecd restart&lt;/code>&lt;/li>
+&lt;li>&lt;code>service kube-apiserver start&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>backup practice&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nv">ETCDCTL_API&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">3&lt;/span> etcdctl --endpoints&lt;span class="o">=&lt;/span>https://&lt;span class="o">[&lt;/span>127.0.0.1&lt;span class="o">]&lt;/span>:2379 &lt;span class="se">\\&lt;/span>
+&lt;span class="ln">2&lt;/span>--cacert&lt;span class="o">=&lt;/span>/etc/kubernetes/pki/etcd/ca.crt &lt;span class="se">\\&lt;/span>
+&lt;span class="ln">3&lt;/span>--cert&lt;span class="o">=&lt;/span>/etc/kubernetes/pki/etcd/server.crt &lt;span class="se">\\&lt;/span>
+&lt;span class="ln">4&lt;/span>--key&lt;span class="o">=&lt;/span>/etc/kubernetes/pki/etcd/server.key &lt;span class="se">\\&lt;/span>
+&lt;span class="ln">5&lt;/span>snapshot save /opt/snapshot-pre-boot.db
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>restore practice&lt;/p>
+&lt;ul>
+&lt;li>Restore snapshot
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nv">ETCDCTL_API&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">3&lt;/span> etcdctl --data-dir /var/lib/etcd-from-backup &lt;span class="se">\\&lt;/span>
+&lt;span class="ln">2&lt;/span>snapshot restore /opt/snapshot-pre-boot.db
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>update the &lt;code>/etc/kubernetes/manifests/etcd.yaml&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>volumes:
+&lt;span class="ln">2&lt;/span> - hostPath:
+&lt;span class="ln">3&lt;/span> path: /var/lib/etcd-from-backup
+&lt;span class="ln">4&lt;/span> type: DirectoryOrCreate
+&lt;span class="ln">5&lt;/span> name: etcd-data
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>\[CKA\] 05. Application Lifecycle Management</title><link>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</link><pubDate>Tue, 18 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
