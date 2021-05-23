@@ -85,7 +85,7 @@
 &lt;ul>
 &lt;li>docker
 &lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-7.png" alt="img-7">&lt;/li>
-&lt;li>k8s
+&lt;li>k8s&lt;br>
 &lt;img src="https://aiden-jeon.github.io/imgs/cka/storage-8.png" alt="img-8">&lt;/li>
 &lt;/ul>
 &lt;h3 id="volumes--mounts">Volumes &amp;amp; Mounts&lt;/h3>
