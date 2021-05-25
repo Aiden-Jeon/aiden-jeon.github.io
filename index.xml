@@ -467,7 +467,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;li>
 &lt;p>method 1&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>ExecStart= ... \\\\ --data-dir=/var/lib/etct&lt;/code>&lt;/li>
+&lt;li>&lt;code>ExecStart= ... \\ --data-dir=/var/lib/etct&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
@@ -477,7 +477,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;li>&lt;code>servcie kube-apiserver stop&lt;/code>&lt;/li>
 &lt;li>&lt;code>ETCDCTL_API=3 etcdctl snapshot --data-dir /var/lib/etcd-from-backup snapshot restore snapshot.db&lt;/code>&lt;/li>
 &lt;li>&lt;code>systemctl daemon-reload&lt;/code>&lt;/li>
-&lt;li>&lt;code>servce stecd restart&lt;/code>&lt;/li>
+&lt;li>&lt;code>service etcd restart&lt;/code>&lt;/li>
 &lt;li>&lt;code>service kube-apiserver start&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;/li>
