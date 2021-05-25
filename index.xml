@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 08. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/08_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_storage/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 07. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/07_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/07_storage/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
@@ -258,7 +258,7 @@
 &lt;ul>
 &lt;li>&lt;code>kubectl get storageclass&lt;/code>&lt;/li>
 &lt;li>&lt;code>kubectl get sc&lt;/code>&lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 06. Cluster Maintenance</title><link>https://aiden-jeon.github.io/post/tech/cka/06_cluster_maintenance/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/06_cluster_maintenance/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 05. Cluster Maintenance</title><link>https://aiden-jeon.github.io/post/tech/cka/05_cluster_maintenance/</link><pubDate>Sat, 22 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/05_cluster_maintenance/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
@@ -505,7 +505,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/code>&lt;/pre>&lt;/div>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 05. Application Lifecycle Management</title><link>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</link><pubDate>Tue, 18 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/05_application_lifecycle_managment/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 04. Application Lifecycle Management</title><link>https://aiden-jeon.github.io/post/tech/cka/04_application_lifecycle_managment/</link><pubDate>Tue, 18 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/04_application_lifecycle_managment/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
@@ -771,7 +771,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">busybox:1.28&lt;/span>&lt;span class="w">
 &lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;sh&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;-c&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;until nslookup mydb; do echo waiting for mydb; sleep 2; done;&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 04. Logging &amp; Monitoring</title><link>https://aiden-jeon.github.io/post/tech/cka/04_logging_monitoring/</link><pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/04_logging_monitoring/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 03. Logging &amp; Monitoring</title><link>https://aiden-jeon.github.io/post/tech/cka/03_logging_monitoring/</link><pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/03_logging_monitoring/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
@@ -811,7 +811,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;h4 id="여러-container">여러 container&lt;/h4>
 &lt;ul>
 &lt;li>&lt;code>kubectl logs -f sample.yaml specific-container&lt;/code>&lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 03. Scheduler</title><link>https://aiden-jeon.github.io/post/tech/cka/03_scheduler-copy/</link><pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/03_scheduler-copy/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 02. Scheduler</title><link>https://aiden-jeon.github.io/post/tech/cka/02_scheduler/</link><pubDate>Sun, 16 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/02_scheduler/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
@@ -1800,7 +1800,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;img src="https://aiden-jeon.github.io/imgs/seldon/from-scratch-install-istio-1.png" alt="img-1">&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 02. Core Concepts</title><link>https://aiden-jeon.github.io/post/tech/cka/02_core_concepts/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/02_core_concepts/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 02. Core Concepts</title><link>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
