@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>docker on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/tags/docker/</link><description>Recent content in docker on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Thu, 27 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Commands &amp; Run</title><link>https://aiden-jeon.github.io/post/tech/docker/docker_commands_run/</link><pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/docker/docker_commands_run/</guid><description>
+&lt;h2 id="basic-docker-commands">Basic Docker Commands&lt;/h2>
+&lt;h3 id="containers">Containers&lt;/h3>
+&lt;h4 id="start-a-container">Start a container&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker run nginx&lt;/code>
+&lt;ul>
+&lt;li>if image is not present pull image from docker hub&lt;/li>
+&lt;li>if image is present it will reuse&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>docker run -it nginx bash&lt;/code>
+&lt;ul>
+&lt;li>to see directly in terminal use &lt;code>-it&lt;/code> option&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="give-name-to-a-container">Give name to a container&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker run --name &amp;lt;name&amp;gt; &amp;lt;image&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="list-containers">List containers&lt;/h4>
+&lt;p>→ docker randomly give &lt;code>conatiner_id&lt;/code> and &lt;code>names&lt;/code> to running container&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>docker ps&lt;/code>
+&lt;ul>
+&lt;li>list containers&lt;/li>
+&lt;li>running containers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>docker ps -a&lt;/code>
+&lt;ul>
+&lt;li>running containers + previously stopped or exited containers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="stop-a-container">Stop a container&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker stop &amp;lt;container id&amp;gt;&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker stop &amp;lt;docker name&amp;gt;&lt;/code>
+&lt;ul>
+&lt;li>no running containers&lt;/li>
+&lt;li>remains in &lt;code>docker ps -a&lt;/code> with &lt;code>Exited&lt;/code> status&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="remove-containers">Remove containers&lt;/h4>
+&lt;p>→ when want to get rid of it from lying space&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>docker rm &amp;lt;container id&amp;gt;&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker rm &amp;lt;docker name&amp;gt;&lt;/code>
+&lt;ul>
+&lt;li>no longer present in &lt;code>docker ps -a&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="get-container-ids">Get container ids&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker ps -aq&lt;/code>&lt;/li>
+&lt;li>remove all containers
+&lt;ul>
+&lt;li>&lt;code>docker rm $(docker ps -aq)&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="images">Images&lt;/h3>
+&lt;h4 id="list-images">List images&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker images&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="get-all-image-ids">Get all image ids&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker images -aq&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="remove-images">Remove images&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker rmi nginx&lt;/code>
+&lt;ul>
+&lt;li>delete all dependent containers to remove image!&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="download-an-image">Download an image&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker pull nginx&lt;/code>
+&lt;ul>
+&lt;li>only pull image, not run docker image&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="docker-run">Docker run&lt;/h3>
+&lt;h4 id="no-hosting-in-docker">No hosting in docker&lt;/h4>
+&lt;p>Containers are not meant to host an operating system.&lt;br>
+Containers are meant to run a specific task or process.&lt;/p>
+&lt;ul>
+&lt;li>such as to host an instance of a web server or application server, ...&lt;/li>
+&lt;/ul>
+&lt;p>Once the task is complete the container exits a container.&lt;br>
+Container only lives as long as the process inside it is alive.&lt;/p>
+&lt;h4 id="append-a-command">Append a command&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker run ubuntu sleep 5&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="execute-a-command">Execute a command&lt;/h4>
+&lt;p>I would like to see the contents of a file inside some particular containers.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>docker exec &amp;lt;run name&amp;gt; cat /etc/hosts&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="attach-and-detach">Attach and Detach&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker run kodekloud/simple-webapp&lt;/code>
+&lt;ul>
+&lt;li>when attached, you can not do anything.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>docker run -d kodekloud/simple-webapp&lt;/code>
+&lt;ul>
+&lt;li>detach mode, it runs in background mode.&lt;/li>
+&lt;li>To attach again
+&lt;ul>
+&lt;li>&lt;code>docker attach &amp;lt;name or run_id&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker-run-1">Docker Run&lt;/h2>
+&lt;h3 id="tag">Tag&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>docker run &amp;lt;image&amp;gt;:&amp;lt;tag&amp;gt;&lt;/code>
+&lt;ul>
+&lt;li>no specific tag → use &lt;code>latest&lt;/code> tag.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="stdin">STDIN&lt;/h3>
+&lt;p>by default, docker container does not listen to standard input, even attached.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>-i&lt;/code>
+&lt;ul>
+&lt;li>interactive mode&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>-t&lt;/code>
+&lt;ul>
+&lt;li>pseudo terminal&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>-it&lt;/code>
+&lt;ul>
+&lt;li>use two options&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="port-mapping">PORT Mapping&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-0.png" alt="img-0">&lt;/p>
+&lt;ul>
+&lt;li>IP of docker container
+&lt;ul>
+&lt;li>internal IP and is only accessible within the docker host.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>IP of docker host
+&lt;ul>
+&lt;li>&lt;code>-p&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker run -p &amp;lt;host_port&amp;gt;:&amp;lt;internal_port&amp;gt; &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="volume-mapping">Volume Mapping&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-1.png" alt="img-1">&lt;/p>
+&lt;ul>
+&lt;li>docker container has its own isolated file system.&lt;/li>
+&lt;li>if want to persist data, map a directory outside the container on the docker host to ad directory inside the container&lt;/li>
+&lt;li>&lt;code>-v&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker run -v &amp;lt;host volume&amp;gt;:&amp;lt;docker volume &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="inspect-container">Inspect Container&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>docker inspect &amp;lt;container id | name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="container-logs">Container Logs&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>docker logs blissful_hopper&lt;/code>&lt;/li>
+&lt;/ul></description></item></channel></rss>
