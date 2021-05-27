@@ -153,7 +153,7 @@ Container only lives as long as the process inside it is alive.&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h3 id="port-mapping">PORT Mapping&lt;/h3>
-&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-0.png" alt="img-0">&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-0.png" alt="docker-port-mapping">&lt;/p>
 &lt;ul>
 &lt;li>IP of docker container
 &lt;ul>
@@ -168,7 +168,7 @@ Container only lives as long as the process inside it is alive.&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h3 id="volume-mapping">Volume Mapping&lt;/h3>
-&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-1.png" alt="img-1">&lt;/p>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-1.png" alt="docker-volume-mapping">&lt;/p>
 &lt;ul>
 &lt;li>docker container has its own isolated file system.&lt;/li>
 &lt;li>if want to persist data, map a directory outside the container on the docker host to ad directory inside the container&lt;/li>
@@ -181,7 +181,96 @@ Container only lives as long as the process inside it is alive.&lt;/p>
 &lt;/ul>
 &lt;h3 id="container-logs">Container Logs&lt;/h3>
 &lt;ul>
-&lt;li>&lt;code>docker logs blissful_hopper&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker logs &amp;lt;container id | name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>Docker Images</title><link>https://aiden-jeon.github.io/post/tech/docker/docker_images/</link><pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/docker/docker_images/</guid><description>
+&lt;h2 id="docker-images">Docker Images&lt;/h2>
+&lt;h3 id="how-to-create-my-own-image">How to create my own image?&lt;/h3>
+&lt;h4 id="order">Order&lt;/h4>
+&lt;ol>
+&lt;li>OS - Ubuntu&lt;/li>
+&lt;li>Update apt repo&lt;/li>
+&lt;li>Install dependencies using apt&lt;/li>
+&lt;li>Install Python dependencies using pip&lt;/li>
+&lt;li>Copy source code to /opt folder&lt;/li>
+&lt;li>Run the web server using &amp;quot;flask&amp;quot; command&lt;/li>
+&lt;/ol>
+&lt;h4 id="dockerfile">Dockerfile&lt;/h4>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-docker" data-lang="docker">&lt;span class="ln">1&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="s"> Ubuntu&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="k">RUN&lt;/span> apt-get update &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> apt-get -y install python&lt;span class="err">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="k">RUN&lt;/span> pip install flask flask-mysql&lt;span class="err">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="k">COPY&lt;/span> . /opt/source-code&lt;span class="err">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">9&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="k">ENTRYPOINT&lt;/span> &lt;span class="nv">FLASK_APP&lt;/span>&lt;span class="o">=&lt;/span>/opt/source-code/app.py flask run&lt;span class="err">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>INSTRUCTION ARGUMENT&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="build">Build&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker build . -f Dockerfile -t &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="push">Push&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker push &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="layered-architecture">Layered architecture&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/docker/docker-image-1.png" alt="layered-architecture">&lt;/p>
+&lt;ul>
+&lt;li>each layer only store the changes from the previous layer&lt;/li>
+&lt;li>&lt;code>docker history &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="environment-variables">Environment Variables&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>-e&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>docker run -e &amp;lt;KEY&amp;gt;=&amp;lt;value&amp;gt; &amp;lt;image name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="inspect-environment-variable">Inspect Environment Variable&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>docker inspect &amp;lt;container name | id&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="command-vs-entrypoint">Command vs Entrypoint&lt;/h2>
+&lt;h3 id="설명">설명&lt;/h3>
+&lt;h4 id="command">Command&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>CMD&lt;/code>&lt;/li>
+&lt;li>instruction the command line parameters passed will get replaced entirely.&lt;/li>
+&lt;/ul>
+&lt;h4 id="entrypoint">Entrypoint&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>ENTRYPOINT&lt;/code>&lt;/li>
+&lt;li>command line parameters will get appended.&lt;/li>
+&lt;li>if parameter is not given, it will get error that the operand is missing
+&lt;ul>
+&lt;li>How to give and default value for entrypoint?
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-Docker" data-lang="Docker">&lt;span class="ln">1&lt;/span>&lt;span class="k">ENTRYPOINT&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;command&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="err">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="err">&lt;/span>&lt;span class="k">CMD&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;param1&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>how to override entrypoint?
+&lt;ul>
+&lt;li>&lt;code>docker run --entrypoint &amp;lt;executable&amp;gt; &amp;lt;image-name&amp;gt; &amp;lt;param&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="명령어">명령어&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>CMD&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>CMD command param1&lt;/code>&lt;/li>
+&lt;li>&lt;code>CMD [&amp;quot;command&amp;quot;, &amp;quot;param1&amp;quot;]&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ENTRYPOINT&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>ENTRYPOINT [&amp;quot;command&amp;quot;]&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul></description></item><item><title>\[CKA\] 07. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/07_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/07_storage/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
