@@ -1,4 +1,993 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 07. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/07_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/07_storage/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kubernetes on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/categories/kubernetes/</link><description>Recent content in kubernetes on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 30 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 06. Security</title><link>https://aiden-jeon.github.io/post/tech/cka/06_security/</link><pubDate>Sun, 30 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/06_security/</guid><description>
+&lt;h2 id="kubernetes-security-primitives">Kubernetes Security Primitives&lt;/h2>
+&lt;h3 id="secrure-hosts">Secrure Hosts&lt;/h3>
+&lt;ul>
+&lt;li>Password based authentication disabled&lt;/li>
+&lt;li>SSH Key based authentication&lt;/li>
+&lt;/ul>
+&lt;h3 id="secure-kubernetes">Secure kubernetes&lt;/h3>
+&lt;ul>
+&lt;li>kube-apiserver
+&lt;ul>
+&lt;li>Who can access?&lt;/li>
+&lt;li>What can they do?&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="authentication">Authentication&lt;/h3>
+&lt;h4 id="who-can-access">Who can access?&lt;/h4>
+&lt;ul>
+&lt;li>Files - Username and Passwords&lt;/li>
+&lt;li>Fiels - Username and Tokens&lt;/li>
+&lt;li>Certificates&lt;/li>
+&lt;li>External Authenication providers - LDAP&lt;/li>
+&lt;li>Service Accounts&lt;/li>
+&lt;/ul>
+&lt;h3 id="authorization">Authorization&lt;/h3>
+&lt;h4 id="what-can-they-do">What can they do?&lt;/h4>
+&lt;ul>
+&lt;li>RBAC Authorization&lt;/li>
+&lt;li>ABAC Authorization&lt;/li>
+&lt;li>Node Authorization&lt;/li>
+&lt;li>Webhook Mode&lt;/li>
+&lt;/ul>
+&lt;h3 id="tls-certificates">TLS Certificates&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-1.png" alt="tls-certificates-example">&lt;/p>
+&lt;h3 id="network-policies">Network Policies&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-2.png" alt="networking-policies-example">&lt;/p>
+&lt;h2 id="authentication-1">Authentication&lt;/h2>
+&lt;p>Users&lt;/p>
+&lt;ul>
+&lt;li>Admins&lt;/li>
+&lt;li>Developers&lt;/li>
+&lt;li>Application End Users&lt;/li>
+&lt;li>Bots&lt;/li>
+&lt;/ul>
+&lt;h3 id="accounts">Accounts&lt;/h3>
+&lt;ul>
+&lt;li>User
+&lt;ul>
+&lt;li>Admins&lt;/li>
+&lt;li>Developers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Servcie Accounts
+&lt;ul>
+&lt;li>Bots&lt;/li>
+&lt;li>not supported officialy in k8s&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="auth-mechanisms">Auth Mechanisms&lt;/h3>
+&lt;ul>
+&lt;li>kube-apiserver
+&lt;ul>
+&lt;li>Static Password File&lt;/li>
+&lt;li>Static Token File&lt;/li>
+&lt;li>Certificates&lt;/li>
+&lt;li>Identity Service&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="basic---file">Basic - file&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>user-details.csv&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>password123,user1,u0001
+&lt;span class="ln">2&lt;/span>password123,user2,u0002
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>kube-apiserver.service&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nv">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/bin/kube-apiserver &lt;span class="se">\\\\&lt;/span>
+&lt;span class="ln">2&lt;/span> --basic-auth-file&lt;span class="o">=&lt;/span>user-details.csvc &lt;span class="se">\\\\&lt;/span>
+&lt;span class="ln">3&lt;/span> ...
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>kubeadm
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">creationTimestamp&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kube-apiserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kube-system&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">kube-apiserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>- --&lt;span class="l">authorization-mode=Node,RBAC&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">&amp;lt;content-hidden&amp;gt;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- --&lt;span class="l">basic-auth-file=/tmp/users/user-details.csv&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>pod
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kube-apiserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kube-system&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">kube-apiserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">&amp;lt;content-hidden&amp;gt;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">k8s.gcr.io/kube-apiserver-amd64:v1.11.3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kube-apiserver&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumeMounts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">mountPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/tmp/users&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">usr-details&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">readOnly&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">volumes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">hostPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/tmp/users&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">DirectoryOrCreate&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">usr-details&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>Authenticate User
+&lt;ul>
+&lt;li>&lt;code>curl -v -k &amp;lt;https://master-node-ip:6443/api/v1/pods&amp;gt; -u &amp;quot;user1:password123&amp;quot;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="basic---token">Basic - token&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>user-token-details.csv&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>asdfbasdhjasdhjkfhjk12312,user1,u0001
+&lt;span class="ln">2&lt;/span>1234g23rgy8werfg89asdfasd,user2,u0002
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>kube-apiserver.service&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nv">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/bin/kube-apiserver &lt;span class="se">\\\\&lt;/span>
+&lt;span class="ln">2&lt;/span> --token-auth-file&lt;span class="o">=&lt;/span>user-details.csvc &lt;span class="se">\\\\&lt;/span>
+&lt;span class="ln">3&lt;/span> ...
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>kubeadm
+&lt;ul>
+&lt;li>&lt;code>kubectl edit&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Authenticate User
+&lt;ul>
+&lt;li>&lt;code>curl -v -k &amp;lt;https://master-node-ip:6443/api/v1/pods&amp;gt; --header &amp;quot;Authorization: Bearer asdfbasdhjasdhjkfhjk12312&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="tls">TLS&lt;/h2>
+&lt;ul>
+&lt;li>master node&lt;/li>
+&lt;li>worker nodes&lt;/li>
+&lt;/ul>
+&lt;h3 id="server-certificates-for-servers">Server Certificates for Servers&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-3.png" alt="server-certificates-for-server">&lt;/p>
+&lt;h4 id="kube-api-server">Kube-Api server&lt;/h4>
+&lt;ul>
+&lt;li>exposes a service that other components as well as external users use to manage the k8s cluster&lt;/li>
+&lt;li>server
+&lt;ul>
+&lt;li>certificates to secure all communications with its clients&lt;/li>
+&lt;li>&lt;code>apiserver.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>apiserver.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="etcd-server">ETCD Server&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>etcdserver.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>etcdserver.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="kubelet-server">KUBELET Server&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubelet.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubelet.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="client-certificates-for-clients">Client Certificates for Clients&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-4.png" alt="client-certificates-for-clients">&lt;/p>
+&lt;h4 id="admin">Admin&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>admin.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>admin.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="kube-scheduler">Kube-Scheduler&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>scheduler.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>scheduler.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="kube-controller-manager">Kube-Controller-Manager&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>controll-manager.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>controll-manager.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="kube-proxy">Kube-Proxy&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kube-proxy.crt&lt;/code>&lt;/li>
+&lt;li>&lt;code>kube-proxy.key&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="certification-creation">Certification Creation&lt;/h2>
+&lt;h3 id="openssl-to-create-client-certification">OpenSSL to Create Client Certification&lt;/h3>
+&lt;ul>
+&lt;li>Certificate Authority(CA)
+&lt;ul>
+&lt;li>Generate Keys (ca.key)
+&lt;ul>
+&lt;li>&lt;code>openssl genrsa -out ca.key 2048&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Certificate Signing Requests (ca.csr)
+&lt;ul>
+&lt;li>&lt;code>openssl req -new -key ca.key -subj &amp;quot;/CN=KUBERNETES-CA&amp;quot; -out ca.csr&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Sign Certificates (ca.crt)
+&lt;ul>
+&lt;li>&lt;code>openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Admin User
+&lt;ul>
+&lt;li>Generate Keys (admin.key)
+&lt;ul>
+&lt;li>&lt;code>openssl genrsa -out admin.key 2048&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Certificate Signing Requests (admin.csr)
+&lt;ul>
+&lt;li>&lt;code>openssl req -new -key admin.key -subj &amp;quot;/CN=kube-admin/O=system:masters&amp;quot; -out admin.csr&lt;/code>&lt;/li>
+&lt;li>&lt;code>&amp;quot;/CN=kube-admin/O=system:masters&amp;quot;&lt;/code> ← admin user&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Sign Certificates (admin.crt)
+&lt;ul>
+&lt;li>&lt;code>openssl x509 -req -in admin.csr -signkey ca.key -out admin.crt&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Kube Scheduler&lt;/li>
+&lt;li>Kube Controller Manager&lt;/li>
+&lt;li>kube Proxy&lt;/li>
+&lt;/ul>
+&lt;h3 id="how-to-use">How to use&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>curl &amp;lt;https://kube-apisever:6443/api/v1/pods&amp;gt; --key admin.key --cert admin.crt --cacert ca.crt&lt;/code>&lt;/li>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">clusters&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">cluster&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">certificate-authority&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ca.crt&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">server&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">&amp;lt;https://kube-apiserver:6443&amp;gt;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kubernetes&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Config&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">users&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kubernetes-admin&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">user&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">client-certificate&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">admin.crt&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">clinet-key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">admin.key&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="openssl-to-create-server-certification">OpenSSL to Create Server Certification&lt;/h3>
+&lt;h4 id="etcd-servers">ETCD Servers&lt;/h4>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>- &lt;span class="l">etcd&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">key-file=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">cert-file=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">peer-cert-file=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">peer-client-cert-auth=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">peer-key-file=&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">peer-trusted-ca-cile&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">trusted-ca-file= &lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="kube-api-server-1">Kube-Api Server&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-5.png" alt="server-certificate-example">&lt;/p>
+&lt;ul>
+&lt;li>Generate Keys (apiserver.key)
+&lt;ul>
+&lt;li>&lt;code>openssl genrsa -out apiserver.key 2048&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Certificate Signing Requests (apiserver.csr)
+&lt;ul>
+&lt;li>&lt;code>openssl.cnf&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln"> 1&lt;/span>[req]
+&lt;span class="ln"> 2&lt;/span>req_extensions = v3_req
+&lt;span class="ln"> 3&lt;/span>[ v3_req ]
+&lt;span class="ln"> 4&lt;/span>basicConstraints = CA:FALSE
+&lt;span class="ln"> 5&lt;/span>keyUsage = nonRpudiation,
+&lt;span class="ln"> 6&lt;/span>subjectAltName = @alt_names
+&lt;span class="ln"> 7&lt;/span>[alt_names]
+&lt;span class="ln"> 8&lt;/span>DNS.1 = kubernetes
+&lt;span class="ln"> 9&lt;/span>DNS.2 = kubernetes.default
+&lt;span class="ln">10&lt;/span>DNS.3 = kubernetes.default.svc
+&lt;span class="ln">11&lt;/span>DNS.4 = kubernetes.default.svc.cluster.local
+&lt;span class="ln">12&lt;/span>IP.1 = 10.96.0.1
+&lt;span class="ln">13&lt;/span>IP.2 = 172.17.0.87
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>openssl req -new -key apiserver.key -subj &amp;quot;/CN=kube-apiserver&amp;quot; -out apiserver.csr -config openssl.cnf&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Sign Certificates (apiserver.crt)
+&lt;ul>
+&lt;li>&lt;code>openssl x509 -req -in apiserver.csr -CA ca.crt -CAkey ca.key -out apiserver.crt&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="kubelet-server-1">Kubelet Server&lt;/h4>
+&lt;ul>
+&lt;li>server cert
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-6.png" alt="server-cert-examples">
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kubelet.config.k8s.io/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">KubeletConfiguration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">authentication&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">x509&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">clientCAFile&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/var/lib/kubernetes/ca.pem&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">authorization&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">mode&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Webhook&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">clusterDomain&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;cluster.local&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">clusterDNS&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="s2">&amp;#34;10.32.0.10&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">podCIDR&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;$(POD_CIDR)&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">resolveConf&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/run/systemd/resolve/resolv.conf&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">reuntimeRequrestTimeout&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;15m&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">tlsCertFile&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/var/lib/kubelet/kubelet-node01.crt&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">tlsPrivateKeyFile&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;/var/lib/kubelet/kubelet-node01.key&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>client cert
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-7.png" alt="client-crt-examples">&lt;/li>
+&lt;/ul>
+&lt;h2 id="view-certificate-details">View Certificate Details&lt;/h2>
+&lt;ul>
+&lt;li>The Hard Way
+&lt;ul>
+&lt;li>&lt;code>cat /etc/systemd/system/kube-apiserver.service&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>kubeadm
+&lt;ul>
+&lt;li>&lt;code>cat /etc/kubernetes/manifest/kube-apiserver.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="inspect-service-logs">Inspect Service Logs&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>journalctl -u etcd.service&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="view-logs">View Logs&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>kubectl logs etcd-master&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="certificates-api">Certificates API&lt;/h2>
+&lt;h3 id="certificate-signing-request">Certificate Signing Request&lt;/h3>
+&lt;h4 id="order">Order&lt;/h4>
+&lt;ol>
+&lt;li>Create &lt;code>CertificateSigningReqeust&lt;/code> Object&lt;/li>
+&lt;li>Review Requests&lt;/li>
+&lt;li>Approve Requests&lt;/li>
+&lt;li>Share Certs to Users&lt;/li>
+&lt;/ol>
+&lt;h4 id="request">Request&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>openssl genrsa -out jan.key 2048&lt;/code>&lt;/li>
+&lt;li>&lt;code>openssl req -new -key jane.key -subj &amp;quot;/CN=jane&amp;quot; -out jan.csr&lt;/code>&lt;/li>
+&lt;li>send to the administrator&lt;/li>
+&lt;li>administrator takes the key and creates a &lt;code>CertifacteSigningRequest&lt;/code> obejct
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">certificates.k8s.io/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">CeritifcateSigningRequest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">jane&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">groups&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">system:authenticated&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">usage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">digital signature&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">key encipherment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">server auth&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">request&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">&amp;lt;cat jane.csr | base64&amp;gt;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>cat akshay.csr | base64 | tr -d &amp;quot;\\n&amp;quot;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="approve">Approve&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubectl get csr&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k get csr
+&lt;span class="ln">2&lt;/span>NAME AGE SIGNERNAME REQUESTOR CONDITION
+&lt;span class="ln">3&lt;/span>akshay 10s kubernetes.io/kube-apiserver-client kubernetes-admin Pending
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>kubectl certificate approve jane&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="상세-요청">상세 요청&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubectl get csr jane -0 yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="deny">Deny&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubectl certificate deny agent-smith&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="delete">Delete&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubectl delete csr agent-smith&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="contoller-manager">Contoller Manager&lt;/h3>
+&lt;ul>
+&lt;li>CSR-APPROVING&lt;/li>
+&lt;li>CSR-SIGNING&lt;/li>
+&lt;li>&lt;code>cat /etc/kubernetes/manifests/kube-controller-manager.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="kubeconfig">Kubeconfig&lt;/h2>
+&lt;h3 id="using-kubectl-with-crt">Using kubectl with crt&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl get pods
+&lt;span class="ln">2&lt;/span> --server my-kube-playground:6443
+&lt;span class="ln">3&lt;/span> --client-key admin.key
+&lt;span class="ln">4&lt;/span> --client-certificated admin.crt
+&lt;span class="ln">5&lt;/span> --certificate-authority ca.crt
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>this is tedious task
+&lt;ul>
+&lt;li>→ move it to config file&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="using-kubectl-with-config-file">Using kubectl with config file&lt;/h3>
+&lt;ul>
+&lt;li>config
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span> --server my-kube-playground:6443
+&lt;span class="ln">2&lt;/span> --client-key admin.key
+&lt;span class="ln">3&lt;/span> --client-certificated admin.crt
+&lt;span class="ln">4&lt;/span> --certificate-authority ca.crt
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>kubectl
+&lt;ul>
+&lt;li>&lt;code>kubectl get pods --kubeconfig config&lt;/code>&lt;/li>
+&lt;li>default config file path
+&lt;ul>
+&lt;li>&lt;code>.kube/config&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="kubeconfig-file">KubeConfig File&lt;/h3>
+&lt;ul>
+&lt;li>clusters
+&lt;ul>
+&lt;li>development&lt;/li>
+&lt;li>production&lt;/li>
+&lt;li>google&lt;/li>
+&lt;li>&lt;code>--server my-kube-playground:6443&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>contexts
+&lt;ul>
+&lt;li>match cluster and users
+&lt;ul>
+&lt;li>admin@production&lt;/li>
+&lt;li>dev@google&lt;/li>
+&lt;li>mykubeadmin@mykubeplayground&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>users
+&lt;ul>
+&lt;li>admin&lt;/li>
+&lt;li>dev user&lt;/li>
+&lt;li>prod user&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span> --client-key admin.key
+&lt;span class="ln">2&lt;/span> --client-certificated admin.crt
+&lt;span class="ln">3&lt;/span> --certificate-authority ca.crt
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>defintion
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Config&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">current-context&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dev-user@google&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">clusters&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-playground&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">cluster&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">certificate-authority&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ca.crt&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">server&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-playground:6443&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">contexts&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-admin@my-kube-playground&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">context&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">clusters&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-playground&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">user&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-admin&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">users&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">my-kube-admin&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">user&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">client-certificate&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">admin.crt&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">client-key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">admin.key&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>current-context&lt;/code>
+&lt;ul>
+&lt;li>default context&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>certificate-authority&lt;/code>
+&lt;ul>
+&lt;li>instead file path using data directly&lt;/li>
+&lt;li>&lt;code> certificate-authority-data&lt;/code>
+&lt;ul>
+&lt;li>with base64 encoding&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="command-line-tool">Command Line Tool&lt;/h4>
+&lt;ul>
+&lt;li>view
+&lt;ul>
+&lt;li>&lt;code>kubectl config view&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl config view --kubeconfig=&amp;lt;config-file-name&amp;gt;&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>update
+&lt;ul>
+&lt;li>&lt;code>kubectl config use-context prod-user@production&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>helo
+&lt;ul>
+&lt;li>&lt;code>kubectl config -h&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="api-groups">API Groups&lt;/h2>
+&lt;h3 id="example">Example&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>curl &amp;lt;https://kube-master:6443/version&lt;/code>&amp;gt;&lt;/li>
+&lt;li>&lt;code>curl &amp;lt;https://kube-master:6443/api/v1/pods&lt;/code>&amp;gt;&lt;/li>
+&lt;/ul>
+&lt;h3 id="types">Types&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>/metrics&lt;/code>&lt;/li>
+&lt;li>&lt;code>/healthz&lt;/code>&lt;/li>
+&lt;li>&lt;code>/version&lt;/code>&lt;/li>
+&lt;li>&lt;code>/api&lt;/code>&lt;/li>
+&lt;li>&lt;code>/apis&lt;/code>&lt;/li>
+&lt;li>&lt;code>/logs&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="api-apis">API, APIS&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>api&lt;/code>
+&lt;ul>
+&lt;li>core group
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-8.png" alt="core-grup">&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>apis&lt;/code>
+&lt;ul>
+&lt;li>named group
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-9.png" alt="named-group">&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>CLT
+&lt;ul>
+&lt;li>&lt;code>curl &amp;lt;http://localhost:6443&amp;gt; -k&lt;/code>&lt;/li>
+&lt;li>&lt;code>curl &amp;lt;http://localhost:6443&amp;gt; -k | grep &amp;quot;name&amp;quot;&lt;/code>&lt;/li>
+&lt;li>need certificates file&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>kubectl proxy&lt;/code>
+&lt;ul>
+&lt;li>to see proxy&lt;/li>
+&lt;li>&lt;code>kube proxy&lt;/code> ≠ &lt;code>kubectl proxy&lt;/code>&lt;/li>
+&lt;li>&lt;code>kube proxy&lt;/code>
+&lt;ul>
+&lt;li>enable connectivity betewwnd pods and services across different nodes in the cluster.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>kubectl proxy&lt;/code>
+&lt;ul>
+&lt;li>HTTP proxy service created by kubectl utility to access the kube-api sever&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="authorization-1">Authorization&lt;/h2>
+&lt;h3 id="authorization-mechanisms">Authorization Mechanisms&lt;/h3>
+&lt;h4 id="types-1">Types&lt;/h4>
+&lt;ul>
+&lt;li>Node&lt;/li>
+&lt;li>ABAC&lt;/li>
+&lt;li>RBAC&lt;/li>
+&lt;li>Webhook&lt;/li>
+&lt;/ul>
+&lt;h4 id="node">Node&lt;/h4>
+&lt;ul>
+&lt;li>Node Authorizer&lt;/li>
+&lt;/ul>
+&lt;h4 id="abac">ABAC&lt;/h4>
+&lt;p>User Attribute Based Authorization&lt;/p>
+&lt;ul>
+&lt;li>dev-user
+&lt;ul>
+&lt;li>→ Can view PODs&lt;/li>
+&lt;li>→ Can create PODs&lt;/li>
+&lt;li>→ Can delete PODs&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="ln">1&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nt">&amp;#34;kind&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Policy&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nt">&amp;#34;spec&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nt">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;dev-user&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nt">&amp;#34;namespace&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nt">&amp;#34;resource&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;pods&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nt">&amp;#34;apiGroup&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="p">}}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h4 id="rbac">RBAC&lt;/h4>
+&lt;p>Rule Based Authorizaion&lt;/p>
+&lt;ul>
+&lt;li>Developer
+&lt;ul>
+&lt;li>→ Can view PODs&lt;/li>
+&lt;li>→ Can create PODs&lt;/li>
+&lt;li>→ Can delete PODs&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Role&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">developer&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">rules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">apiGroups&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;pods&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">verbs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;list&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;get&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;create&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;update&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;delete&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resourceNames&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;blue&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;orange&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>rules have 3 sections
+&lt;ul>
+&lt;li>&lt;code>apiGroups&lt;/code>&lt;/li>
+&lt;li>&lt;code>resources&lt;/code>&lt;/li>
+&lt;li>&lt;code>verbs&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>link users to rule
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">RoleBinding&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">devuser-developer-binding&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">subjects&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">User&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dev-user&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">apiGroup&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">roleRef&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Role&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">developer&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">apiGroup&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>view
+&lt;ul>
+&lt;li>&lt;code>kubectl get roles&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get rolebindings&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Check Access
+&lt;ul>
+&lt;li>&lt;code>kubectl auth can-i create deployments&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl auth can-i delete nodes&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl auth can-i create deployments --as dev-user&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="webhook">Webhook&lt;/h4>
+&lt;ul>
+&lt;li>outsource all the mechanism&lt;/li>
+&lt;/ul>
+&lt;h4 id="alwaysallow">AlwaysAllow&lt;/h4>
+&lt;ul>
+&lt;li>always allow&lt;/li>
+&lt;/ul>
+&lt;h4 id="alwaysdeny">AlwaysDeny&lt;/h4>
+&lt;ul>
+&lt;li>always deny&lt;/li>
+&lt;/ul>
+&lt;h3 id="setting">Setting&lt;/h3>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nv">ExecStart&lt;/span> &lt;span class="o">=&lt;/span> ...&lt;span class="se">\\&lt;/span>
+&lt;span class="ln">2&lt;/span> --authorization-mode&lt;span class="o">=&lt;/span>AlwaysAllow
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>default : &lt;code>AlwaysAllow&lt;/code>&lt;/li>
+&lt;li>multiple mode:
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>Node,RBAC,Webhook
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>if one's requiest is denied, it pass to next chain&lt;/li>
+&lt;li>if approved no more checks.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="inspect">Inspect&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>kubectl describe pod kube-apisever-controlplane -n kube-system
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>--authorizastion mode&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="cluster-roles">Cluster Roles&lt;/h2>
+&lt;h3 id="types-2">Types&lt;/h3>
+&lt;ul>
+&lt;li>namespace ← role
+&lt;ul>
+&lt;li>pods&lt;/li>
+&lt;li>replicasets&lt;/li>
+&lt;li>...&lt;/li>
+&lt;li>&lt;code>kubectl api-resources --namespaced=true&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>cluster scoped
+&lt;ul>
+&lt;li>nodes&lt;/li>
+&lt;li>pv&lt;/li>
+&lt;li>...&lt;/li>
+&lt;li>&lt;code>kubectl api-resources --namespaced=false&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="clusterroles">Clusterroles&lt;/h3>
+&lt;ul>
+&lt;li>Cluster admin
+&lt;ul>
+&lt;li>Can view Nodes&lt;/li>
+&lt;li>can create Nodes&lt;/li>
+&lt;li>Can delete Nodes&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorizastion.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ClusterRole&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">cluster-administrator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">rules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">apiGroups&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;nodes&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">verbs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;list&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;get&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;create&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;delete&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="clusterrolebining">Clusterrolebining&lt;/h3>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ClusterRoleBinding&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">cluster-admin-role-binding&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">subjects&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>- &lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">User&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">cluster-admin&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">apiGroup&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">roleRef&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ClusterRole&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">cluster-administrator&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">apiGroup&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">rbac.authorization.k8s.io&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="image-security">Image Security&lt;/h2>
+&lt;h3 id="private-repository">Private Repository&lt;/h3>
+&lt;h4 id="login-to-private-repository">Login to private repository&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>docker login private-registry.io&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker run private-registry.io/apss/internal-app&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="create-secret">Create secret&lt;/h4>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="l">kubectl create secrete docker-registry regcred \\&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">docker-server=private-registry.io \\&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">docker-username=registry-user \\&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">docker-password=registry-password \\&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>--&lt;span class="l">docker-email=registry-user@org.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="create-pod">Create pod&lt;/h4>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Poid&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">private-registry.op/apps/internal-app&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">imagePullSecrets&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">regcred&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="security-context">Security Context&lt;/h2>
+&lt;ul>
+&lt;li>definition for pod
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">web-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">securityContext&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runAsUser&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1000&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;sleep&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;3600&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>definition for container
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">web-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">command&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;sleep&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;3600&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">securityContext&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runAsUser&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1000&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">capabilities&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">add&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;AMC_ADMIN&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>capabilities&lt;/code>
+&lt;ul>
+&lt;li>only supported at the container level&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="network-policy">Network Policy&lt;/h2>
+&lt;h3 id="ingress--egress">Ingress &amp;amp; Egress&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-10.png" alt="ingres-egress-outline">&lt;/p>
+&lt;ul>
+&lt;li>ingress
+&lt;ul>
+&lt;li>for a web serever the incoming traffic from the users is an ingress&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>egress
+&lt;ul>
+&lt;li>outgoing request to the app server&lt;/li>
+&lt;li>allow external calls&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="traffic">traffic&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/security-11.png" alt="traffic-outline">&lt;/p>
+&lt;h3 id="network-security">Network Security&lt;/h3>
+&lt;ul>
+&lt;li>Network Policy
+&lt;ul>
+&lt;li>eg) Allow Ingress Raffic From API pod on Port 3306&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="selectors">Selectors&lt;/h4>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersions&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">networking.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">NetworkPolicy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db-policy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">mathLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">role&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">policyTpes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">from&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">api-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3306&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h2 id="network-policies-1">Network Policies&lt;/h2>
+&lt;ul>
+&lt;li>network policy to pod to protect
+&lt;ul>
+&lt;li>defintion
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">apiVersions&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">networking.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">NetworkPolicy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db-policy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">mathLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">role&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>what type of policies?
+&lt;ul>
+&lt;li>ingress or egress or both ?&lt;/li>
+&lt;li>allow incoming request → ingress&lt;/li>
+&lt;li>if incoming request is allowed, response is allowed automatically&lt;/li>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">policyTpes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>define specific rules
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">from&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">api-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3306&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>allow only in prod namespace
+&lt;ul>
+&lt;li>definition (and)
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">from&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">api-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">namespaceSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">prod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3306&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>if only &lt;code>namespaceSelector&lt;/code> is defined
+&lt;ul>
+&lt;li>allow or request in same namespace&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>definition (or)
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">from&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">api-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">namespaceSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">prod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3306&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>use array&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>to backup in server
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">ipBlock&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">cidr&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">192.168.5.10&lt;/span>&lt;span class="l">/32&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>to push to bakcup server
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersions&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">networking.k8s.io/v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">NetworkPolicy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db-policy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">mathLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">role&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">policyTpes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">Egress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">from&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">podSelector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">api-pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3306&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">egress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">to&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">ipBlock&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">cidr&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">192.168.5.10&lt;/span>&lt;span class="l">/32&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>\[CKA\] 07. Storage</title><link>https://aiden-jeon.github.io/post/tech/cka/07_storage/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/07_storage/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
