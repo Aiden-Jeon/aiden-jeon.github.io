@@ -3594,7 +3594,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;ul>
 &lt;li>&lt;code>kubectl get events&lt;/code>&lt;/li>
 &lt;li>&lt;code>kubectl logs my-custom-scheduler --n kube-system&lt;/code>&lt;/li>
-&lt;/ul></description></item><item><title>\[CKA\] 02. Core Concepts</title><link>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</guid><description>
+&lt;/ul></description></item><item><title>\[CKA\] 01. Core Concepts</title><link>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</link><pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/01_core_concepts/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
