@@ -1,4 +1,1273 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/post/tech/</link><description>Recent content in Tech on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 30 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 06. Security</title><link>https://aiden-jeon.github.io/post/tech/cka/06_security/</link><pubDate>Sun, 30 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/06_security/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on Aiden's Laboratory</title><link>https://aiden-jeon.github.io/post/tech/</link><description>Recent content in Tech on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 06 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 08. Networking</title><link>https://aiden-jeon.github.io/post/tech/cka/08_networking/</link><pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_networking/</guid><description>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>Every POD should have and IP Address&lt;/li>
+&lt;li>Every POD should be able to communicate with every other POD in the same node&lt;/li>
+&lt;li>Every POD should be able to communicate with every other POD on other nodes without NAT&lt;/li>
+&lt;/ul>
+&lt;h2 id="cni-in-kubernetes">CNI in kubernetes&lt;/h2>
+&lt;h3 id="configuring-cni">Configuring CNI&lt;/h3>
+&lt;ul>
+&lt;li>kubelete.service&lt;/li>
+&lt;li>&lt;code>ps -aux | grep kubelet&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>--cni-conf-dir=/etc/cni/net.d&lt;/code>&lt;/li>
+&lt;li>&lt;code>ls /opt/cni/bin&lt;/code>&lt;/li>
+&lt;li>&lt;code>ls /etc/cni/net.d&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="cni-weaveworks">CNI WeaveWorks&lt;/h2>
+&lt;h3 id="script">Script&lt;/h3>
+&lt;p>Networking solution has a routing table which mapped what networks are on what hosts&lt;/p>
+&lt;ul>
+&lt;li>when a packet is sent from pod to the other, it goes out
+&lt;ul>
+&lt;li>to the network,&lt;/li>
+&lt;li>to the router,&lt;/li>
+&lt;li>find its way to the node that hosts that pod
+→ works for a small environment and in a simple network
+→ Larger environment, this is not practical&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>routing table may not support so many entries&lt;/li>
+&lt;/ul>
+&lt;h3 id="weaveworks">WeaveWorks&lt;/h3>
+&lt;ul>
+&lt;li>deply an agent or service on each node&lt;/li>
+&lt;li>they communicate with each other to exchange information withing them
+&lt;ul>
+&lt;li>nodes&lt;/li>
+&lt;li>networks&lt;/li>
+&lt;li>PODs&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="how-it-works">How it works&lt;/h4>
+&lt;ul>
+&lt;li>Send
+&lt;ol>
+&lt;li>a packet is sent from one pod to another on another node&lt;/li>
+&lt;li>weave intercepts the packet and identifies that it's on a seperate network&lt;/li>
+&lt;li>encapsulates this packet into a new one with new source and destination&lt;/li>
+&lt;li>sends it across the network&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>Recieve
+&lt;ul>
+&lt;li>other weave agent retrieves the packet&lt;/li>
+&lt;li>decapsulates&lt;/li>
+&lt;li>routes the packet to the right pod&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="deploy">Deploy&lt;/h4>
+&lt;ul>
+&lt;li>weave and weave peers
+&lt;ul>
+&lt;li>deployed as service or daemons on each node&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>kubectl apply -f &amp;quot;&amp;lt;https://cloud.weave.works/k8s/net?k8s-version=$&amp;gt;(kubectl version | base64 | tr -d '\\n')&amp;quot;&lt;/code>
+&lt;ul>
+&lt;li>deploys daemonset&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="상태">상태&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubectl get pods -n kubesystem | grep weave-net&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="ip-adress-management">IP Adress Management&lt;/h2>
+&lt;ul>
+&lt;li>how the tool brutes networks&lt;/li>
+&lt;li>the nodes assign an IP subset&lt;/li>
+&lt;li>how are the pods assigned an IP&lt;/li>
+&lt;li>where is this information stored&lt;/li>
+&lt;li>who is responsible for ensuring there are no duplicate IP is assigned&lt;/li>
+&lt;/ul>
+&lt;h3 id="script-1">Script&lt;/h3>
+&lt;h4 id="who">Who&lt;/h4>
+&lt;ul>
+&lt;li>CNI
+&lt;ul>
+&lt;li>who define the standards CNI&lt;/li>
+&lt;li>it is responsibility of the CNI plugin, the network provider to take care of assigning IP to the containers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="how">How&lt;/h4>
+&lt;ul>
+&lt;li>get free IP list from file
+&lt;ul>
+&lt;li>placed on the each host&lt;/li>
+&lt;li>&lt;code>ip = get_free_ip_from_host_local()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>cat /etc/cni/net.d/net-script.conf&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">&amp;#34;ipam&amp;#34;: &lt;/span>{&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">&amp;#34;type&amp;#34;: &lt;/span>&lt;span class="l">...,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">&amp;#34;subnet&amp;#34;: &lt;/span>&lt;span class="l">...,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">&amp;#34;routes&amp;#34;: &lt;/span>&lt;span class="l">...,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w">&lt;/span>}&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="weaveworks-1">WeaveWorks&lt;/h3>
+&lt;ul>
+&lt;li>entire network
+&lt;ul>
+&lt;li>10.32.0.0/12&lt;/li>
+&lt;li>10.32.0.1 ~ 10.47.255.254&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="service-networking">Service Networking&lt;/h2>
+&lt;h3 id="type-of-service">Type of service&lt;/h3>
+&lt;h4 id="cluster-ip">Cluster IP&lt;/h4>
+&lt;ul>
+&lt;li>if created it is accessible from all pods of the cluster, irrespective of what nodes the pods are on&lt;/li>
+&lt;li>hosted across the cluster&lt;/li>
+&lt;li>only aceescible from within ther cluster&lt;/li>
+&lt;/ul>
+&lt;h4 id="nodeport">NodePort&lt;/h4>
+&lt;ul>
+&lt;li>works as cluster IP&lt;/li>
+&lt;li>in addtion, it also exposes the applications on a port on all nodes in ther cluster
+&lt;ul>
+&lt;li>external user or applications have access to the service&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="question">Question&lt;/h3>
+&lt;ul>
+&lt;li>How are the services getting these IP addresses&lt;/li>
+&lt;li>How are they made avaliable acorss all the nodes in the cluster&lt;/li>
+&lt;li>How is service made avalible to external users through a port on each node&lt;/li>
+&lt;li>Who is doing that, and how and where do we see it&lt;/li>
+&lt;/ul>
+&lt;h3 id="answer">Answer&lt;/h3>
+&lt;h4 id="kubelet-process">kubelet process&lt;/h4>
+&lt;ul>
+&lt;li>which is responsible for creating PODs&lt;/li>
+&lt;li>each kubelet service on each node&lt;/li>
+&lt;li>whatches the changes in the cluster through the kube-api server
+&lt;ol>
+&lt;li>everty time a new pod is to be created, it creates the pod on the nodes&lt;/li>
+&lt;li>invokes the CNI plugin to configure networking for that pod&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="kube-proxy">kube-proxy&lt;/h4>
+&lt;ul>
+&lt;li>runs on each node&lt;/li>
+&lt;li>watches the changes in the cluster through kube-api server&lt;/li>
+&lt;li>every time a new service is to be crated&lt;/li>
+&lt;li>service are not created on each node or assigned to each node
+&lt;ul>
+&lt;li>service is the cluster wide concept&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>virtual object&lt;/li>
+&lt;/ul>
+&lt;h4 id="service-ip">Service IP&lt;/h4>
+&lt;ol>
+&lt;li>create service obejct in k8s&lt;/li>
+&lt;li>it is assigned an IP address from a pre-defined range&lt;/li>
+&lt;li>kube-proxy components running on each node, get's that IP address&lt;/li>
+&lt;li>creates forwarding rulse on each node in ther clsuter
+&lt;ul>
+&lt;li>any traffic coming in to service IP, should go the IP of the pod&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="rules-of-service-ip">Rules of service IP&lt;/h4>
+&lt;ul>
+&lt;li>kube-proxy supports serveral-way
+&lt;ul>
+&lt;li>userspace&lt;/li>
+&lt;li>ipvs&lt;/li>
+&lt;li>iptables&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>setting
+&lt;ul>
+&lt;li>&lt;code>kube-proxy --proxy-mode [userspaces | iptables | ipvs] ...&lt;/code>
+&lt;ul>
+&lt;li>default: ip tables&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>ip tables
+&lt;ol>
+&lt;li>pod is created it has ip 10.244.1.2&lt;/li>
+&lt;li>create a ClusterIP service
+&lt;ul>
+&lt;li>k8s assigns an IP address to it, 10.103.132.104&lt;/li>
+&lt;li>range is specified in kube-api-server option
+&lt;ul>
+&lt;li>&lt;code>kube-api-server --service-cluster-ip-range ipNet&lt;/code>&lt;/li>
+&lt;li>default : 10.0.0.0/24&lt;/li>
+&lt;li>&lt;code>ps aux | grep kube-api-server&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>pod ip range and service ip range shoulde be not duplicat ed&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>see the tables
+&lt;ul>
+&lt;li>&lt;code>iptables -L -t net | grep db-service&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="logs">Logs&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>cat /var/log/kube-proxy.log&lt;/code>
+&lt;ul>
+&lt;li>what proxy it uses&lt;/li>
+&lt;li>IP tables and Add and entry whe new serviec is created&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="dns-in-kubernetes">DNS in kubernetes&lt;/h2>
+&lt;h3 id="objectives">Objectives&lt;/h3>
+&lt;ul>
+&lt;li>what names are assigned to what obejcts?&lt;/li>
+&lt;li>Service DNS records&lt;/li>
+&lt;li>POD DNS records&lt;/li>
+&lt;/ul>
+&lt;h3 id="kube-dns">Kube DNS&lt;/h3>
+&lt;ul>
+&lt;li>service is created&lt;/li>
+&lt;li>k8s DNS service creates a record for the service
+&lt;ul>
+&lt;li>it maps the service name to the IP address&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>any pod can reach the service using its service name
+&lt;ul>
+&lt;li>&lt;code>&amp;lt;service-name&amp;gt;.&amp;lt;namesapce&amp;gt;.&amp;lt;type&amp;gt;.&amp;lt;Root&amp;gt;&lt;/code>&lt;/li>
+&lt;li>subdomain = namespace&lt;/li>
+&lt;li>type = svc&lt;/li>
+&lt;li>root = cluster.local&lt;/li>
+&lt;li>eg) &lt;code>curl &amp;lt;http://web-service.apps.svc.cluster.local&lt;/code>&amp;gt;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>pod
+&lt;ul>
+&lt;li>hostname
+&lt;ul>
+&lt;li>10.224.2.5 → 10-224-2-5&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>type → pod&lt;/li>
+&lt;li>eg) &lt;code>curl &amp;lt;http://10-224-2-5.apps.pod.cluster.local&lt;/code>&amp;gt;&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="how-k8s-implements-dns">How k8s implements DNS?&lt;/h2>
+&lt;h3 id="coredns">CoreDNS&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cat /etc/coredns/Corefile&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl get configmap -n kube-system&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="dns-server">DNS Server&lt;/h3>
+&lt;ul>
+&lt;li>node
+&lt;ul>
+&lt;li>&lt;code>cat /etc/resolv.conf&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>nameserver 10.96.0.10&lt;/code>&lt;/li>
+&lt;li>k8s do automatically&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="ingress">Ingress&lt;/h2>
+&lt;h3 id="ingress-controller">Ingress Controller&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-1.png" alt="ingress-controller">&lt;/p>
+&lt;ul>
+&lt;li>nginx deployment
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">extensrions/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deployment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress-controller&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">replicas&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">selector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">matchLabels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">template&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress-controller&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">...&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">args&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">19&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="l">/nginx-ingress-controller&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">20&lt;/span>&lt;span class="w"> &lt;/span>- --&lt;span class="l">configmap=$(POD_NAMESPACE)/nginx-configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">21&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">22&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">POD_NAME&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">23&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">valueFrom&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">24&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fieldRef&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">25&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fieldPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">metadata.name&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">26&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">POD_NAMESPACE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">27&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">valueFrom&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">28&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fieldRef&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">29&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fieldPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">metadata.namesapce&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">30&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">31&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">http&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">32&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">contrainerPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">33&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">34&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">contrainerPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">443&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>configmap
+&lt;ul>
+&lt;li>feed nginx configuration data&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ConfigMap&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>service
+&lt;ul>
+&lt;li>expose&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">NodePort&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">ports&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">targetPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">http&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">443&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">targetPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">443&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">protocol&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TCP&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">selector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>service account
+&lt;ul>
+&lt;li>right permissions to access&lt;/li>
+&lt;li>Roles&lt;/li>
+&lt;li>ClusterRoles&lt;/li>
+&lt;li>RoleBindings&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ServiceAccount&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-ingress-serviceaacount&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="ingress-resource">Ingress Resource&lt;/h3>
+&lt;ul>
+&lt;li>simple one application&lt;/li>
+&lt;li>single domain and several subdomains&lt;/li>
+&lt;li>several domains&lt;/li>
+&lt;li>상태
+&lt;ul>
+&lt;li>&lt;code>kubectl get ingress&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="rules">Rules&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-2.png" alt="ingress-rules">&lt;/p>
+&lt;h4 id="single">Single&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-3.png" alt="ingress-single">&lt;/p>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">extensrions/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ingress -wear&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">backend&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">serviceName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">web-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">servicePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h4 id="several-rules">Several rules&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-4.png" alt="ingress-serveral-rules">&lt;/p>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">extensrions/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ingress -wear&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">rules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">http&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">paths&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/wear&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">backend&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">serviceName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">wear-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">servicePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">path&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">/watch&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">backend&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">serviceName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">watch-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">servicePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>상태
+&lt;ul>
+&lt;li>&lt;code>kubectl describe ingress ingress-wear-watch&lt;/code>&lt;/li>
+&lt;li>default backend
+&lt;ul>
+&lt;li>if user access to not specified server&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="several-domains">Several domains&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-5.png" alt="ingress-serveral-domains">&lt;/p>
+&lt;ul>
+&lt;li>definition
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">extensrions/v1beta1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Ingress&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ingress -wear&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">rules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">wear.my-online-store.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">http&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">paths&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">backend&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">11&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">serviceName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">wear-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">12&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">servicePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">13&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">watch.my-online-store.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">14&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">http&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">15&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">paths&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">16&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">backend&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">17&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">serviceName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">watch-service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">18&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">servicePort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">80&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul></description></item><item><title>\[CKA\] 08. Networking Pre-requisites</title><link>https://aiden-jeon.github.io/post/tech/cka/08_networking_pre/</link><pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_networking_pre/</guid><description>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="pre-requisites">Pre-Requisites&lt;/h2>
+&lt;ul>
+&lt;li>Switching and Routing
+&lt;ul>
+&lt;li>Switching&lt;/li>
+&lt;li>Routing&lt;/li>
+&lt;li>Default Gateway&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>DNS
+&lt;ul>
+&lt;li>DNS Configurations on Linux&lt;/li>
+&lt;li>CoreDNS Introduction&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Network Namespaces&lt;/li>
+&lt;li>Docker Networking&lt;/li>
+&lt;/ul>
+&lt;h2 id="switching-routing">Switching Routing&lt;/h2>
+&lt;h3 id="switching">Switching&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-1.png" alt="switching">&lt;/p>
+&lt;h4 id="상황">상황&lt;/h4>
+&lt;ul>
+&lt;li>There are two computers and want to communicate to each other
+&lt;ul>
+&lt;li>→ use switch&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법">방법&lt;/h4>
+&lt;ol>
+&lt;li>see the interface of host
+&lt;ul>
+&lt;li>&lt;code>ip link&lt;/code>&lt;/li>
+&lt;li>look at the interface named &lt;code>eth0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>assume ip address
+&lt;ul>
+&lt;li>switch: 192.168.1.0&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>give ip to hosts
+&lt;ul>
+&lt;li>&lt;code>ip addr add &amp;lt;ip&amp;gt;/&amp;lt;port&amp;gt; &amp;lt;hostname&amp;gt; &amp;lt;interface&amp;gt;&lt;/code>&lt;/li>
+&lt;li>A: 192.168.1.10
+&lt;ul>
+&lt;li>&lt;code>ip addr add 192.168.1.10/24 dev eth0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>B: 192.168.1.11
+&lt;ul>
+&lt;li>&lt;code>ip addr add 192.168.1.11/24 dev eth0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Two computers can communicate each other through switch
+&lt;ul>
+&lt;li>&lt;code>ping 192.16.1.11&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="특징">특징&lt;/h4>
+&lt;ul>
+&lt;li>switch can only enable communications within network&lt;/li>
+&lt;li>it can receive packets from a host on the network and deliver it to other system within the same network&lt;/li>
+&lt;/ul>
+&lt;h3 id="routing">Routing&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-2.png" alt="routing">&lt;/p>
+&lt;h4 id="상황-1">상황&lt;/h4>
+&lt;ul>
+&lt;li>New system exists
+&lt;ul>
+&lt;li>Two computer name with C, D&lt;/li>
+&lt;li>Ip address
+&lt;ul>
+&lt;li>C: 192.168.2.10&lt;/li>
+&lt;li>D: 192.168.2.11&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>How does computer A reach to computer c?&lt;/li>
+&lt;li>→ Router
+&lt;ul>
+&lt;li>helps connect two networks together.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-1">방법&lt;/h4>
+&lt;ol>
+&lt;li>Connecting two networks, it need two ip assigned.
+&lt;ul>
+&lt;li>first network (A&amp;amp;B): 192.168.1.1&lt;/li>
+&lt;li>second network (C&amp;amp;D): 192.168.2.1&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Send A to C
+&lt;ul>
+&lt;li>how does know where is C?&lt;/li>
+&lt;li>→ Gateway&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="gateway">Gateway&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-3.png" alt="gateway">&lt;/p>
+&lt;h4 id="상황-2">상황&lt;/h4>
+&lt;ul>
+&lt;li>network ← room&lt;/li>
+&lt;li>gateway ← a door to the outside world to other networks&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-2">방법&lt;/h4>
+&lt;ol>
+&lt;li>systems need to know where that door is to go through
+&lt;ul>
+&lt;li>to see the existing routing configuration on a system&lt;/li>
+&lt;li>&lt;code>route&lt;/code>&lt;/li>
+&lt;li>displays the kernels routing table&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Configure a gateway
+&lt;ol>
+&lt;li>&lt;code>ip route add 192.168.2.0/24 via 192.168.1.1&lt;/code>
+&lt;ul>
+&lt;li>→ you can reach the 192.168.2.0 network through the door or gateway at 192.168.1.11&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>route&lt;/code>
+&lt;ul>
+&lt;li>see the route added&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>Configure on all system
+&lt;ol>
+&lt;li>&lt;code>ip route add 192.168.1.0/24 via 192.168.2.1&lt;/code>&lt;/li>
+&lt;li>&lt;code>route&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="internet">Internet&lt;/h3>
+&lt;h4 id="상황-3">상황&lt;/h4>
+&lt;ul>
+&lt;li>System need acces to the internet&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-3">방법&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>ip route add 172.217.194.0/24 via 192.168.2.1&lt;/code>
+&lt;ul>
+&lt;li>add a new road in routing table to road all traffic to the network 172.217.194.0&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="default-gateway">Default gateway&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-4.png" alt="default-gateway">&lt;/p>
+&lt;h4 id="상황-4">상황&lt;/h4>
+&lt;ul>
+&lt;li>any request to any network outside of existing network goes to this particular router&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-4">방법&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>ip route add default via 192.168.2.1&lt;/code>&lt;/li>
+&lt;li>also can called 0.0.0.0
+&lt;ul>
+&lt;li>&lt;code>ip route add 0.0.0.0 via 192.168.2.1&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>if default gateway is defined, in same network there is no need to add 192.168.1.0&lt;/li>
+&lt;li>in sepreated network
+&lt;ul>
+&lt;li>one entry for private network&lt;/li>
+&lt;li>&lt;code>ip addr add 192.168.1.0/24 via 192.168.2.2&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="linux-as-a-host">Linux as a host&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-5.png" alt="linux-host">&lt;/p>
+&lt;h4 id="상황-5">상황&lt;/h4>
+&lt;ul>
+&lt;li>3 hosts, A, B, C&lt;/li>
+&lt;li>host B is connected to both networks using eth0 and eth1
+&lt;ul>
+&lt;li>A&amp;amp;B are connected with 192.168.1.0&lt;/li>
+&lt;li>B&amp;amp;C are connected with 192.168.2.0&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>how to reach from A to C
+&lt;ul>
+&lt;li>→ need to tell host A that the door or gateway to network C is through host B&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-5">방법&lt;/h4>
+&lt;ol>
+&lt;li>add a routing table entry
+&lt;ul>
+&lt;li>&lt;code>ip route add 192.168.2.0/24 via 192.168.1.6&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>when packet is reached to host C, host C will have to send back response to host A
+&lt;ul>
+&lt;li>&lt;code>ip route add 192.168.1.0/24 via 192.168.2.6&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>in Linux, packets are not forwarded from one interface to the next
+&lt;ul>
+&lt;li>eg) pacets receivced on eht0 on host B, are not forwarded to through eth1&lt;/li>
+&lt;li>eth0: private, eth1: public&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>allow forward
+&lt;ul>
+&lt;li>default: denied
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; cat /proc/sys/net/ipv4/ip_forward
+&lt;span class="ln">2&lt;/span>&lt;span class="m">0&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>set allowed
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; &lt;span class="nb">echo&lt;/span> 1&amp;gt; /proc/sys/net/ipv4/ip_forward
+&lt;span class="ln">2&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>this is not persistant, changed if reboot.&lt;/li>
+&lt;li>to make persistent, modify the same value in the &lt;code>/etc/sysctl.conf&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>net.ipv4.ip_forward&lt;span class="o">=&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="take-aways">Take Aways&lt;/h3>
+&lt;h4 id="ip">ip&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>ip link&lt;/code>
+&lt;ul>
+&lt;li>to list and modify interfactes on the host&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ip addr&lt;/code>
+&lt;ul>
+&lt;li>to see the ip addresses assigned to those interface&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ip addr ad&lt;/code>
+&lt;ul>
+&lt;li>add IP addresses on the interfaces&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="dns">DNS&lt;/h2>
+&lt;h3 id="name-resolution">Name Resolution&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-6.png" alt="name-resolution">&lt;/p>
+&lt;h4 id="상황-6">상황&lt;/h4>
+&lt;ul>
+&lt;li>two computers A and B
+&lt;ul>
+&lt;li>same network&lt;/li>
+&lt;li>assigned IP
+&lt;ul>
+&lt;li>A: 192.168.1.0&lt;/li>
+&lt;li>B: 192.168.1.11&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>able to ping one computer to others with IP
+&lt;ul>
+&lt;li>&lt;code>ping 192.168.1.11&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>B has a database service
+&lt;ul>
+&lt;li>give a name DB&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>want to ping to B, using DB instead of IP address
+&lt;ul>
+&lt;li>&lt;code>ping db&lt;/code>&lt;/li>
+&lt;li>→ err: &lt;code>ping :unkown host db&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-6">방법&lt;/h4>
+&lt;ol>
+&lt;li>When i say db, it means IP 192.161.1.11
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>cat &amp;gt;&amp;gt; /etc/hosts
+&lt;span class="ln">2&lt;/span>192.168.1.11 db
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>&lt;code>ping db&lt;/code>
+&lt;ul>
+&lt;li>successful&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="특징-1">특징&lt;/h4>
+&lt;ul>
+&lt;li>doesn't matter real host name&lt;/li>
+&lt;li>can have many names&lt;/li>
+&lt;li>need to all specify other system
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-7.png" alt="name-resoltuions">&lt;/li>
+&lt;/ul>
+&lt;h3 id="dns-server">DNS Server&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-8.png" alt="before-dns-server">
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-9.png" alt="after-dns-server">&lt;/p>
+&lt;h4 id="상황-7">상황&lt;/h4>
+&lt;ul>
+&lt;li>until the enviroment grew and these files got filled with too many entries&lt;/li>
+&lt;li>managing these files too hard&lt;/li>
+&lt;li>move all these files in one server&lt;/li>
+&lt;li>→ DNS Server
+&lt;ul>
+&lt;li>point all hosts to look up tahat server&lt;/li>
+&lt;li>ip: 192.168.1.100&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-7">방법&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-10.png" alt="how-dns-server">&lt;/p>
+&lt;ol>
+&lt;li>add entry
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>cat /etc/resolv.conf
+&lt;span class="ln">2&lt;/span>nameserver 192.168.1.100
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>configure in all host&lt;/li>
+&lt;/ol>
+&lt;h4 id="특징-2">특징&lt;/h4>
+&lt;ul>
+&lt;li>also can use &lt;code>/etc/hosts&lt;/code>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>cat &amp;gt;&amp;gt; /etc/hosts
+&lt;span class="ln">2&lt;/span>192.168.1.115 &lt;span class="nb">test&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>&lt;code>ping test&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>if an entry in both places
+&lt;ul>
+&lt;li>host first looks in the local &lt;code>/etc/hosts&lt;/code>&lt;/li>
+&lt;li>and then look at the name sever&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>order can change
+&lt;ul>
+&lt;li>&lt;code>etc/nsswitch.conf&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>multiple name server is possible&lt;/li>
+&lt;/ul>
+&lt;h3 id="domain-names">Domain Names&lt;/h3>
+&lt;h4 id="structure">Structure&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-11.png" alt="domain-name-structure">&lt;/p>
+&lt;ul>
+&lt;li>tree structure
+&lt;ul>
+&lt;li>.com
+&lt;ul>
+&lt;li>top level domain&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>google
+&lt;ul>
+&lt;li>domain name&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>www
+&lt;ul>
+&lt;li>subdomain
+&lt;ul>
+&lt;li>helping further grouping things together&lt;/li>
+&lt;li>eg) maps, drive, ..&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="in-public">In public&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-12.png" alt="domain-name-works-public">&lt;/p>
+&lt;ol>
+&lt;li>request hits organization's internal DNS server&lt;/li>
+&lt;li>forwards request to the Internet
+&lt;ul>
+&lt;li>point to a serving .com&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>forwards to Google&lt;/li>
+&lt;li>Google DNS server provides IP of ther serving the apps applications&lt;/li>
+&lt;li>to speed up all future results, organization's DNS server choose to cache this IP&lt;/li>
+&lt;/ol>
+&lt;h3 id="in-private">In private&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-13.png" alt="domain-names-works-private">&lt;/p>
+&lt;ul>
+&lt;li>within in company do not wany to use domain name
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>cat &amp;gt;&amp;gt; /etc/resolv.conf
+&lt;span class="ln">2&lt;/span>nameserver 192.168.1.100
+&lt;span class="ln">3&lt;/span>search mycompany.com
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h3 id="record-types">Record Types&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-14.png" alt="record-types">&lt;/p>
+&lt;h3 id="tools">Tools&lt;/h3>
+&lt;h4 id="nslookup">nslookup&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-15.png" alt="nslookup">&lt;/p>
+&lt;ul>
+&lt;li>to query hostname from a DNS server&lt;/li>
+&lt;li>does not consider the entries in the local &lt;code>/etc/hosts&lt;/code> file
+&lt;ul>
+&lt;li>entry for web application has to be present in DNS server.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="dig">dig&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-16.png" alt="dig">&lt;/p>
+&lt;ul>
+&lt;li>give more information&lt;/li>
+&lt;/ul>
+&lt;h2 id="network-namespaces">Network Namespaces&lt;/h2>
+&lt;h3 id="process-namespace">Process Namespace&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-17.png" alt="process-name">&lt;/p>
+&lt;ul>
+&lt;li>container host
+&lt;ul>
+&lt;li>create a container, want to make sure that it is isolated&lt;/li>
+&lt;li>create a special room, called namespace&lt;/li>
+&lt;li>only sees the processes run by container&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>underlying host
+&lt;ul>
+&lt;li>has visibility in to all of the proceeses
+&lt;ul>
+&lt;li>including those running inside containers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="network-namespace">Network namespace&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-18.png" alt="network-namespace">&lt;/p>
+&lt;ul>
+&lt;li>host has its own intercates that connect to the local area network&lt;/li>
+&lt;li>own routing table, arp table
+&lt;ul>
+&lt;li>information about rest of the network&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-8">방법&lt;/h4>
+&lt;ol>
+&lt;li>create a container&lt;/li>
+&lt;li>create a network namespace for it
+&lt;ul>
+&lt;li>it has no visibility to any network related infromation on the host within its namespace&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>the container have its own virtual interfaces, routing and arp tables&lt;/li>
+&lt;/ol>
+&lt;h4 id="create-network-namespace">Create network namespace&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-19.png" alt="create-ns">&lt;/p>
+&lt;ul>
+&lt;li>생성
+&lt;ul>
+&lt;li>&lt;code>ip netns add red&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip netns add blue&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>상태
+&lt;ul>
+&lt;li>&lt;code>ip netns&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="exec-in-network-ns">Exec in network ns&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-20.png" alt="exec-ns">&lt;/p>
+&lt;ul>
+&lt;li>interfaces
+&lt;ul>
+&lt;li>to list interfaces on my host
+&lt;ul>
+&lt;li>&lt;code>ip link&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>to list interfaces on network namespace
+&lt;ul>
+&lt;li>&lt;code>ip netns exec red ip link&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip -n red link&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>arp &amp;amp; route table
+&lt;ul>
+&lt;li>no entries in namespace&lt;/li>
+&lt;li>these namespaces has no connectivity to other network&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="connect">Connect&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-21.png" alt="connect-ns">&lt;/p>
+&lt;ul>
+&lt;li>connect namespaces together using a virtual ehternet pair or a virtual cable&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-9">방법&lt;/h4>
+&lt;ol>
+&lt;li>create the cable
+&lt;ul>
+&lt;li>&lt;code>ip link add veth-red type veth peer name veth-blue&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>attach each interface to the appropriate namespace
+&lt;ul>
+&lt;li>&lt;code>ip link set veth-red netns red&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip link set veth-blue netns blue&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>assign IP addresses to each of these namespaces
+&lt;ul>
+&lt;li>&lt;code>ip -n red addr add 192.168.15.1 dev veth-red&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip -n blue addr add 192.168.15.2 dev veth-blue&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>bring up the interface
+&lt;ul>
+&lt;li>&lt;code>ip -n red link set veth-red up&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip -n blue link set veth-blue up&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="확인">확인&lt;/h4>
+&lt;ul>
+&lt;li>arp table is created
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-22.png" alt="arp-table">&lt;/li>
+&lt;/ul>
+&lt;h3 id="virtual-network">Virtual network&lt;/h3>
+&lt;ul>
+&lt;li>many pods → need a switch&lt;/li>
+&lt;li>create a virtual switch&lt;/li>
+&lt;li>how to create virtual networks?
+&lt;ul>
+&lt;li>여러 open source들&lt;/li>
+&lt;li>여기선 linux bridge&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="생성">생성&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-23.png" alt="create-vns">&lt;/p>
+&lt;ol>
+&lt;li>add a new interface to the host
+&lt;ul>
+&lt;li>&lt;code>ip link add v-net-0 type bridge&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>check
+&lt;ul>
+&lt;li>&lt;code>ip link&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>turn up
+&lt;ul>
+&lt;li>&lt;code>ip link set de v-net-0 up&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>connect the namespaces to new virtual network switch&lt;/li>
+&lt;/ol>
+&lt;h4 id="연결">연결&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-24.png" alt="connect-vns">&lt;/p>
+&lt;ol>
+&lt;li>create a cable
+&lt;ul>
+&lt;li>&lt;code>ip link add veth-red type veth peer name veth-red-br&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip link add veth-blue type veth peer name veth-blue-br&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>attach one end of this interface to the red namespace
+&lt;ul>
+&lt;li>&lt;code>ip link set veth-red netns red&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip link set veth-red-br master v-net-0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>same job with 2 in blue
+&lt;ul>
+&lt;li>&lt;code>ip link set veth-blue netns blue&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip link set veth-blue-br master v-net-0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>assign ip address
+&lt;ul>
+&lt;li>&lt;code>ip -n red addr add 192.168.15.1 dev veth-red&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip -n blue addr add 192.168.15.2 dev veth-blue&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>turn devices up
+&lt;ul>
+&lt;li>&lt;code>ip -n red link set veth-red up&lt;/code>&lt;/li>
+&lt;li>&lt;code>ip -n blue link set veth-blue up&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="host-and-namespace">Host and namespace&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-25.png" alt="host-vns">&lt;/p>
+&lt;ul>
+&lt;li>try trired to reach one of these interfaces in this namespaces from my host
+&lt;ul>
+&lt;li>→ doesn't work&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>connect interface with host
+&lt;ul>
+&lt;li>&lt;code>ip addr add 192.168.15.5/25 dev net-0&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="localhost">Localhost&lt;/h3>
+&lt;h4 id="상황-8">상황&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-26.png" alt="localhost-status">&lt;/p>
+&lt;ul>
+&lt;li>can't reach the outside world and no one from outside world can not reach hosted inside&lt;/li>
+&lt;li>how to configure this bridge to reach the network through the internet port?
+&lt;ul>
+&lt;li>→ need to add an entry in to the routing table to provide a gateway or door to the outside world&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>localhost
+&lt;ul>
+&lt;li>has all these namesapces&lt;/li>
+&lt;li>has an interface to attach to the private network&lt;/li>
+&lt;li>a gateway that connects the two networks toghter&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-10">방법&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-27.png" alt="localhost-method">&lt;/p>
+&lt;ol>
+&lt;li>add localhost to router
+&lt;ul>
+&lt;li>&lt;code>ip netns exec blue ip route add 192.168.1.0/24 via 192.168.15.5&lt;/code>&lt;/li>
+&lt;li>host has two ip addresses
+&lt;ul>
+&lt;li>192.168.15.5&lt;/li>
+&lt;li>external network: 192.168.1.2&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>forward
+&lt;ul>
+&lt;li>&lt;code>iptables -t nat -A POSTROUT -s 192.168.15.0/25 -j MASQUERADE&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>connect to internet
+&lt;ul>
+&lt;li>&lt;code>ip netns exec blue ip route add default via 192.168.15.5&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="docker-networking">Docker Networking&lt;/h2>
+&lt;h3 id="single-docker-host">Single Docker host&lt;/h3>
+&lt;ul>
+&lt;li>Has an ethernet interface at eth0 that connects to the local network with the IP address 192.168.1.10&lt;/li>
+&lt;li>run a container, there is different networking option to choose from
+&lt;ul>
+&lt;li>none network&lt;/li>
+&lt;li>host network&lt;/li>
+&lt;li>bridge&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="none-network">None network&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-28.png" alt="docker-none">&lt;/p>
+&lt;ul>
+&lt;li>docker container is not attached to any network&lt;/li>
+&lt;/ul>
+&lt;h4 id="host-network">Host network&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-29.png" alt="docker-host">&lt;/p>
+&lt;ul>
+&lt;li>container is attached to the host's network&lt;/li>
+&lt;li>sharing host network, cannot use same port at same time&lt;/li>
+&lt;/ul>
+&lt;h4 id="bridge">Bridge&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-30.png" alt="docker-bridge">&lt;/p>
+&lt;ul>
+&lt;li>internal private network is created which the docker host and containers attach to&lt;/li>
+&lt;li>ip address: 172.17.0.0&lt;/li>
+&lt;/ul>
+&lt;h3 id="bridge-1">Bridge&lt;/h3>
+&lt;h4 id="상태">상태&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-31.png" alt="bridge-status">&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>docker network ls&lt;/code>
+&lt;ul>
+&lt;li>docker calls the network by the name bridge&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ip link&lt;/code>
+&lt;ul>
+&lt;li>host the name of network is created with docker0&lt;/li>
+&lt;li>interface is currently down&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ip addr&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h4 id="생성-1">생성&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-32.png" alt="bridge-crate">&lt;/p>
+&lt;ul>
+&lt;li>container is created&lt;/li>
+&lt;li>docker creates a network namepsace for it&lt;/li>
+&lt;li>&lt;code>ip netns&lt;/code>&lt;/li>
+&lt;li>&lt;code>docker inspect ~~&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="attach-container-to-the-bridge">Attach container to the bridge&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-33.png" alt="bridge-attach">&lt;/p>
+&lt;ol>
+&lt;li>creates a virtual cable
+&lt;ul>
+&lt;li>&lt;code>ip link&lt;/code> on docker host
+&lt;ul>
+&lt;li>end of the interface which is attached to the local bridge docker0&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>ip -n ~~ link&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>check the ip
+&lt;ul>
+&lt;li>&lt;code>ip -n ~~ addr&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="port-mapping">Port Mapping&lt;/h3>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-34.png" alt="port-mapping">&lt;/p>
+&lt;ul>
+&lt;li>port publishing or port mapping options
+&lt;ul>
+&lt;li>to allow to access the applications hosted on containers&lt;/li>
+&lt;li>&lt;code>docker run -p 8080:80 nginx&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법-11">방법&lt;/h4>
+&lt;p>&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-35.png" alt="port-mapping-how">&lt;/p>
+&lt;ul>
+&lt;li>requirements
+&lt;ul>
+&lt;li>forward traffic coming in one port to another port on the server&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;ol>
+&lt;li>add rules to docker chain&lt;/li>
+&lt;li>set destination to include the containers IP&lt;/li>
+&lt;li>see the rule
+&lt;ul>
+&lt;li>&lt;code>iptables -nvL -t nat&lt;/code>
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/networking-pre-36.png" alt="port-mapping-rule">&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="cluster-networking">Cluster Networking&lt;/h2>
+&lt;h3 id="ip--fqdn">IP &amp;amp; FQDN&lt;/h3>
+&lt;ol>
+&lt;li>k8s cluster consists of master and worker nodes&lt;/li>
+&lt;li>each node must have at least 1 interface connected to a network&lt;/li>
+&lt;li>each interface must have an address configured&lt;/li>
+&lt;li>the host must have a unique hostname set, unique MAC address
+&lt;ul>
+&lt;li>note this if you created the VMs by cloning from existing ones.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="ports">PORTS&lt;/h3>
+&lt;p>There are some ports to be opened.&lt;/p>
+&lt;h4 id="master">Master&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kube-api&lt;/code> - 6443&lt;/li>
+&lt;li>&lt;code>kubelet&lt;/code> - 10250&lt;/li>
+&lt;li>&lt;code>kube-scheduler&lt;/code> - 10251&lt;/li>
+&lt;li>&lt;code>kube-controller-manager&lt;/code> - 10252&lt;/li>
+&lt;li>&lt;code>etcd&lt;/code>
+&lt;ul>
+&lt;li>2379&lt;/li>
+&lt;li>2380, if multiple master nodes&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="worker">Worker&lt;/h4>
+&lt;ul>
+&lt;li>&lt;code>kubelet&lt;/code> - 10250&lt;/li>
+&lt;li>&lt;code>services&lt;/code> - 30000~32767&lt;/li>
+&lt;/ul>
+&lt;h3 id="practice">Practice&lt;/h3>
+&lt;h4 id="what-is-the-network-interface-configured-for-cluster-connectivity-on-the-master-node-node-to-node-communication">What is the network interface configured for cluster connectivity on the master node? node-to-node communication&lt;/h4>
+&lt;p>Run: &lt;code>kubectl get nodes -o wide&lt;/code> to see the IP address assigned to the controlplane node.&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>root@controlplane:~# kubectl get nodes controlplane -o wide
+&lt;span class="ln">2&lt;/span>NAME STATUS ROLES AGE VERSION INTERNAL-IP EXTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
+&lt;span class="ln">3&lt;/span>controlplane Ready control-plane,master 4h46m v1.20.0 10.3.116.12 &amp;lt;none&amp;gt; Ubuntu 18.04.5 LTS 5.4.0-1041-gcp docker://19.3.0
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>In this case, the internal IP address used for node for node to node communication is &lt;code>10.3.116.12&lt;/code>.&lt;/p>
+&lt;p>&lt;strong>Important Note&lt;/strong> : The result above is just an example, the node IP address will vary for each lab.&lt;/p>
+&lt;p>Next, find the network interface to which this IP is assigned by making use of the &lt;code>ip a&lt;/code> command:&lt;/p>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="ln">1&lt;/span>root@controlplane:~# ip a | grep -B2 10.3.116.12
+&lt;span class="ln">2&lt;/span>16476: eth0@if16477: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1450 qdisc noqueue state UP group default
+&lt;span class="ln">3&lt;/span> link/ether 02:42:0a:03:74:0c brd ff:ff:ff:ff:ff:ff link-netnsid 0
+&lt;span class="ln">4&lt;/span> inet 10.3.116.12/24 brd 10.3.116.255 scope global eth0
+&lt;span class="ln">5&lt;/span>root@controlplane:~#
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Here you can see that the interface associated with this IP is eth0 on the host.&lt;/p>
+&lt;h4 id="what-is-the-mac-address-assigned-to-node01">What is the MAC address assigned to node01?&lt;/h4>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; arp node01
+&lt;span class="ln">2&lt;/span>Address HWtype HWaddress Flags Mask Iface
+&lt;span class="ln">3&lt;/span>10.153.142.8 ether 02:42:0a:99:8e:07 C eth0
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>\[CKA\] 06. Security</title><link>https://aiden-jeon.github.io/post/tech/cka/06_security/</link><pubDate>Sun, 30 May 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/06_security/</guid><description>
 &lt;h2 id="kubernetes-security-primitives">Kubernetes Security Primitives&lt;/h2>
 &lt;h3 id="secrure-hosts">Secrure Hosts&lt;/h3>
 &lt;ul>
