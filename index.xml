@@ -1,9 +1,147 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Sun, 06 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 08. Networking</title><link>https://aiden-jeon.github.io/post/tech/cka/08_networking/</link><pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_networking/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aiden's Laboratory</title><link>https://aiden-jeon.github.io/</link><description>Recent content on Aiden's Laboratory</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Mon, 07 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>\[CKA\] 09. Design and Install a k8s Cluster</title><link>https://aiden-jeon.github.io/post/tech/cka/09_design_and_install_k8s/</link><pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/09_design_and_install_k8s/</guid><description>
 &lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
 &lt;ul>
-&lt;li>Every POD should have and IP Address&lt;/li>
-&lt;li>Every POD should be able to communicate with every other POD in the same node&lt;/li>
-&lt;li>Every POD should be able to communicate with every other POD on other nodes without NAT&lt;/li>
+&lt;li>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="design-a-k8s-cluster">Design a k8s cluster&lt;/h2>
+&lt;h3 id="purpose">Purpose&lt;/h3>
+&lt;ul>
+&lt;li>Education
+&lt;ul>
+&lt;li>Minikube&lt;/li>
+&lt;li>Single node cluster w\ kubeadm/GCP/A&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Development &amp;amp; Testing
+&lt;ul>
+&lt;li>Multi-node cluster with a single master and multiple workers&lt;/li>
+&lt;li>setup using kbeadm tool or quick provision on GCP or AWS or AKS&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Hosting Production Applications&lt;/li>
+&lt;/ul>
+&lt;h4 id="hosting-production-applications">Hosting Production Applications&lt;/h4>
+&lt;ul>
+&lt;li>High Availability Multi node cluster with multiple master nodes&lt;/li>
+&lt;li>kubeadm or GCP or Kops on AWS or other supported platforms&lt;/li>
+&lt;li>Upto 5000 nodes&lt;/li>
+&lt;li>Upto 150,000 PODs in the cluster&lt;/li>
+&lt;li>Upto 300,000 Total Containers&lt;/li>
+&lt;li>Upto 100 PODs per Node&lt;/li>
+&lt;/ul>
+&lt;h3 id="cloud-or-onprem">Cloud or OnPrem&lt;/h3>
+&lt;ul>
+&lt;li>Use Kubeadm for on-prem&lt;/li>
+&lt;li>GKE for GCP&lt;/li>
+&lt;li>Kops for AWS&lt;/li>
+&lt;li>AKS for Azure&lt;/li>
+&lt;/ul>
+&lt;h3 id="storage">Storage&lt;/h3>
+&lt;ul>
+&lt;li>High Performance - SSD Backed Storage&lt;/li>
+&lt;li>Multiple Concurrent connections - Network based storage&lt;/li>
+&lt;li>Persistent shared volumes for shared access across multiple PODs&lt;/li>
+&lt;li>Label nodes with specific disk types&lt;/li>
+&lt;li>Use Node Selectors to assign applications to nodes with specific disk types&lt;/li>
+&lt;/ul>
+&lt;h3 id="nodes">Nodes&lt;/h3>
+&lt;ul>
+&lt;li>Virtual or Physical Machines&lt;/li>
+&lt;li>Minimum of 4 Node cluster&lt;/li>
+&lt;li>Master vs Worker Nodes&lt;/li>
+&lt;li>Linux X86_64 Architecture&lt;/li>
+&lt;li>Master nodes can host worloads&lt;/li>
+&lt;li>Best practice is to not host workloads on Master nodes&lt;/li>
+&lt;/ul>
+&lt;h2 id="etcd-in-ha">ETCD in HA&lt;/h2>
+&lt;h3 id="etcd">ETCD&lt;/h3>
+&lt;ul>
+&lt;li>a distributed reliable key-value store that is Simple, Secure &amp;amp; Fast&lt;/li>
+&lt;/ul>
+&lt;h4 id="key-value-store">Key-value store&lt;/h4>
+&lt;ul>
+&lt;li>Tablular/Relational Databases
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/design-1.png" alt="tabular-table">&lt;/li>
+&lt;li>key-value store
+&lt;img src="https://aiden-jeon.github.io/imgs/cka/design-2.png" alt="key-value">&lt;/li>
+&lt;/ul>
+&lt;h4 id="distributed">Distributed&lt;/h4>
+&lt;ul>
+&lt;li>it is possible to have your database across multiple servers&lt;/li>
+&lt;/ul>
+&lt;h4 id="consistent">Consistent&lt;/h4>
+&lt;ul>
+&lt;li>how does it ensure the data on all the nodes are consitent?
+&lt;ul>
+&lt;li>ETCD ensures that the same consistent copy of the data is available on all instances at the same time&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>how does do that?
+&lt;ul>
+&lt;li>read ← easy&lt;/li>
+&lt;li>write
+&lt;ul>
+&lt;li>two write request coming&lt;/li>
+&lt;li>only one of the instances is responsible for processing the writes&lt;/li>
+&lt;li>interanally the other nodes elect a leader among them.
+&lt;ul>
+&lt;li>one node: leader&lt;/li>
+&lt;li>other nodes: followers&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>leader process write
+&lt;ul>
+&lt;li>leader makes sure that the other nodes are sent a copy of the data&lt;/li>
+&lt;li>if the writes come in through any of the other follower nodes, then they forward the wirtes to the leader internally&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="leader-election---raft">Leader Election - RAFT&lt;/h3>
+&lt;ul>
+&lt;li>How to elect leader in ETCD&lt;/li>
+&lt;li>→ use RAFT protocol&lt;/li>
+&lt;/ul>
+&lt;h4 id="방법">방법&lt;/h4>
+&lt;ul>
+&lt;li>use RAFT Algorithm
+&lt;ol>
+&lt;li>random timers for initiating requets&lt;/li>
+&lt;li>first nodes sent out a requetst to the otehr node requesting permission to be the leader&lt;/li>
+&lt;li>other managers receiving the request responds with their vote and node assumens the leader role&lt;/li>
+&lt;li>leader is elected, it sends out notifications at regular intervals to other masters informing them that it is continuing to assume the roloe of the leader&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>other nodes do not receive a notifications from the leader at some point time
+&lt;ol>
+&lt;li>nodes initiate a re-election process among themselves&lt;/li>
+&lt;li>new leader is identified&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul></description></item><item><title>\[CKA\] 08. Networking</title><link>https://aiden-jeon.github.io/post/tech/cka/08_networking/</link><pubDate>Sun, 06 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/08_networking/</guid><description>
+&lt;h2 id="pod-networking">POD Networking&lt;/h2>
+&lt;h3 id="networking-model">Networking Model&lt;/h3>
+&lt;p>CKA를 준비하면서 공부한 요약 내용입니다.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="https://www.udemy.com/course/certified-kubernetes-administrator-with-practice-tests/">강의&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a href="https://www.cncf.io/certification/cka/">What is CKA?&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Every POD should have and IP Address&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Every POD should be able to communicate with every other POD in the same node&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Every POD should be able to communicate with every other POD on other nodes without NAT&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;h2 id="cni-in-kubernetes">CNI in kubernetes&lt;/h2>
 &lt;h3 id="configuring-cni">Configuring CNI&lt;/h3>
