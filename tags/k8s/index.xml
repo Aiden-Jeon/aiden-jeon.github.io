@@ -4204,48 +4204,51 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/ul>
 &lt;h1 id="0-tips">0. Tips&lt;/h1>
 &lt;ol>
-&lt;li>
-&lt;p>ailias &lt;code>kubectl&lt;/code>&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; &lt;span class="nb">alias&lt;/span> &lt;span class="nv">k&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kubectl&amp;#34;&lt;/span>
-&lt;span class="ln">2&lt;/span>&amp;gt; k get po
-&lt;span class="ln">3&lt;/span>No resources found in default namespace.
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>shortcuts&lt;/p>
+&lt;li>ailias &lt;code>kubectl&lt;/code> to &lt;code>k&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">alias&lt;/span> &lt;span class="nv">k&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kubectl&amp;#34;&lt;/span>
+&lt;span class="ln">2&lt;/span>k get po
+&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>shortcuts&lt;/li>
+&lt;/ol>
 &lt;ul>
 &lt;li>pod = po&lt;/li>
 &lt;li>service = svc&lt;/li>
 &lt;li>namespace = ns&lt;/li>
 &lt;li>replicasets = rs&lt;/li>
 &lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>do not write all config file&lt;/p>
+&lt;ol start="3">
+&lt;li>do not write all config file&lt;/li>
+&lt;/ol>
 &lt;ul>
 &lt;li>use dry run
-&lt;code>kubectl run nginx --image=nginx --dry-run=client -o yaml&lt;/code>
-&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
-&lt;li>export it to yaml file
-&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml &amp;gt; nginx-deployment.yaml&lt;/code>&lt;/li>
+&lt;ul>
+&lt;li>&lt;code>kubectl run nginx --image=nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ol>
+&lt;li>export it to yaml file
+&lt;ul>
+&lt;li>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml &amp;gt; nginx-deployment.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
 &lt;h2 id="1-pods">1. Pods&lt;/h2>
 &lt;h3 id="생성">생성&lt;/h3>
 &lt;ol>
 &lt;li>yaml&lt;/li>
 &lt;/ol>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># pod.yaml&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pod&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">kubectl apply -f pod.yaml&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="c"># pod.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f pod.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
 &lt;li>run&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl run nginx --image&lt;span class="o">=&lt;/span>nginx
@@ -4352,20 +4355,14 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/code>&lt;/pre>&lt;/div>&lt;/li>
 &lt;/ul>
 &lt;h3 id="삭제">삭제&lt;/h3>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>root@controlplane:~# k delete po webapp
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k delete po webapp
 &lt;span class="ln">2&lt;/span>pod &lt;span class="s2">&amp;#34;webapp&amp;#34;&lt;/span> deleted
 &lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="수정">수정&lt;/h3>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k edit po redis
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k edit po redis
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-replication-controller">2. Replication Controller&lt;/h2>
-&lt;p>What is replica and why need controller?&lt;/p>
-&lt;ul>
-&lt;li>replication controller
-&lt;ul>
-&lt;li>run multiple instances of a single pod in the k8s cluster&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;strong>특징&lt;/strong>&lt;/p>
+&lt;p>What is replica and why need controller?&lt;br>
+-&amp;gt; replication controller runs multiple instances of a single pod in the k8s cluster&lt;/p>
+&lt;h3 id="특징">특징&lt;/h3>
 &lt;ol>
 &lt;li>high availability
 &lt;ul>
@@ -4380,6 +4377,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/ul>
 &lt;/li>
 &lt;/ol>
+&lt;h3 id="종류">종류&lt;/h3>
 &lt;ul>
 &lt;li>replication controller
 &lt;ul>

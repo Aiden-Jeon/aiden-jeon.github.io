@@ -4477,48 +4477,51 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/ul>
 &lt;h1 id="0-tips">0. Tips&lt;/h1>
 &lt;ol>
-&lt;li>
-&lt;p>ailias &lt;code>kubectl&lt;/code>&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; &lt;span class="nb">alias&lt;/span> &lt;span class="nv">k&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kubectl&amp;#34;&lt;/span>
-&lt;span class="ln">2&lt;/span>&amp;gt; k get po
-&lt;span class="ln">3&lt;/span>No resources found in default namespace.
-&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>shortcuts&lt;/p>
+&lt;li>ailias &lt;code>kubectl&lt;/code> to &lt;code>k&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&lt;span class="nb">alias&lt;/span> &lt;span class="nv">k&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;kubectl&amp;#34;&lt;/span>
+&lt;span class="ln">2&lt;/span>k get po
+&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>shortcuts&lt;/li>
+&lt;/ol>
 &lt;ul>
 &lt;li>pod = po&lt;/li>
 &lt;li>service = svc&lt;/li>
 &lt;li>namespace = ns&lt;/li>
 &lt;li>replicasets = rs&lt;/li>
 &lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>do not write all config file&lt;/p>
+&lt;ol start="3">
+&lt;li>do not write all config file&lt;/li>
+&lt;/ol>
 &lt;ul>
 &lt;li>use dry run
-&lt;code>kubectl run nginx --image=nginx --dry-run=client -o yaml&lt;/code>
-&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
-&lt;li>export it to yaml file
-&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml &amp;gt; nginx-deployment.yaml&lt;/code>&lt;/li>
+&lt;ul>
+&lt;li>&lt;code>kubectl run nginx --image=nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
+&lt;li>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ol>
+&lt;li>export it to yaml file
+&lt;ul>
+&lt;li>&lt;code>kubectl create deployment --image=nginx nginx --dry-run=client -o yaml &amp;gt; nginx-deployment.yaml&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
 &lt;h2 id="1-pods">1. Pods&lt;/h2>
 &lt;h3 id="생성">생성&lt;/h3>
 &lt;ol>
 &lt;li>yaml&lt;/li>
 &lt;/ol>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln"> 1&lt;/span>&lt;span class="c"># pod.yaml&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pod&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln"> 9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
-&lt;/span>&lt;span class="ln">10&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">kubectl apply -f pod.yaml&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="ln">1&lt;/span>&lt;span class="c"># pod.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">2&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">apiVersion&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">v1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">3&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">kind&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">pod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">4&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">metadata&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">6&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">spec&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">7&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">containers&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">8&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx-container&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="ln">9&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nginx&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl apply -f pod.yaml
+&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
 &lt;li>run&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>kubectl run nginx --image&lt;span class="o">=&lt;/span>nginx
@@ -4625,20 +4628,14 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/code>&lt;/pre>&lt;/div>&lt;/li>
 &lt;/ul>
 &lt;h3 id="삭제">삭제&lt;/h3>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>root@controlplane:~# k delete po webapp
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k delete po webapp
 &lt;span class="ln">2&lt;/span>pod &lt;span class="s2">&amp;#34;webapp&amp;#34;&lt;/span> deleted
 &lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="수정">수정&lt;/h3>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>&amp;gt; k edit po redis
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="ln">1&lt;/span>k edit po redis
 &lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="2-replication-controller">2. Replication Controller&lt;/h2>
-&lt;p>What is replica and why need controller?&lt;/p>
-&lt;ul>
-&lt;li>replication controller
-&lt;ul>
-&lt;li>run multiple instances of a single pod in the k8s cluster&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;strong>특징&lt;/strong>&lt;/p>
+&lt;p>What is replica and why need controller?&lt;br>
+-&amp;gt; replication controller runs multiple instances of a single pod in the k8s cluster&lt;/p>
+&lt;h3 id="특징">특징&lt;/h3>
 &lt;ol>
 &lt;li>high availability
 &lt;ul>
@@ -4653,6 +4650,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;/ul>
 &lt;/li>
 &lt;/ol>
+&lt;h3 id="종류">종류&lt;/h3>
 &lt;ul>
 &lt;li>replication controller
 &lt;ul>
@@ -4934,7 +4932,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln"> 6&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln"> 7&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln"> 8&lt;/span>&lt;span class="n">columns&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>
-&lt;span class="ln"> 9&lt;/span> &lt;span class="n">f&lt;/span>&lt;span class="s2">&amp;#34;feature_{0}&amp;#34;&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;feature_&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">10&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln">11&lt;/span>&lt;span class="n">sample_data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pd&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DataFrame&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">columns&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">columns&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>데이터는 다음과 같습니다.&lt;/p>
@@ -5458,11 +5456,11 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln">12&lt;/span> &lt;span class="n">relation&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln">13&lt;/span>
 &lt;span class="ln">14&lt;/span>&lt;span class="n">stack&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">relation&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">keys&lt;/span>&lt;span class="p">()]&lt;/span>
-&lt;span class="ln">15&lt;/span>&lt;span class="n">visit&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">N&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="n">visit&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">N&lt;/span>
 &lt;span class="ln">16&lt;/span>
 &lt;span class="ln">17&lt;/span>
 &lt;span class="ln">18&lt;/span>&lt;span class="k">def&lt;/span> &lt;span class="nf">dfs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">depth&lt;/span>&lt;span class="p">):&lt;/span>
-&lt;span class="ln">19&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">True&lt;/span>
+&lt;span class="ln">19&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>
 &lt;span class="ln">20&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">depth&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">21&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>
 &lt;span class="ln">22&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">friend&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">relation&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cur&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">[]):&lt;/span>
@@ -5470,16 +5468,16 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln">24&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">dfs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">friend&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">depth&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">25&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">26&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>
-&lt;span class="ln">27&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">friend&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">False&lt;/span>
+&lt;span class="ln">27&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">friend&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
 &lt;span class="ln">28&lt;/span>
 &lt;span class="ln">29&lt;/span>
 &lt;span class="ln">30&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
 &lt;span class="ln">31&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">dfs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">32&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">False&lt;/span>
+&lt;span class="ln">32&lt;/span> &lt;span class="n">visit&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
 &lt;span class="ln">33&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">34&lt;/span> &lt;span class="k">break&lt;/span>
 &lt;span class="ln">35&lt;/span>
-&lt;span class="ln">36&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">36&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>리모컨</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1107/</link><pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1107/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1107&lt;/li>
@@ -5544,12 +5542,12 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln">32&lt;/span> &lt;span class="n">comb&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">product&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">remote&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">repeat&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">33&lt;/span> &lt;span class="n">m&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">min&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">cal&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">target&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">start_idx&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">comb&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln">34&lt;/span> &lt;span class="n">min_cnt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">min&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cnt&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">m&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">35&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cnt&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">35&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cnt&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">36&lt;/span>&lt;span class="k">elif&lt;/span> &lt;span class="n">f&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span> &lt;span class="p">:&lt;/span>
 &lt;span class="ln">37&lt;/span> &lt;span class="n">min_cnt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">min&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">target&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nb">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">target&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;span class="ln">38&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cnt&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">38&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">min_cnt&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">39&lt;/span>&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">40&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">target&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">40&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">target&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>사탕 게임</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</link><pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/3085/</guid><description>
 &lt;ul>
 &lt;li>problem number: 3085&lt;/li>
@@ -5610,7 +5608,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln">43&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">max_candy&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">N&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">44&lt;/span> &lt;span class="k">break&lt;/span>
 &lt;span class="ln">45&lt;/span>
-&lt;span class="ln">46&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">max_candy&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">46&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">max_candy&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>날짜 계산</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1476/</link><pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1476/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1476&lt;/li>
@@ -5643,7 +5641,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln"> 4&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">S&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">M&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">rstrip&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln"> 5&lt;/span>&lt;span class="n">e&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">m&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
 &lt;span class="ln"> 6&lt;/span>&lt;span class="n">cnt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
-&lt;span class="ln"> 7&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="bp">True&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln"> 7&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln"> 8&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">E&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">e&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">S&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">M&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">m&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="k">break&lt;/span>
 &lt;span class="ln">10&lt;/span> &lt;span class="n">e&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
@@ -5657,7 +5655,7 @@ if a pod in node has no replicaset, use &lt;code>--force&lt;/code> option, but a
 &lt;span class="ln">18&lt;/span> &lt;span class="n">m&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
 &lt;span class="ln">19&lt;/span> &lt;span class="n">cnt&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
 &lt;span class="ln">20&lt;/span>
-&lt;span class="ln">21&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cnt&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">21&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cnt&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>argocd를 branch에서 cd</title><link>https://aiden-jeon.github.io/post/tech/cicd/argocd_branch/</link><pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cicd/argocd_branch/</guid><description>
 &lt;p>&lt;strong>CI/CD Contents 순서&lt;/strong>&lt;/p>
 &lt;ol>
@@ -5811,7 +5809,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">2&lt;/span>
 &lt;span class="ln">3&lt;/span>
 &lt;span class="ln">4&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="ln">5&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">5&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>문자열 분석</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10820/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10820/</guid><description>
 &lt;ul>
 &lt;li>problem number: 10820&lt;/li>
@@ -5848,7 +5846,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">20&lt;/span> &lt;span class="n">lower&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln">21&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Z&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
 &lt;span class="ln">22&lt;/span> &lt;span class="n">upper&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">counts&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">]&lt;/span>
-&lt;span class="ln">23&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lower&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">upper&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">blank&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">23&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lower&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">upper&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">blank&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>알파벳 개수</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10808/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10808/</guid><description>
 &lt;ul>
 &lt;li>problem number: 10808&lt;/li>
@@ -5869,7 +5867,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">5&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">6&lt;/span>&lt;span class="n">S&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Counter&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">7&lt;/span>&lt;span class="n">answer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">S&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">chr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;z&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)]&lt;/span>
-&lt;span class="ln">8&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;span class="ln">8&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>알파벳 찾기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10809/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10809/</guid><description>
 &lt;ul>
 &lt;li>problem number: 10809&lt;/li>
@@ -5892,7 +5890,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln"> 8&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">string&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;a&amp;#34;&lt;/span>&lt;span class="p">)]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">i&lt;/span>
 &lt;span class="ln">10&lt;/span>
-&lt;span class="ln">11&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">11&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>후위 표기식2</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1935/</link><pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1935/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1935&lt;/li>
@@ -5941,7 +5939,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">31&lt;/span> &lt;span class="n">before&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">32&lt;/span> &lt;span class="n">stacks&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">calculator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">after&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">before&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cur&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln">33&lt;/span>
-&lt;span class="ln">34&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;{:.2f}&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">stacks&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]))&lt;/span>
+&lt;span class="ln">34&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">{:.2f}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">stacks&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]))&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>relative-sort-array</title><link>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</link><pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/leetcode/1122/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1122&lt;/li>
@@ -6016,7 +6014,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">14&lt;/span> &lt;span class="n">answer&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">j&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">mapping&lt;/span>
 &lt;span class="ln">15&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">val&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mapping&lt;/span>&lt;span class="p">])&lt;/span>
 &lt;span class="ln">16&lt;/span>
-&lt;span class="ln">17&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">17&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>후위 표기식</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1918/</link><pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1918/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1918&lt;/li>
@@ -6057,7 +6055,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">25&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">26&lt;/span> &lt;span class="n">answer&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">27&lt;/span>
-&lt;span class="ln">28&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">28&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Introduction to XAI</title><link>https://aiden-jeon.github.io/post/mldl/xai/introduction/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/mldl/xai/introduction/</guid><description>
 &lt;h1 id="introduction-to-xaiexplainable-ai">Introduction to XAI(eXplainable AI)&lt;/h1>
 &lt;hr>
@@ -6186,7 +6184,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln"> 8&lt;/span>&lt;span class="n">newsgroups_test&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">fetch_20newsgroups&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">subset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;test&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">categories&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">categories&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 9&lt;/span>&lt;span class="n">class_names&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;atheism&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;christian&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln">10&lt;/span>
-&lt;span class="ln">11&lt;/span>&lt;span class="n">vectorizer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sklearn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">feature_extraction&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">TfidfVectorizer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lowercase&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">11&lt;/span>&lt;span class="n">vectorizer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sklearn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">feature_extraction&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">TfidfVectorizer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lowercase&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">12&lt;/span>&lt;span class="n">train_vectors&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vectorizer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit_transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">newsgroups_train&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">13&lt;/span>&lt;span class="n">test_vectors&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vectorizer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">transform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">newsgroups_test&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">14&lt;/span>&lt;span class="n">rf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sklearn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ensemble&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RandomForestClassifier&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n_estimators&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">500&lt;/span>&lt;span class="p">)&lt;/span>
@@ -6212,7 +6210,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;p>우선 데이터 &lt;em>x&lt;/em> 를 interpretable representation &lt;em>x'&lt;/em> 으로 변환합니다. Text의 경우 interpretable represenstiond은 단어가 존재한다/존재하지 않는다 입니다. 아래 코드는 단어를 숫자로 mapping 시켜주는 역할을 합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">lime.lime_text&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">TextDomainMapper&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IndexedString&lt;/span>
 &lt;span class="ln">2&lt;/span>
-&lt;span class="ln">3&lt;/span>&lt;span class="n">indexed_string&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">IndexedString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">text_instance&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bow&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">split_expression&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s2">&amp;#34;\W+&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mask_string&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">None&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">3&lt;/span>&lt;span class="n">indexed_string&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">IndexedString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">text_instance&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bow&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">split_expression&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="sa">r&lt;/span>&lt;span class="s2">&amp;#34;\W+&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mask_string&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">4&lt;/span>&lt;span class="n">domain_mapper&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">TextDomainMapper&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">indexed_string&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>​&lt;/p>
 &lt;p>x' 는 모든 단어가 존재하기 때문에 아래와 같이 모든 값이 존재한다를 뜻하는 1로 채워져 있습니다.&lt;/p>
@@ -6224,7 +6222,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;h2 id="sampling-for-local-exploration">&lt;strong>Sampling for Local Exploration&lt;/strong>&lt;/h2>
 &lt;hr>
 &lt;p>이제 위에서 변환된 &lt;em>x'&lt;/em> 주변에서 *z'*을 샘플링 합니다. 샘플링은 random 하게 값을 고른 후 1을 0으로 바꿔주면 됩니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">numpy&lt;/span> &lt;span class="kn">as&lt;/span> &lt;span class="nn">np&lt;/span>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">numpy&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">np&lt;/span>
 &lt;span class="ln"> 2&lt;/span>&lt;span class="kn">from&lt;/span> &lt;span class="nn">sklearn.utils&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">check_random_state&lt;/span>
 &lt;span class="ln"> 3&lt;/span>
 &lt;span class="ln"> 4&lt;/span>&lt;span class="n">random_state&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">check_random_state&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2020&lt;/span>&lt;span class="p">)&lt;/span>
@@ -6282,7 +6280,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="n">features_range&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">doc_size&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 2&lt;/span>&lt;span class="n">inverse_data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">indexed_string&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">raw_string&lt;/span>&lt;span class="p">()]&lt;/span>
 &lt;span class="ln"> 3&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">enumerate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sample&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">):&lt;/span>
-&lt;span class="ln"> 4&lt;/span> &lt;span class="n">inactive&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">choice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">features_range&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">replace&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 4&lt;/span> &lt;span class="n">inactive&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">choice&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">features_range&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">replace&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 5&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">inactive&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
 &lt;span class="ln"> 6&lt;/span> &lt;span class="n">inverse_data&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">indexed_string&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">inverse_removing&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inactive&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln"> 7&lt;/span>
@@ -6327,7 +6325,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;p>​&lt;/p>
 &lt;h3 id="distance">&lt;strong>Distance&lt;/strong>&lt;/h3>
 &lt;p>우선 &lt;em>x&lt;/em> 와 &lt;em>z&lt;/em> 사이의 거리를 계산합니다. 이 예시는 text 이기 때문에 cosine distance 를 구했습니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="o">**&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">scipy&lt;/span> &lt;span class="kn">as&lt;/span> &lt;span class="nn">sp&lt;/span>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="o">**&lt;/span>&lt;span class="kn">import&lt;/span> &lt;span class="nn">scipy&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">sp&lt;/span>
 &lt;span class="ln"> 2&lt;/span>
 &lt;span class="ln"> 3&lt;/span>&lt;span class="n">distance_metric&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;cosine&amp;#34;&lt;/span>
 &lt;span class="ln"> 4&lt;/span>
@@ -6363,13 +6361,13 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln"> 3&lt;/span>&lt;span class="n">labels_column&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">labels&lt;/span>&lt;span class="p">[:,&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
 &lt;span class="ln"> 4&lt;/span>&lt;span class="n">num_features&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">10&lt;/span>
 &lt;span class="ln"> 5&lt;/span>
-&lt;span class="ln"> 6&lt;/span>&lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Ridge&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alpha&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mf">0.01&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fit_intercept&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random_state&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 6&lt;/span>&lt;span class="n">clf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Ridge&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alpha&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mf">0.01&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fit_intercept&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random_state&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 7&lt;/span>&lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">labels_column&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sample_weight&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">weights&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 8&lt;/span>
 &lt;span class="ln"> 9&lt;/span>&lt;span class="n">coef&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">clf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">coef_&lt;/span>
 &lt;span class="ln">10&lt;/span>
 &lt;span class="ln">11&lt;/span>&lt;span class="n">weighted_data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">coef&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>
-&lt;span class="ln">12&lt;/span>&lt;span class="n">feature_weights&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">sorted&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">zip&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">shape&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]),&lt;/span> &lt;span class="n">weighted_data&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">reverse&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">12&lt;/span>&lt;span class="n">feature_weights&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">sorted&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">zip&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">shape&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]),&lt;/span> &lt;span class="n">weighted_data&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">reverse&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">13&lt;/span>
 &lt;span class="ln">14&lt;/span>&lt;span class="n">used_features&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">feature_weights&lt;/span>&lt;span class="p">[:&lt;/span>&lt;span class="n">num_features&lt;/span>&lt;span class="p">]])&lt;/span>
 &lt;span class="ln">15&lt;/span>&lt;span class="n">used_features&lt;/span>
@@ -6379,7 +6377,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;h2 id="train-g">&lt;strong>Train &lt;em>g&lt;/em>&lt;/strong>&lt;/h2>
 &lt;hr>
 &lt;p>선택된 변수들을 이용하여서 &lt;em>g&lt;/em>를 학습합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="n">easy_model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Ridge&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alpha&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fit_intercept&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random_state&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="n">easy_model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Ridge&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alpha&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fit_intercept&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">random_state&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">random_state&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">2&lt;/span>&lt;span class="n">easy_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">[:,&lt;/span> &lt;span class="n">used_features&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">labels_column&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sample_weight&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">weights&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">3&lt;/span>&lt;span class="n">prediction_score&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">easy_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">score&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">[:,&lt;/span> &lt;span class="n">used_features&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">labels_column&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">sample_weight&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">weights&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">4&lt;/span>&lt;span class="n">prediction_score&lt;/span>
@@ -6392,7 +6390,7 @@ docs를 build하기 위해서 &lt;code>requirements-doc.txt&lt;/code> 를 추가
 &lt;span class="ln">3&lt;/span>
 &lt;span class="ln">4&lt;/span>&lt;span class="n">array&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="mf">0.71951834&lt;/span>&lt;span class="p">])&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>설명 변수들을 coefficient 크기를 기준으로 정렬합니다.&lt;/p>
-&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="n">local_exp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">sorted&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">zip&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">used_features&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">easy_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">coef_&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]),&lt;/span> &lt;span class="n">reverse&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="n">local_exp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">sorted&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">zip&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">used_features&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">easy_model&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">coef_&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">np&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]),&lt;/span> &lt;span class="n">reverse&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 2&lt;/span>&lt;span class="n">local_exp&lt;/span>
 &lt;span class="ln"> 3&lt;/span>
 &lt;span class="ln"> 4&lt;/span>&lt;span class="p">[(&lt;/span>&lt;span class="mi">49&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mf">0.028394961697102435&lt;/span>&lt;span class="p">),&lt;/span>
@@ -6439,7 +6437,7 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln"> 5&lt;/span>&lt;span class="n">stack&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
 &lt;span class="ln"> 6&lt;/span>&lt;span class="n">reverse&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
 &lt;span class="ln"> 7&lt;/span>
-&lt;span class="ln"> 8&lt;/span>&lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">False&lt;/span>
+&lt;span class="ln"> 8&lt;/span>&lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
 &lt;span class="ln"> 9&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">string&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">10&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">11&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="p">:&lt;/span>
@@ -6448,10 +6446,10 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln">14&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;&amp;lt;&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">15&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">16&lt;/span> &lt;span class="n">reverse&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="ln">17&lt;/span> &lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">True&lt;/span>
+&lt;span class="ln">17&lt;/span> &lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">True&lt;/span>
 &lt;span class="ln">18&lt;/span> &lt;span class="n">reverse&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">s&lt;/span>
 &lt;span class="ln">19&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;&amp;gt;&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">20&lt;/span> &lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">False&lt;/span>
+&lt;span class="ln">20&lt;/span> &lt;span class="n">is_tag&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">False&lt;/span>
 &lt;span class="ln">21&lt;/span> &lt;span class="n">reverse&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">s&lt;/span>
 &lt;span class="ln">22&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">is_tag&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">23&lt;/span> &lt;span class="n">reverse&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">s&lt;/span>
@@ -6460,7 +6458,7 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln">26&lt;/span>
 &lt;span class="ln">27&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">28&lt;/span> &lt;span class="n">reverse&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;span class="ln">29&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">reverse&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">29&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">reverse&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>쇠막대기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/10799/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/10799/</guid><description>
 &lt;ul>
 &lt;li>problem number: 10799&lt;/li>
@@ -6490,7 +6488,7 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln">15&lt;/span> &lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">16&lt;/span> &lt;span class="n">remain&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">17&lt;/span>
-&lt;span class="ln">18&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">total&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="sb">``&lt;/span>&lt;span class="err">`&lt;/span>
+&lt;span class="ln">18&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">total&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="err">```&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>오큰수</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/17298/</link><pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/17298/</guid><description>
 &lt;ul>
 &lt;li>problem number: 17298&lt;/li>
@@ -6522,7 +6520,7 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln">10&lt;/span> &lt;span class="n">answer&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">val&lt;/span>
 &lt;span class="ln">11&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">12&lt;/span>
-&lt;span class="ln">13&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">13&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>단어 뒤집기</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/9093/</guid><description>
 &lt;ul>
 &lt;li>problem number: 9093&lt;/li>
@@ -6549,7 +6547,7 @@ LIME의 해석에 관한 부분은 공식 github repo를 참조해주세요.&lt;
 &lt;span class="ln"> 7&lt;/span> &lt;span class="n">words&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">split&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 8&lt;/span> &lt;span class="n">words&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">x&lt;/span> &lt;span class="p">:&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">words&lt;/span>&lt;span class="p">))&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="n">sentence&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34; &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">words&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">10&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sentence&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sentence&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>스택수열</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1874/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1874&lt;/li>
@@ -6590,7 +6588,7 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln"> 7&lt;/span>&lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">1&lt;/span>
 &lt;span class="ln"> 8&lt;/span>&lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">):&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">stdin&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">readline&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;span class="ln">10&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="bp">True&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">11&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">j&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">12&lt;/span> &lt;span class="n">stack&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">13&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;+&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
@@ -6606,10 +6604,10 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln">23&lt;/span> &lt;span class="k">break&lt;/span>
 &lt;span class="ln">24&lt;/span>
 &lt;span class="ln">25&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">26&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">26&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;NO&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">27&lt;/span>&lt;span class="k">else&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">28&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">r&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">29&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">29&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">r&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>에디터</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1406/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1406&lt;/li>
@@ -6646,7 +6644,7 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln">16&lt;/span> &lt;span class="k">elif&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;B&amp;#34;&lt;/span> &lt;span class="ow">and&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">17&lt;/span> &lt;span class="n">left&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">pop&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">18&lt;/span>
-&lt;span class="ln">19&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]))&lt;/span>
+&lt;span class="ln">19&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">right&lt;/span>&lt;span class="p">[::&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]))&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>요세푸스 문제</title><link>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</link><pubDate>Tue, 30 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/algorithm/acmicpc/1158/</guid><description>
 &lt;ul>
 &lt;li>problem number: 1158&lt;/li>
@@ -6681,7 +6679,7 @@ stack = [] / 4 3 6 8 7 5 2 1&lt;/p>
 &lt;span class="ln">12&lt;/span> &lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">popleft&lt;/span>&lt;span class="p">())&lt;/span>
 &lt;span class="ln">13&lt;/span> &lt;span class="n">answer&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">deq&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">popleft&lt;/span>&lt;span class="p">()]&lt;/span>
 &lt;span class="ln">14&lt;/span>&lt;span class="n">answer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;, &amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">str&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">answer&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;span class="ln">15&lt;/span>&lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f&lt;/span>&lt;span class="s2">&amp;#34;&amp;lt;{answer}&amp;gt;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">15&lt;/span>&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;&amp;lt;&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">answer&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;gt;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div></description></item><item><title>setup.py 와 Makefile 설정하기</title><link>https://aiden-jeon.github.io/post/tech/module-setup/makefile/</link><pubDate>Sun, 14 Mar 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/module-setup/makefile/</guid><description>
 &lt;p>&lt;strong>Module setup Contents 순서&lt;/strong>&lt;/p>
 &lt;ol>
@@ -7744,7 +7742,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">10&lt;/span>
 &lt;span class="ln">11&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">12&lt;/span> &lt;span class="nb">exit&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="n">exit&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">13&lt;/span>
 &lt;span class="ln">14&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">imshow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;img&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">15&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">waitKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;q&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
@@ -7761,7 +7759,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln">1&lt;/span>&lt;span class="n">ret&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">2&lt;/span>&lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">namedWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">3&lt;/span>&lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">imshow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">4&lt;/span>&lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">4&lt;/span>&lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">5&lt;/span>&lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">destroyWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>동영상 제일 처음 frame을 불러와서 cv2.selectROI 를 이용해 처음에 ROI 를 세팅할 수 있는 창을 만든다.&lt;/p>
 &lt;h2 id="5-tracker">5. tracker&lt;/h2>
@@ -7774,7 +7772,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;span class="ln"> 6&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln"> 7&lt;/span>
 &lt;span class="ln"> 8&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln"> 9&lt;/span> &lt;span class="nb">exit&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln"> 9&lt;/span> &lt;span class="n">exit&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">10&lt;/span>
 &lt;span class="ln">11&lt;/span> &lt;span class="n">success&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">box&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">tracker&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">img&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">12&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">top&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">w&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">h&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">box&lt;/span>&lt;span class="p">))&lt;/span>
@@ -7802,15 +7800,15 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;div class="highlight">&lt;pre class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="ln"> 1&lt;/span>&lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">namedWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 2&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">isOpened&lt;/span>&lt;span class="p">():&lt;/span>
 &lt;span class="ln"> 3&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
-&lt;span class="ln"> 4&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln"> 4&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 5&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln"> 6&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">imshow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 7&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">waitKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln"> 8&lt;/span> &lt;span class="c1"># Quit when &amp;#39;q&amp;#39; is pressed&lt;/span>
 &lt;span class="ln"> 9&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;q&amp;#39;&lt;/span>&lt;span class="p">):&lt;/span>
 &lt;span class="ln">10&lt;/span> &lt;span class="k">break&lt;/span>
-&lt;span class="ln">11&lt;/span> &lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">12&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">11&lt;/span> &lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">12&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">13&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="nb">sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">14&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">destroyWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">15&lt;/span> &lt;span class="k">break&lt;/span>
@@ -7828,7 +7826,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;span class="ln"> 7&lt;/span>
 &lt;span class="ln"> 8&lt;/span>&lt;span class="c1">## ROI Setting&lt;/span>
 &lt;span class="ln"> 9&lt;/span>&lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">isOpened&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">10&lt;/span> &lt;span class="nb">exit&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">10&lt;/span> &lt;span class="n">exit&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">11&lt;/span>
 &lt;span class="ln">12&lt;/span>&lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">namedWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">13&lt;/span>&lt;span class="k">while&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">isOpened&lt;/span>&lt;span class="p">():&lt;/span>
@@ -7838,8 +7836,8 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;span class="ln">17&lt;/span> &lt;span class="c1"># Quit when &amp;#39;q&amp;#39; is pressed&lt;/span>
 &lt;span class="ln">18&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nb">ord&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;q&amp;#39;&lt;/span>&lt;span class="p">):&lt;/span>
 &lt;span class="ln">19&lt;/span> &lt;span class="k">break&lt;/span>
-&lt;span class="ln">20&lt;/span> &lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">True&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;span class="ln">21&lt;/span> &lt;span class="k">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">20&lt;/span> &lt;span class="n">rect&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">selectROI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">fromCenter&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">showCrosshair&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="ln">21&lt;/span> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">22&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="nb">sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rect&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>
 &lt;span class="ln">23&lt;/span> &lt;span class="n">cv2&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">destroyWindow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Select Window&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">24&lt;/span> &lt;span class="k">break&lt;/span>
@@ -7852,7 +7850,7 @@ extensions에 아래와 같이 추가합니다.&lt;/p>
 &lt;span class="ln">31&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">img&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">32&lt;/span>
 &lt;span class="ln">33&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">ret&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;span class="ln">34&lt;/span> &lt;span class="nb">exit&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="ln">34&lt;/span> &lt;span class="n">exit&lt;/span>&lt;span class="p">()&lt;/span>
 &lt;span class="ln">35&lt;/span>
 &lt;span class="ln">36&lt;/span> &lt;span class="n">success&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">box&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">tracker&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">img&lt;/span>&lt;span class="p">)&lt;/span>
 &lt;span class="ln">37&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">left&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">top&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">w&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">h&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">box&lt;/span>&lt;span class="p">))&lt;/span>
