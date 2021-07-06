@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tech on Aiden's Firewoods</title><link>https://aiden-jeon.github.io/post/tech/</link><description>Recent content in Tech on Aiden's Firewoods</description><generator>Hugo -- gohugo.io</generator><copyright>Copyright © 2020-2021, Jongseob Jeon; all rights reserved.</copyright><lastBuildDate>Tue, 06 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://aiden-jeon.github.io/post/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>Using AntiPatterns to avoid MLOps Mistakes</title><link>https://aiden-jeon.github.io/post/tech/mlops/antipatterns_for_mlops/</link><pubDate>Tue, 06 Jul 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/mlops/antipatterns_for_mlops/</guid><description>
-&lt;h2 id="tldr">TLDR;&lt;/h2>
+&lt;ul>
+&lt;li>업데이트 내역:
+&lt;ul>
+&lt;li>2021.07.16 Brier Score 수식 추가&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="tldr">TL;DR&lt;/h2>
 &lt;p>MLOps를 성공적으로 수행하기 위해서는 아래와 같은 상황들이 일어나지 않도록 해야 합니다.&lt;/p>
 &lt;ol>
 &lt;li>데이터 유출에 의해 과도하게 최적화(overly optimistic)된 모델이 배포된 상황&lt;/li>
@@ -124,10 +131,23 @@ Oversampling을 상황에서도 데이터 유출이 일어날 수 있습니다. 
 &lt;p>자세한 방법은 논문에서 인용한 논문을 참고하시기 바랍니다.&lt;/p>
 &lt;h3 id="8communicate-with-ambivalence-antipattern">8.'Communicate with Ambivalence' AntiPattern&lt;/h3>
 &lt;p>잘 보정되지 않은 모델을 배포함으로서 머신러닝 파이프라인 전체의 신뢰도 하락이 일어나는 상황입니다. 잘 보정된 모델은 &lt;em>Brier score&lt;/em>가 잘 보정 되었다는 뜻입니다.&lt;/p>
-&lt;blockquote>
-&lt;p>The Brier Score is a strictly proper score function or strictly proper scoring rule that measures the accuracy of probabilistic predictions. For uni dimensional predictions, it is strictly equivalent to the mean squared error as applied to predicted probabilities.&lt;/p>
-&lt;/blockquote>
 &lt;p>만약 보정되지 않는 모델을 사용한다면 파이프라인의 어디가 문제인지 정확히 진단할 수 없게 됩니다. 그래서 최근 연구에서는 모델의 설명 가능성 뿐만 아니라 모델의 불확실성을 전달하는 것도 중요하다고 합니다.&lt;/p>
+&lt;ul>
+&lt;li>Brier Score란?&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>The Brier Score is a strictly proper score function or strictly proper scoring rule that measures the accuracy of probabilistic predictions. For uni dimensional predictions, it is strictly equivalent to the mean squared error as applied to predicted probabilities.&lt;br>
+출처: &lt;a href="https://en.wikipedia.org/wiki/Brier_score">https://en.wikipedia.org/wiki/Brier_score&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>Brier Score 수식은 다음과 같습니다.&lt;/p>
+&lt;p>$$BS=\frac{1}{N}\sum_{t=1}^N (f_{t}-o_{t})^2$$&lt;/p>
+&lt;ul>
+&lt;li>$N$: the number of items you’re calculating a Brier score for&lt;/li>
+&lt;li>$f_{t}$: is the forecast probability (i.e. 25% chance)&lt;/li>
+&lt;li>$o_{t}$: is the outcome (1 if it happened, 0 if it didn’t)&lt;/li>
+&lt;/ul>
+&lt;p>출처: &lt;a href="https://www.statisticshowto.com/brier-score/">https://www.statisticshowto.com/brier-score/&lt;/a>&lt;/p>
+&lt;p>Brier Score가 0에 가까울 수록 모델이 잘 보정되었다고 해석할 수 있습니다.&lt;/p>
 &lt;h3 id="9data-crisis-as-a-service-antipattern">9.'Data Crisis as a Service' AntiPattern&lt;/h3>
 &lt;p>모델을 개발하는 과정에서 데이터가 수정되는 과정이 기록되지 않는 상황입니다. 이 과정이 반복된다면 모델 학습에 사용한 데이터가 어떤 과정을 거쳤는지 확인할 수 없게 됩니다.&lt;/p></description></item><item><title>\[CKA\] CKA 합격 후기</title><link>https://aiden-jeon.github.io/post/tech/cka/99_review/</link><pubDate>Mon, 28 Jun 2021 00:00:00 +0000</pubDate><guid>https://aiden-jeon.github.io/post/tech/cka/99_review/</guid><description>
 &lt;h2 id="준비-과정">준비 과정&lt;/h2>
