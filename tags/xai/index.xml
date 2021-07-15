@@ -23,7 +23,7 @@
 &lt;p>&lt;strong>White-box/model-dependant explainers&lt;/strong>&lt;br>
 화이트 박스 explainer들은 대상 모델의 구조(Architecture)에 접근이 가능해야 합니다. 대표적으로 LRP, DeepLIFT, saliency maps, integrated gradients, Grad-CAM, DeepSHAP 그리고 MaxSHAP와 같은 방법이 있습니다.&lt;/p>
 &lt;h2 id="3-instance-wise-versus-global">3. Instance-Wise versus Global&lt;/h2>
-&lt;p>모델을 설명하는 또 다른 분류 방법은 설명의 범위에 따라 나눌 수 있습니다. 이 분류 방법 또한 주로 Post-hoc explanatory methods을 세분화한 것 입니다. Self-explanatory models들은 기본적으로 Instance-wise explainers 입니다.&lt;/p>
+&lt;p>모델을 설명하는 또 다른 분류 방법은 설명의 범위에 따라 나눌 수 있습니다. 이 분류 방법 또한 주로 Post-hoc explanatory methods을 세분화한 것 입니다. Self-explanatory model들은 기본적으로 Instance-wise explainers 입니다.&lt;/p>
 &lt;p>&lt;strong>Instance-wise explainers&lt;/strong>&lt;br>
 모델의 단일 예측(individual instance) 결과에 대해서 설명을 제공합니다. 예를 들어 LIME은 instance 별로 linear regression을 학습해 설명합니다.&lt;br>
 - 장점) End user가 요구하는 모델의 결정에 대한 설명을 제공할 수 있음&lt;/p>
@@ -39,7 +39,7 @@
 Importance weights explanation은 입력 feature의 모델이 수행한 예측에 대한 기여 정도를 숫자로 나타냅니다.&lt;/p>
 &lt;p>&lt;strong>subsets of features&lt;/strong>&lt;br>
 Subset explanation은 각 instance 별로 예측에 중요한 feature의 subset을 제공합니다.&lt;/p>
-&lt;p>예를 들어서문장 감정 분류 모델이 &lt;code>“The movie was very good.&amp;quot;&lt;/code>를, &lt;code>&amp;quot;4/5점, 긍정&amp;quot;&lt;/code>이라고 분류했습니다. 이 때 subset explanation은 &lt;code>{“very”, “good”}&lt;/code>을 중요한 feature로 제공합니다. 반면, importance weights explanation는 &lt;code>{&amp;quot;good&amp;quot;: 3, &amp;quot;very&amp;quot;:1&lt;/code>(이 때 두 점수의 합은 분류 모델의 예측인 4점 입니다)을 제공합니다.&lt;/p>
+&lt;p>예를 들어서문장 감정 분류 모델이 &lt;code>“The movie was very good.&amp;quot;&lt;/code>를, &lt;code>&amp;quot;4/5점, 긍정&amp;quot;&lt;/code>이라고 분류했습니다. 이 때 subset explanation은 &lt;code>{“very”, “good”}&lt;/code>을 중요한 feature로 제공합니다. 반면, importance weights explanation는 &lt;code>{&amp;quot;good&amp;quot;: 3, &amp;quot;very&amp;quot;:1}&lt;/code>(이 때 두 점수의 합은 분류 모델의 예측인 4점 입니다)을 제공합니다.&lt;/p>
 &lt;h3 id="natural-language-explanations">Natural language explanations&lt;/h3>
 &lt;p>자연어에 대한 설명은 예측에 대한 결과를 사람과 같은 방식으로 전달합니다. 예를 들어서 “A woman is walking her dog in the park.”라는 문장에 “A person is in the park.”를 포함시켜서 설명한다면, “A woman is a person, and walking in the park implies being in the park.”과 같이 설명할 수 있습니다.&lt;/p>
 &lt;h3 id="concept-based-explanations">Concept-based explanations&lt;/h3>
