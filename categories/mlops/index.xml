@@ -6,6 +6,7 @@
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
+&lt;hr>
 &lt;h2 id="tldr">TL;DR&lt;/h2>
 &lt;p>MLOps를 성공적으로 수행하기 위해서는 아래와 같은 상황들이 일어나지 않도록 해야 합니다.&lt;/p>
 &lt;ol>
