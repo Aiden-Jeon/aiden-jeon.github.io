@@ -30,7 +30,7 @@ testimonials:
       label: "Get Started Now"
       link: "https://mlops-for-mle.github.io/tutorial/"
     # # avatar: "/images/avatar-sm.png"
-    content: "Aa comprehensive guide for ML engineers on MLOps concepts using Docker and Docker Compose."
+    content: "A comprehensive guide for ML engineers on MLOps concepts using Docker and Docker Compose."
 
   - name: "MLOps for ALL"
     # designation: "Web Designer"
