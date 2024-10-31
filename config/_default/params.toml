@@ -64,9 +64,9 @@ content = "You must replace the **baseURL** in **hugo.toml** file when deploying
 [metadata]
 keywords = ["Boilerplate", "Hugo"]
 description = "Jongseob's Homepage"
-author = "zeon.studio"
-twitter = "zeon_studio"
-image = "images/og-image.png"
+author = "Jongseob Jeon"
+# twitter = "zeon_studio"
+image = "images/banner.png"
 
 
 # site verifications
